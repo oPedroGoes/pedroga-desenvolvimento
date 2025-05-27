@@ -118,3 +118,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   }
   **num_ptr_addr = val;
  }
+
+
+     //DEVE SER ADICIONADA, POIS promoRate DEVE SER DOUBLE.
+void trataParamNumericoDouble(double **num_ptr_addr, const char *param_str);
