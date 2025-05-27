@@ -6,5 +6,7 @@ src/teste.c
 
 # Você ainda pode querer manter estes para ignorar outros comuns:
 obj/
+bin/
 *.o
 *.exe
+*.DS_Store
