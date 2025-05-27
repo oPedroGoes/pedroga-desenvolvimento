@@ -1,0 +1,10 @@
+# Ignorar o executável de teste específico no diretório bin
+bin/teste
+
+# Ignorar o arquivo de código fonte de teste específico no diretório src
+src/teste.c
+
+# Você ainda pode querer manter estes para ignorar outros comuns:
+obj/
+*.o
+*.exe
