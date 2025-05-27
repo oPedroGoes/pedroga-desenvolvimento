@@ -1,56 +1,76 @@
-# Nome do executável
-TARGET = ted
-
-# Nome do aluno
-ALUNO = PedroGoes
+# Makefile para compilar o projeto
 
 # Compilador
 CC = gcc
 
-# Flags de compilação
-CFLAGS = -std=c99 -fstack-protector-all -Wall -Wextra -O0 -g -ggdb
+# Flags de compilação:
+# -Wall: Habilita a maioria dos avisos (warnings)
+# -Wextra: Habilita avisos extras
+# -g: Gera informações de depuração (para usar com gdb)
+# -Isrc: Diz ao compilador para procurar arquivos de cabeçalho (.h) no diretório 'src'
+CFLAGS = -Wall -Wextra -g -Isrc
 
-# Diretório de código-fonte
-SRC_DIR = .
+# Flags do linker (se precisar de bibliotecas como a de matemática -lm, adicione aqui)
+LDFLAGS =
 
-# Diretório de cabeçalhos
-INC_DIR = .
+# Diretórios
+SRCDIR = src
+OBJDIR = obj
+BINDIR = bin
 
-# Diretório de bibliotecas
-LIB_DIR = ./lib
+# Arquivos fonte .c (automático se todos os .c em SRCDIR forem parte do executável principal)
+# Se tiver outros .c que não fazem parte do executável principal, liste-os explicitamente.
+# Para este caso, vamos listar explicitamente, já que são poucos.
+SOURCES = $(SRCDIR)/main.c $(SRCDIR)/leituraTerminal.c
 
-# Bibliotecas adicionais (use -lm para a biblioteca matemática, por exemplo)
-LIBS = -lm
+# Arquivos objeto .o (serão colocados no diretório OBJDIR)
+# Substitui a extensão .c por .o e adiciona o prefixo do diretório de objetos.
+OBJECTS = $(patsubst $(SRCDIR)/%.c,$(OBJDIR)/%.o,$(SOURCES))
 
-# Lista de arquivos de origem
-SRCS = $(wildcard $(SRC_DIR)/*.c)
+# Nome do executável final (será colocado no diretório BINDIR)
+EXECUTABLE_NAME = main
+EXECUTABLE = $(BINDIR)/$(EXECUTABLE_NAME)
 
-# Lista de arquivos de objeto
-OBJS = $(SRCS:.c=.o)
+# ----- Regras -----
 
-# Incluir diretórios
-INC_FLAGS = -I$(INC_DIR)
+# Regra padrão (o que acontece quando você digita 'make')
+all: $(EXECUTABLE)
 
-# Diretórios de bibliotecas
-LIB_FLAGS = -L$(LIB_DIR)
+# Regra para criar o executável final
+# Depende de todos os arquivos objeto e do diretório binário existir.
+$(EXECUTABLE): $(OBJECTS) | $(BINDIR)
+	@echo "Ligando os arquivos objeto para criar o executável..."
+	$(CC) $(OBJECTS) -o $(EXECUTABLE) $(LDFLAGS)
+	@echo "Executável $(EXECUTABLE) criado com sucesso!"
 
-# Regra de compilação dos arquivos de objeto
-$(SRC_DIR)/%.o: $(SRC_DIR)/%.c
-	$(CC) $(CFLAGS) $(INC_FLAGS) -c $< -o $@
+# Regra genérica para compilar arquivos .c para .o
+# Depende do arquivo .c correspondente e do arquivo .h (leituraTerminal.h)
+# Também depende do diretório de objetos existir (order-only prerequisite).
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(SRCDIR)/leituraTerminal.h | $(OBJDIR)
+	@echo "Compilando $< -> $@"
+	$(CC) $(CFLAGS) -c $< -o $@
 
-# Regra de compilação do executável
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(LIB_FLAGS) $(LIBS) -o $(TARGET)
+# Regra para criar o diretório de binários, se não existir
+$(BINDIR):
+	@echo "Criando diretório $(BINDIR)..."
+	@mkdir -p $(BINDIR)
 
-# Limpar arquivos intermediários e o executável
+# Regra para criar o diretório de objetos, se não existir
+$(OBJDIR):
+	@echo "Criando diretório $(OBJDIR)..."
+	@mkdir -p $(OBJDIR)
+
+# Regra para limpar os arquivos gerados (objetos e executável)
 clean:
-	rm -f $(SRC_DIR)/*.o $(TARGET)
+	@echo "Limpando arquivos gerados..."
+	@rm -f $(OBJECTS)
+	@rm -f $(EXECUTABLE)
+	@echo "Removendo diretório de objetos $(OBJDIR)..."
+	@rm -rf $(OBJDIR)
+	# Você pode descomentar a linha abaixo se quiser remover o diretório bin também,
+	# mas geralmente o diretório bin é mantido.
+	# @rm -rf $(BINDIR)
+	@echo "Limpeza concluída."
 
-# Falso alvo para evitar conflitos com arquivos chamados "clean"
-.PHONY: clean
-
-pack: $(PROJ_NAME)
-	rm -f ../$(ALUNO).zip
-	echo $(ALUNO)
-	date >> .entrega
-	cd ..; zip $(ALUNO).zip -r src/*.c src/*.h src/Makefile LEIA-ME.txt .entrega	
+# Phony targets: alvos que não são nomes de arquivos.
+.PHONY: all clean
