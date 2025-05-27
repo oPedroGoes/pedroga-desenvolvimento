@@ -95,7 +95,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   }
 
   char *strEnd;
-  errno = 0; // Resetar errno
+  errno = 0; // Resetar errno antes de chamar strtof
   float val = strtof(param_str, &strEnd); // Usar strtof para float
 
   if (strEnd == param_str) {
@@ -111,7 +111,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
     return;
   }
 
-  *num_ptr_addr = (float*) malloc(sizeof(float)); // Aloca espaço para UM float
+  *num_ptr_addr = (float*) malloc(sizeof(float)); // Aloca espaço para um float
   if (*num_ptr_addr == NULL) {
     fprintf(stderr, "(trataParamNumericoFloat) Erro: falha ao alocar memoria.\n");
     return;
@@ -120,5 +120,39 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
  }
 
 
-     //DEVE SER ADICIONADA, POIS promoRate DEVE SER DOUBLE.
-void trataParamNumericoDouble(double **num_ptr_addr, const char *param_str);
+  void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str) {
+    *num_ptr_addr = NULL; // Falha/não processado por padrão
+
+    if (param_str == NULL) {
+        fprintf(stderr, "Erro (trataParamNumericoDouble): Parametro string fornecido e nulo.\n");
+        // Deixa *param_str como NULL para ser checado em main
+        return;
+    }
+
+    char *strEnd;
+    errno = 0; // Resetar errno antes de chamar strtod
+    double val = strtod(param_str, &strEnd);
+
+    // Verificar se a conversão foi bem-sucedida
+    if (strEnd == param_str) {
+        fprintf(stderr, "(trataParamNumericoDouble) Erro: Parametro '%s' nao contem digitos validos.\n", param_str);
+        return;
+    }
+
+    if (*strEnd != '\0') {
+        fprintf(stderr, "(trataParamNumericoDouble) Erro: Caracteres invalidos ('%s') apos o numero em '%s'.\n", strEnd, param_str);
+        return;
+    }
+
+    if (errno == ERANGE && (val == HUGE_VAL || val == -HUGE_VAL || val == 0.0)) {
+        fprintf(stderr, "(trataParamNumericoDouble) Erro: Valor '%s' fora do range para double ou underflow para zero.\n", param_str);
+        return;
+    }
+
+    *num_ptr_addr = (double*) malloc(sizeof(double)); // Aloca espaço para um double
+    if (*num_ptr_addr == NULL) {
+        fprintf(stderr, "(trataParamNumericoDouble) ERRO: falha ao alocar memoria para o double.\n");
+        return;
+    }
+    **num_ptr_addr = val;
+}

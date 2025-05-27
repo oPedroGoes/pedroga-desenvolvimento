@@ -21,7 +21,7 @@
   char *dirEntrada = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL, *dirSaida = NULL,
        *nomeQry = NULL, *fullNomeQry = NULL, *fullNameArq = NULL; // Inicializado fullNameArq
   int *prioMax = NULL, *hc = NULL;
-  float *promoRate = NULL;
+  double *promoRate = NULL;
 
   FILE *f = NULL; // Se for usar, lembre de fclose(f)
   
@@ -113,7 +113,7 @@
           printf("\nERRO: falta parametro para -pr.");
           goto frees_and_exit;
         }
-        trataParamNumericoFloat(&promoRate, argv[i]);
+        trataParamNumericoDouble(&promoRate, argv[i]);
         if(promoRate == NULL) {
           fprintf(stderr, "\nFalha ao processar -pr (promoRate).\n");
         }
