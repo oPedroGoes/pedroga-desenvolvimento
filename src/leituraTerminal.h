@@ -31,8 +31,8 @@ void trataParamNumericoFloat(float **num_ptr_addr, const char* param_str);
 
 /*
  * Converte uma string de parâmetro ('param_str') em um valor double.
- * Aloca memória para o float convertido e faz '*num_ptr_addr' apontar para ele.
- * Em caso de erro de conversão, formato inválido, valor fora do range de float, ou falha de alocação, '*num_ptr_addr' é definido como NULL e uma mensagem de erro é impressa em stderr.
+ * Aloca memória para o double convertido e faz '*num_ptr_addr' apontar para ele.
+ * Em caso de erro de conversão, formato inválido, valor fora do range de double, ou falha de alocação, '*num_ptr_addr' é definido como NULL e uma mensagem de erro é impressa em stderr.
  */
 void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str);
 
