@@ -16,8 +16,7 @@
 
 
  void trataPath(char **pathDir, char* arg){
-  int argLen = strlen(arg)+1;
-
+  int argLen = strlen(arg);
 
   *pathDir = (char*) malloc(sizeof(char)*(argLen));
   if (*pathDir == NULL){
@@ -33,11 +32,8 @@
  }
 
 
-
-
  void trataNomeArquivo(char **pathArq, char* arg){
   int argLen = strlen(arg);
-
 
   *pathArq = (char*) malloc(sizeof(char)*(argLen+1));
   if (*pathArq == NULL){
@@ -45,32 +41,24 @@
     return ;
   }
 
-
   printf("nome: %s", arg);
-
 
   if(arg[argLen-1] == '/'){
     arg[argLen-1] = '\0';
   }
 
-
   printf("nome: %s", arg);
-
-
   strcpy(*pathArq, arg);
  }
 
-
-
+void trataParamNumerico(int **num, char* param){
+  int paramLen = strlen(param);
+}
 
  int main(int argc, char *argv[]){
   char *dirEntrada = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL, *dirSaida = NULL,
-  *nomeQry = NULL, *fullNomeQry = NULL, *prioMax = NULL, *hc = NULL, *promoRate = NULL;
-  char *fullNameArq;
-
-
-
-
+  *nomeQry = NULL, *fullNomeQry = NULL, *fullNameArq;
+  int *prioMax = NULL, *hc = NULL, *promoRate = NULL;
 
 
 
@@ -81,19 +69,16 @@
     printf("argv[%d] = %s\n",i,argv[i]);
   }
 
-
   int i = 1;
   while (i < argc){
     if (strcmp(argv[i], "-e") == 0){
         printf("\n lendo parametro -e... ");
         i++;
 
-
         if (i >= argc){
             printf("\nERRO: falta parametro.");
             assert(i < argc);
         }
-
 
         trataPath(&dirEntrada, argv[i]);
     }
@@ -101,12 +86,10 @@
         printf("\n lendo parametro -f... ");
         i++;
 
-
         if (i >= argc){
             printf("\nERRO: falta parametro.");
             assert(i < argc);
         }
-
 
         trataNomeArquivo(&nomeGeo, argv[i]);
     } else if (strcmp(argv[i], "-q") == 0){
@@ -123,15 +106,23 @@
         printf("\n lendo parametro -o... ");
         i++;
 
+        if (i >= argc){
+            printf("\nERRO: falta parametro.");
+            assert(i < argc);
+        }
+
+        trataPath(&dirSaida, argv[i]);
+    } else if (strcmp(argv[i], "-p") == 0){
+        printf("\n lendo parametro -p... ");
+        i++;
 
         if (i >= argc){
             printf("\nERRO: falta parametro.");
             assert(i < argc);
         }
 
-
         trataPath(&dirSaida, argv[i]);
-    }
+      }
     i++;
   }
   //while.
