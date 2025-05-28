@@ -32,7 +32,6 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   strcpy(*pathDir,arg); // Copia o arg (potencialmente modificado)
  }
 
-
  void trataNomeArquivo(char **pathArq, char* arg){ // arg é argv[i]
   int argLen = strlen(arg);
 
@@ -119,7 +118,6 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   **num_ptr_addr = val;
  }
 
-
   void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str) {
     *num_ptr_addr = NULL; // Falha/não processado por padrão
 
@@ -156,3 +154,18 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
     }
     **num_ptr_addr = val;
 }
+
+  void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
+    int fullNomeLen = strlen(pathDir) + 1 + strlen(nomeArq);
+    
+    *fullNomeArq = (char*)malloc(sizeof(char)*(fullNomeLen+1));
+    if(fullNomeArq == NULL){
+      fprintf(stderr, "(trataPath) Erro: falha ao alocar memoria para '%s'\n", nomeArq);
+    // Deixa *fullNomeArq como NULL para ser checado em main
+    return ;
+    }
+    
+    strcpy(*fullNomeArq, pathDir);
+    strcat(*fullNomeArq, "/");
+    strcat(*fullNomeArq, nomeArq);
+  }

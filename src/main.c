@@ -19,7 +19,7 @@
 
  int main(int argc, char *argv[]){
   char *dirEntrada = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL, *dirSaida = NULL,
-       *nomeQry = NULL, *fullNomeQry = NULL, *fullNameArq = NULL; // Inicializado fullNameArq
+       *nomeQry = NULL, *fullNomeQry = NULL;
   int *prioMax = NULL, *hc = NULL;
   double *promoRate = NULL;
 
@@ -123,14 +123,19 @@
         // goto frees_and_exit; 
       }
     i++;
-  } 
+  }
   //while.
+
+  completaNomeArquivo(dirEntrada, nomeGeo, &fullNomeGeo);
+  completaNomeArquivo(dirEntrada, nomeQry, &fullNomeQry);
 
   printf("\n--- Valores Processados ---\n");
   printf("dirEntrada = %s\n", dirEntrada ? dirEntrada : "(null ou falha)");
   printf("dirSaida   = %s\n", dirSaida   ? dirSaida   : "(null ou falha)");
   printf("nomeGeo    = %s\n", nomeGeo    ? nomeGeo    : "(null ou falha)");
   printf("nomeQry    = %s\n", nomeQry    ? nomeQry    : "(null ou falha)");
+  printf("fullNomeQry    = %s\n", fullNomeQry    ? fullNomeQry    : "(null ou falha)");
+  printf("fullNomeGeo    = %s\n", fullNomeGeo   ? fullNomeGeo    : "(null ou falha)");
 
   if (prioMax != NULL) {
     printf("prioMax = %d\n", *prioMax);

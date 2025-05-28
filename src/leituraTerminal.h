@@ -36,4 +36,6 @@ void trataParamNumericoFloat(float **num_ptr_addr, const char* param_str);
  */
 void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str);
 
+void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq);
+
 #endif
