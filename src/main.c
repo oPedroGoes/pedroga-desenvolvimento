@@ -119,7 +119,6 @@
         }
       } else {
         printf("\nParametro desconhecido: %s\n", argv[i]);
-        // Você pode querer sair aqui se um parâmetro desconhecido for um erro fatal
         // goto frees_and_exit; 
       }
     i++;
