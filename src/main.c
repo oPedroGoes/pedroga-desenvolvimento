@@ -5,10 +5,11 @@
  #include <errno.h>  // Para errno, ERANGE
  #include <limits.h> // Para INT_MAX, INT_MIN, LONG_MAX, LONG_MIN
  #include <math.h>   // Para HUGE_VALF
-
+ 
+ #include "processaGeo.h"
  #include "leituraTerminal.h"
 
- /* FALTA ATUALIZAR OS FULL NAMES. Falta decidir o que fazer com cada um dos full names.
+ /* Falta decidir o que fazer com cada um dos full names.
  */
 
 /* FREE EM:
@@ -135,6 +136,9 @@
   printf("nomeQry    = %s\n", nomeQry    ? nomeQry    : "(null ou falha)");
   printf("fullNomeQry    = %s\n", fullNomeQry    ? fullNomeQry    : "(null ou falha)");
   printf("fullNomeGeo    = %s\n", fullNomeGeo   ? fullNomeGeo    : "(null ou falha)");
+
+  int instru = 0, foramcriadas = 0, id = 0;
+  processa_geo(fullNomeGeo, dirSaida, nomeGeo, &instru, &foramcriadas, &id);
 
   if (prioMax != NULL) {
     printf("prioMax = %d\n", *prioMax);

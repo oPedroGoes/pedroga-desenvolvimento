@@ -4,7 +4,7 @@
     typedef void* RECTANGLE;
 
 
-    RECTANGLE cria_retangulo(int i, float x, float y, float w, float h, char* cb, char* cp);
+    RECTANGLE create_rectangle(int i, float x, float y, float w, float h, char* cb, char* cp);
 
 
     int get_idR(RECTANGLE r);

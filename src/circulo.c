@@ -10,7 +10,7 @@ typedef struct{
     char *corb, *corp;
 }circle;
 
-CIRCLE create_circle(int i, float x, float y, float r, char* cb, char* cp){
+CIRCLE create_circle(int i, double x, double y, double r, char* cb, char* cp){
     circle* c=(circle*)malloc(sizeof(circle));
     if(c == NULL){printf("(create_circle) Erro: falha ao alocar memoria para c."); exit(1);}
 

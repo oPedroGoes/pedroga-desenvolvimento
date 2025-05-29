@@ -20,5 +20,5 @@
      * 
      * @return void
      */
-    ARVORE processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *instru, int *formcriadas, int *id, float *xcent, float *ycent);
+    void processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *instru, int *formcriadas, int *id);
 #endif
