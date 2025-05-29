@@ -24,7 +24,7 @@
      * 
      * @brief Função para criar a estrutura de um texto
      * 
-     * @param i ID do texto
+     * @param id ID do texto
      * @param x Eixo x da localização do texto
      * @param y Eixo y da localização do texto
      * @param cb cor da borda
@@ -37,7 +37,7 @@
      * 
      * @return Retorna um ponteiro do tipo void para essa estrutura
      */
-    TEXTO cria_texto(int i, float x, float y, char* cb, char* cp, char a, char* txt, char* ff, char* fw, char* fs);
+    TEXTO cria_texto(int id, double x, double y, char* cb, char* cp, char a, char* txt, char* ff, char* fw, char* fs);
 
     /**
      * 
@@ -55,9 +55,9 @@
      * 
      * @param t Estrutura do texto para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_XT(TEXTO t);
+    double get_XT(TEXTO t);
 
     /**
      * 
@@ -65,9 +65,9 @@
      * 
      * @param t Estrutura do texto para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_YT(TEXTO t);
+    double get_YT(TEXTO t);
     /**
      * 
      * @brief Pegar por meio de um TAD a cor da borda do texto
@@ -164,11 +164,11 @@
      * 
      * @param t Estrutura do texto para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_eixoX1T(TEXTO t);
+    double get_eixoX1T(TEXTO t);
 
-    void set_idT(TEXTO t, int i);
+    void set_idT(TEXTO t, int id);
     
     /**
      * 
@@ -176,9 +176,9 @@
      * 
      * @param t Estrutura do texto para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_eixoX2T(TEXTO t);
+    double get_eixoX2T(TEXTO t);
 
     /**
      * 
@@ -189,7 +189,7 @@
      * 
      * @return void
      */
-    void set_xT(TEXTO t, float x);
+    void set_xT(TEXTO t, double x);
 
     /**
      * 
@@ -200,7 +200,7 @@
      * 
      * @return void
      */
-    void set_yT(TEXTO t, float y);
+    void set_yT(TEXTO t, double y);
 
     /**
      * 
@@ -230,9 +230,9 @@
      * 
      * @param t Estrutura do texto para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_areaT(TEXTO t);
+    double get_areaT(TEXTO t);
 
     /**
      * 

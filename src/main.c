@@ -23,8 +23,6 @@
        *nomeQry = NULL, *fullNomeQry = NULL;
   int *prioMax = NULL, *hc = NULL;
   double *promoRate = NULL;
-
-  FILE *f = NULL; // Se for usar, lembre de fclose(f)
   
   /* MOSTRA OS PARAMETROS */
   printf("Numero de argumentos: %d\n", argc);

@@ -1,65 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
-
-void leitura_qry(FILE *arqQry){
-    char *tipo = (char*)malloc(sizeof(char)*5);
-    char *str = (char*)malloc(sizeof(char)*100);
-
-    while(fgets(str, 100, arqQry)){
-        strncpy(tipo, str, 5);
-        tipo[4] = '\0';
-
-        if(strcmp(tipo, "selr") == 0){
-            printf("processando selr...");
-            //processa selr
-        }
-
-        if(strcmp(tipo, "seli") == 0){
-            printf("processando seli...");
-            //processa seli
-        }
-
-        if(strcmp(tipo, "disp") == 0){
-            printf("processando disp...");
-            //processa disp
-        }
-
-        if(strcmp(tipo, "transp") == 0){
-            printf("processando transp...");
-            //processa transp
-        }
-
-        if(strcmp(tipo, "cln") == 0){
-            printf("processando cln...");
-            //processa cln
-        }
-
-        if(strcmp(tipo, "spy") == 0){
-            printf("processando spy...");
-            //processa spy
-        }
-
-        if(strcmp(tipo, "cmflg") == 0){
-            printf("processando cmflg...");
-            //processa cmflg
-        }
-
-        if(strcmp(tipo, "blow") == 0){
-            printf("processando blow...");
-            //processa blow
-        }
-
-    }
-}
-
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-//#include "smutreap.h" // Supondo que este é o header da sua SmuTreap
+#include "SmuTreap.h" // Supondo que este é o header da sua SmuTreap
 // #include "lista.h" // Se você usar a estrutura Lista do smutreap.h para seleções
 
 #define MAX_LINE_LENGTH 1024
@@ -68,13 +10,13 @@ void leitura_qry(FILE *arqQry){
 // --- Protótipos das Funções de Tratamento para cada Comando ---
 // Estas funções precisariam de mais parâmetros (SmuTreap, arquivos de saída, etc.)
 void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n, double x, double y, double w, double h) {
-    fprintf(txt_output_file, "[*] selr %d %.2f %.2f %.2f %.2f\n", n, x, y, w, h);
+    fprintf(pathTxtOut, "[*] selr %d %.2f %.2f %.2f %.2f\n", n, x, y, w, h);
     printf("Comando selr: n=%d, x=%.2f, y=%.2f, w=%.2f, h=%.2f\n", n, x, y, w, h);
     // TODO: Implementar lógica de selr
     // - Selecionar formas na SmuTreap
     // - Reportar no TXT
     // - Marcar no SVG
-    fprintf(txt_output_file, "Resultado de selr...\n"); // Placeholder
+    fprintf(pathTxtOut, "Resultado de selr...\n"); // Placeholder
 }
 
 void handle_seli(SmuTreap tree, FILE* pathTxtOut, int n, double x, double y) {

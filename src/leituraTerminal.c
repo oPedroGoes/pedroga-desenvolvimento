@@ -169,3 +169,5 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
     strcat(*fullNomeArq, "/");
     strcat(*fullNomeArq, nomeArq);
   }
+
+  void 

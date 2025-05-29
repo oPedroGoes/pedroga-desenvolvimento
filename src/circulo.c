@@ -4,17 +4,17 @@
 #include "circulo.h"
 
 typedef struct{
-    int i;
-    float x, y;
-    float r;
+    int id;
+    double x, y;
+    double r;
     char *corb, *corp;
 }circle;
 
-CIRCLE create_circle(int i, double x, double y, double r, char* cb, char* cp){
+CIRCLE create_circle(int id, double x, double y, double r, char* cb, char* cp){
     circle* c=(circle*)malloc(sizeof(circle));
     if(c == NULL){printf("(create_circle) Erro: falha ao alocar memoria para c."); exit(1);}
 
-    c->i=i;
+    c->id=id;
     c->x=x;
     c->y=y;
     c->r=r;
@@ -34,20 +34,20 @@ CIRCLE create_circle(int i, double x, double y, double r, char* cb, char* cp){
 
 int get_idC(CIRCLE c){
     circle *c1=((circle*)c);
-    return c1->i;
+    return c1->id;
 }
 
-float get_XC(CIRCLE c){
+double get_XC(CIRCLE c){
     circle *c1=((circle*)c);
     return c1->x;
 }
 
-float get_YC(CIRCLE c){
+double get_YC(CIRCLE c){
     circle *c1=((circle*)c);
     return c1->y;
 }
 
-float get_rC(CIRCLE c){
+double get_rC(CIRCLE c){
     circle *c1=((circle*)c);
     return c1->r;
 }
@@ -62,17 +62,17 @@ char* get_cpC(CIRCLE c){
     return c1->corp;
 }
 
-float get_areaC(CIRCLE c){
+double get_areaC(CIRCLE c){
     circle *c1=((circle*)c);
     return c1->r*c1->r*3.1415;
 }
 
-void set_xC(CIRCLE c, float x){
+void set_xC(CIRCLE c, double x){
     circle *c1=((circle*)c);
     c1->x=x;
 }
 
-void set_yC(CIRCLE c, float y){
+void set_yC(CIRCLE c, double y){
     circle *c1=((circle*)c);
     c1->y=y;
 }
@@ -88,9 +88,9 @@ void set_cbC(CIRCLE c, char* cb){
     strcpy(c1->corb, cb);
 }
 
-void set_idC(CIRCLE c, int i){
+void set_idC(CIRCLE c, int id){
     circle *c1=((circle*)c);
-    c1->i=i;
+    c1->id=id;
 }
 
 void set_cpC(CIRCLE c, char* cp){
