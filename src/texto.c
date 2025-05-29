@@ -8,21 +8,21 @@ typedef struct{
 }tipotxt;
 
 typedef struct{
-    int i;
-    float x, y;
+    int id;
+    double x, y;
     char *corb, *corp;
     char a; //ancora do texto (inicio, meio e fim)
     char *texto;
     tipotxt ttxt;
 }texto;
 
-TEXTO cria_texto(int i, float x, float y, char* cb, char* cp, char a, char* txt, char* ff, char* fw, char* fs){
+TEXTO cria_texto(int id, double x, double y, char* cb, char* cp, char a, char* txt, char* ff, char* fw, char* fs){
     texto* t=(texto*)malloc(sizeof(texto));
     if(t==NULL){
         printf("Erro na alocação de memória!\n");
         exit(1);
     }
-    t->i=i;
+    t->id=id;
     t->x=x;
     t->y=y;
     t->corb =(char*)malloc(sizeof(char)*(strlen(cb)+1));
@@ -71,15 +71,15 @@ TEXTO cria_texto(int i, float x, float y, char* cb, char* cp, char a, char* txt,
 
 int get_idT(TEXTO t){
     texto *t1=((texto*)t);
-    return t1->i;
+    return t1->id;
 }
 
-float get_XT(TEXTO t){
+double get_XT(TEXTO t){
     texto *t1=((texto*)t);
     return t1->x;
 }
 
-float get_YT(TEXTO t){
+double get_YT(TEXTO t){
     texto *t1=((texto*)t);
     return t1->y;
 }
@@ -139,7 +139,7 @@ int comprimento_da_linhaT(TEXTO t){
     return 10*tamanho_dotextoT(t1);
 }
 
-float get_eixoX1T(TEXTO t){
+double get_eixoX1T(TEXTO t){
     texto *t1=((texto*)t);
     if(t1->a=='i'){
         return t1->x;
@@ -150,7 +150,7 @@ float get_eixoX1T(TEXTO t){
     }
 }
 
-float get_eixoX2T(TEXTO t){
+double get_eixoX2T(TEXTO t){
     texto *t1=((texto*)t);
     if(t1->a=='i'){
         return t1->x+comprimento_da_linhaT(t1);
@@ -161,17 +161,17 @@ float get_eixoX2T(TEXTO t){
     }
 }
 
-void set_idT(TEXTO t, int i){
+void set_idT(TEXTO t, int id){
     texto *t1=(texto*)t;
-    t1->i=i;
+    t1->id=id;
 }
 
-void set_xT(TEXTO t, float x){
+void set_xT(TEXTO t, double x){
     texto *t1=((texto*)t);
     t1->x=x;
 }
 
-void set_yT(TEXTO t, float y){
+void set_yT(TEXTO t, double y){
     texto *t1=((texto*)t);
     t1->y=y;
 }
@@ -198,7 +198,7 @@ void set_cpT(TEXTO t, char* cp){
     strcpy(t1->corp, cp);
 }
 
-float get_areaT(TEXTO t){
+double get_areaT(TEXTO t){
     texto *t1=((texto*)t);
     printf("aa\n");
     if(t1==NULL){

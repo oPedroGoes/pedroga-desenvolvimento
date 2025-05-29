@@ -7,7 +7,7 @@
      * 
      * @brief Função para criar a estrutura de uma linha
      * 
-     * @param i ID da linha
+     * @param id ID da linha
      * @param x1 Inicio do x da linha
      * @param y1 Inicio do y da linha
      * @param x2 fim do x da linha
@@ -16,7 +16,7 @@
      * 
      * @return Retorna um ponteiro do tipo void para essa estrutura
      */
-    LINHA cria_linha(int i, float x1, float y1, float x2, float y2, char* c);
+    LINHA cria_linha(int id, double x1, double y1, double x2, double y2, char* c);
 
     /**
      * 
@@ -28,7 +28,7 @@
      */
     int get_idL(LINHA l);
 
-    void set_idL(LINHA l, int i);
+    void set_idL(LINHA l, int id);
 
     /**
      * 
@@ -36,9 +36,9 @@
      * 
      * @param l Estrutura da linha para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_X1L(LINHA l);
+    double get_X1L(LINHA l);
 
     /**
      * 
@@ -46,9 +46,9 @@
      * 
      * @param l Estrutura da linha para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_Y1L(LINHA l);
+    double get_Y1L(LINHA l);
 
     /**
      * 
@@ -56,9 +56,9 @@
      * 
      * @param l Estrutura da linha para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_X2L(LINHA l);
+    double get_X2L(LINHA l);
 
     /**
      * 
@@ -66,9 +66,9 @@
      * 
      * @param l Estrutura da linha para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_Y2L(LINHA l);
+    double get_Y2L(LINHA l);
 
     /**
      * 
@@ -86,9 +86,9 @@
      * 
      * @param l Estrutura da linha para pegar a informação
      * 
-     * @return retorna um float
+     * @return retorna um double
      */
-    float get_areaL(LINHA l);
+    double get_areaL(LINHA l);
 
     /** 
      *
@@ -99,7 +99,7 @@
      * 
      * @return void
      */
-    void set_x1L(LINHA l, float x);
+    void set_x1L(LINHA l, double x);
 
     /** 
      *
@@ -110,7 +110,7 @@
      * 
      * @return void
      */
-    void set_y1L(LINHA l, float y);
+    void set_y1L(LINHA l, double y);
 
     /** 
      *
@@ -121,7 +121,7 @@
      * 
      * @return void
      */
-    void set_x2L(LINHA l, float x);
+    void set_x2L(LINHA l, double x);
 
     /** 
      *
@@ -132,7 +132,7 @@
      * 
      * @return void
      */
-    void set_y2L(LINHA l, float y);
+    void set_y2L(LINHA l, double y);
 
     /** 
      *

@@ -5,18 +5,18 @@
 #include "linha.h"
 
 typedef struct{
-    int i;
-    float x1, y1, x2, y2;
+    int id;
+    double x1, y1, x2, y2;
     char *cor;
 }linha;
 
-LINHA cria_linha(int i, float x1, float y1, float x2, float y2, char* c){
+LINHA cria_linha(int id, double x1, double y1, double x2, double y2, char* c){
     linha* l=(linha*)malloc(sizeof(linha));
     if(l==NULL){
         printf("Erro na alocação de memória!\n");
         exit(1);
     }
-    l->i=i;
+    l->id=id;
     l->x1=x1;
     l->y1=y1;
     l->x2=x2;
@@ -32,25 +32,25 @@ LINHA cria_linha(int i, float x1, float y1, float x2, float y2, char* c){
 
 int get_idL(LINHA l){
     linha *l1=((linha*)l);
-    return l1->i;
+    return l1->id;
 }
 
-float get_X1L(LINHA l){
+double get_X1L(LINHA l){
     linha *l1=((linha*)l);
     return l1->x1;
 }
 
-float get_Y1L(LINHA l){
+double get_Y1L(LINHA l){
     linha *l1=((linha*)l);
     return l1->y1;
 }
 
-float get_X2L(LINHA l){
+double get_X2L(LINHA l){
     linha *l1=((linha*)l);
     return l1->x2;
 }
 
-float get_Y2L(LINHA l){
+double get_Y2L(LINHA l){
     linha *l1=((linha*)l);
     return l1->y2;
 }
@@ -60,29 +60,29 @@ char* get_cL(LINHA l){
     return l1->cor;
 }
 
-float get_areaL(LINHA l){
+double get_areaL(LINHA l){
     linha *l1=((linha*)l);
-    float x=l1->x2-l1->x1;
-    float y=l1->y2-l1->y1;
+    double x=l1->x2-l1->x1;
+    double y=l1->y2-l1->y1;
     return 1.5*sqrt(pow(x,2)+pow(y,2));
 }
 
-void set_x1L(LINHA l, float x){
+void set_x1L(LINHA l, double x){
     linha *l1=((linha*)l);
     l1->x1=x;
 }
 
-void set_y1L(LINHA l, float y){
+void set_y1L(LINHA l, double y){
     linha *l1=((linha*)l);
     l1->y1=y;
 }
 
-void set_x2L(LINHA l, float x){
+void set_x2L(LINHA l, double x){
     linha *l1=((linha*)l);
     l1->x2=x;
 }
 
-void set_y2L(LINHA l, float y){
+void set_y2L(LINHA l, double y){
     linha *l1=((linha*)l);
     l1->y2=y;
 }
@@ -98,9 +98,9 @@ void set_cL(LINHA l, char* c){
     strcpy(l1->cor, c);
 }
 
-void set_idL(LINHA l, int i){
+void set_idL(LINHA l, int id){
     linha *l1=(linha*)l;
-    l1->i=i;
+    l1->id=id;
 }
 
 void kill_linha(LINHA l){

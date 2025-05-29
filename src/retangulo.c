@@ -4,20 +4,20 @@
 #include "retangulo.h"
 
 typedef struct{
-    int i;
-    float x, y;
-    float w, h;
+    int id;
+    double x, y;
+    double w, h;
     char *corb, *corp;
 }rectangle;
 
-RECTANGLE create_rectangle(int i, float x, float y, float w, float h, char* cb, char* cp){
+RECTANGLE create_rectangle(int id, double x, double y, double w, double h, char* cb, char* cp){
     rectangle* r=(rectangle*)malloc(sizeof(rectangle));
     if(r==NULL){
         printf("Erro na alocação de memória!\n");
         exit(1);
     }
 
-    r->i=i;
+    r->id=id;
     r->x=x;
     r->y=y;
     r->w=w;
@@ -44,25 +44,25 @@ RECTANGLE create_rectangle(int i, float x, float y, float w, float h, char* cb, 
 
 int get_idR(RECTANGLE r){
     rectangle *r1=((rectangle*)r);
-    return r1->i;
+    return r1->id;
 }
 
-float get_XR(RECTANGLE r){
+double get_XR(RECTANGLE r){
     rectangle *r1=((rectangle*)r);
     return r1->x;
 }
 
-float get_YR(RECTANGLE r){
+double get_YR(RECTANGLE r){
     rectangle *r1=((rectangle*)r);
     return r1->y;
 }
 
-float get_wR(RECTANGLE r){
+double get_wR(RECTANGLE r){
     rectangle *r1=((rectangle*)r);
     return r1->w;
 }
 
-float get_hR(RECTANGLE r){
+double get_hR(RECTANGLE r){
     rectangle *r1=((rectangle*)r);
     return r1->h;
 }
@@ -77,17 +77,17 @@ char* get_cpR(RECTANGLE r){
     return r1->corp;
 }
 
-float get_areaR(RECTANGLE r){
+double get_areaR(RECTANGLE r){
     rectangle *r1=((rectangle*)r);
     return r1->w*r1->h;
 }
 
-void set_xR(RECTANGLE r, float x){
+void set_xR(RECTANGLE r, double x){
     rectangle *r1=((rectangle*)r);
     r1->x=x;
 }
 
-void set_yR(RECTANGLE r, float y){
+void set_yR(RECTANGLE r, double y){
     rectangle *r1=((rectangle*)r);
     r1->y=y;
 }
@@ -105,9 +105,9 @@ void set_cbR(RECTANGLE r, char* cb){
     strcpy(r1->corb, cb);
 }
 
-void set_idR(RECTANGLE r, int i){
+void set_idR(RECTANGLE r, int id){
     rectangle *r1=(rectangle*)r;
-    r1->i=i;
+    r1->id=id;
 }
 
 void set_cpR(RECTANGLE r, char* cp){
