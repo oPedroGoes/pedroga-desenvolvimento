@@ -19,9 +19,11 @@
 */
 
  int main(int argc, char *argv[]){
-  char *dirEntrada = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL, *dirSaida = NULL,
+  char *dirEntrada = NULL, *dirSaida = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL,
        *nomeQry = NULL, *fullNomeQry = NULL;
+
   int *prioMax = NULL, *hc = NULL;
+
   double *promoRate = NULL;
   
   /* MOSTRA OS PARAMETROS */

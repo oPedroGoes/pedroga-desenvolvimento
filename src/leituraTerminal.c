@@ -50,7 +50,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   strcpy(*pathArq, arg); // Copia o arg (potencialmente modificado)
  }
 
- void trataParamNumericoInt(int **num_ptr_addr, const char *param_str){ // param_str apenas leitura
+void trataParamNumericoInt(int **num_ptr_addr, const char *param_str){ // param_str apenas leitura
   *num_ptr_addr = NULL; // Falha/não processado por padrão
 
   if (param_str == NULL) {
@@ -84,7 +84,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   **num_ptr_addr = (int)val; 
  }
 
- void trataParamNumericoFloat(float **num_ptr_addr, const char* param_str){ // param_str apenas leitura
+void trataParamNumericoFloat(float **num_ptr_addr, const char* param_str){ // param_str apenas leitura
   *num_ptr_addr = NULL; // Falha/não processado por padrão
 
   if (param_str == NULL) {
@@ -118,7 +118,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   **num_ptr_addr = val;
  }
 
-  void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str) {
+void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str) {
     *num_ptr_addr = NULL; // Falha/não processado por padrão
 
     if (param_str == NULL) {
@@ -155,7 +155,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
     **num_ptr_addr = val;
 }
 
-  void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
+void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
     int fullNomeLen = strlen(pathDir) + 1 + strlen(nomeArq);
     
     *fullNomeArq = (char*)malloc(sizeof(char)*(fullNomeLen+1));
@@ -170,4 +170,32 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
     strcat(*fullNomeArq, nomeArq);
   }
 
-  void 
+void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
+    int lenGeo = strlen(nomeGeo);
+    int lenQry = strlen(nomeQry);
+    
+    char buff1[lenGeo];
+    char buff2[lenQry];
+
+    strcpy(buff1, nomeGeo);
+    strcpy(buff2, nomeQry);
+    
+    buff1[strlen(buff1)-4] = '\0';
+    buff2[strlen(buff2)-4] = '\0';
+
+    int lenArqTxt = strlen(pathOut) + 1 + strlen(buff1) + 1 + strlen(buff2) + 4;
+
+    *arqTxt = (char*)malloc(sizeof(char)*(lenArqTxt + 1));
+    if (arqTxt == NULL){
+      fprintf(stderr, "(trataArqTxt) ERRO: falha ao alocar memoria para '%s'\n", *arqTxt);
+    // Deixa *pathDir como NULL para ser checado em main
+    return ;
+    }
+
+    strcpy(*arqTxt, pathOut); 
+    strcat(*arqTxt, "/");
+    strcat(*arqTxt, buff1);
+    strcat(*arqTxt, "-");
+    strcat(*arqTxt, buff2);
+    strcat(*arqTxt, ".txt");
+}
