@@ -38,4 +38,6 @@ void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str);
 
 void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq);
 
+void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt);
+
 #endif

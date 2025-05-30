@@ -8,12 +8,14 @@
 #define TIPO_TEXTO 3
 #define TIPO_LINHA 4
 
-
+typedef struct{
+    double x, y, w, h;
+}BB;
 
 typedef struct node_internal{
     //ancoras do nó
-    double nodeAnch_x;
-    double nodeAnch_y;
+    double x;
+    double y;
 
     //heap
     int priority;
@@ -31,10 +33,8 @@ typedef struct node_internal{
     int hitCountCounter;
 
     //para armazenar bounding box
-    double bb_anch_x;
-    double bb_anch_y;
-    double bb_length;
-    double bb_width;
+    BB node;
+    BB subTree;
 } node_internal;
 
 typedef struct{
@@ -95,7 +95,7 @@ Node newNode(double x, double y, int priorityMax, Info i, DescritorTipoInfo d, F
 
     //o que fazer com fCalcBb?
 
-}*/
+}
 
 Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCalculaBoundingBox fCalcBb){
 

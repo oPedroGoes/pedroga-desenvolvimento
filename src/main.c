@@ -20,7 +20,7 @@
 
  int main(int argc, char *argv[]){
   char *dirEntrada = NULL, *dirSaida = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL,
-       *nomeQry = NULL, *fullNomeQry = NULL;
+       *nomeQry = NULL, *fullNomeQry = NULL; char *fullNomeTxt = NULL;
 
   int *prioMax = NULL, *hc = NULL;
 
@@ -128,6 +128,7 @@
 
   completaNomeArquivo(dirEntrada, nomeGeo, &fullNomeGeo);
   completaNomeArquivo(dirEntrada, nomeQry, &fullNomeQry);
+  trataArqTxt(dirSaida, nomeGeo, nomeQry, &fullNomeTxt);
 
   printf("\n--- Valores Processados ---\n");
   printf("dirEntrada = %s\n", dirEntrada ? dirEntrada : "(null ou falha)");
@@ -136,9 +137,12 @@
   printf("nomeQry    = %s\n", nomeQry    ? nomeQry    : "(null ou falha)");
   printf("fullNomeQry    = %s\n", fullNomeQry    ? fullNomeQry    : "(null ou falha)");
   printf("fullNomeGeo    = %s\n", fullNomeGeo   ? fullNomeGeo    : "(null ou falha)");
+  printf("fullNomeTxt    = %s\n", fullNomeTxt   ? fullNomeTxt    : "(null ou falha)");
 
   int instru = 0, foramcriadas = 0, id = 0;
   processa_geo(fullNomeGeo, dirSaida, nomeGeo, &instru, &foramcriadas, &id);
+
+
 
   if (prioMax != NULL) {
     printf("prioMax = %d\n", *prioMax);

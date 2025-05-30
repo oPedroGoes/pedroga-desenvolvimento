@@ -52,7 +52,22 @@ void calcBB_l(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h
 }
 
 void *fCalcBB(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
-    if (tp == 1){
-        //calcBB_c()
+    switch (tp)
+    {
+    case 1:
+        calcBB_c(i, bbA_x, bbA_y, bbA_w, bbA_h);
+        break;
+
+    case 2:
+        calcBB_r(i, bbA_x, bbA_y, bbA_w, bbA_h);
+        break;
+
+    case 3:
+        calcBB_t(i, bbA_x, bbA_y, bbA_w, bbA_h);
+        break;
+    
+    default:
+        calcBB_l(i, bbA_x, bbA_y, bbA_w, bbA_h);
+        break;
     }
 }
