@@ -34,7 +34,8 @@ typedef struct node_internal{
 
     //para armazenar bounding box
     BB BBnode;
-    BB BBsubTree;
+    BB BBsubTreeL;
+    BB BBsubTreeR;
 } node_internal;
 
 typedef struct{
