@@ -11,6 +11,8 @@
 #include "linha.h"
 
 //c: 1, r: 2, t: 3, l: 4
+typedef void* BB; //ADICIONAR NO .H!!!!!!!
+
 
 void calcBB_c(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
     if (i == NULL) { 
@@ -141,6 +143,22 @@ void *fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bb
         break;
     }
 }
+
+/*void uniaoBB(BB bb_dest, BB bb1, BB bb2){
+    // VERIFICACAO VALIDADE DE AMBOS OS BB.
+    if (!bb1 || (bb1->w < 0 || bb1->h < 0)) { // bb1 inválido ou não inicializado
+        if (bb2 && bb2->w >= 0 && bb2->h >= 0) {
+            *bb_res = *bb2;
+        } else {
+            bb_res->x = 0; bb_res->y = 0; bb_res->w = -1; bb_res->h = -1; // inválido
+        }
+        return;
+    }
+    if (!bb2 || (bb2->w < 0 || bb2->h < 0)) { // bb2 inválido ou não inicializado
+         *bb_res = *bb1; // bb1 é válido (verificado acima)
+        return;
+    }
+}*/
 
 //TALVEZ HAVERA UMA
 void *fCalcBB_agrupada(){}

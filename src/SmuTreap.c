@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #define TIPO_CIRCULO 1
 #define TIPO_RETANGULO 2
@@ -33,9 +34,8 @@ typedef struct node_internal{
     int hitCountCounter;
 
     //para armazenar bounding box
-    BB BBnode;
-    BB BBsubTreeL;
-    BB BBsubTreeR;
+    BB BBinfo;
+    BB BBsubTree;
 } node_internal;
 
 typedef struct{
@@ -69,7 +69,7 @@ SmuTreap newSmuTreap(int hitCount, int priorityMax, double promotionRate, double
 
     newSmu->root = NULL;
     newSmu->hitCountConfig = hitCount;
-    //newSmu->prioMax = ??;
+    newSmu->prioMax = priorityMax;
     newSmu->promoRateConfig = promotionRate;
     newSmu->epsilon = epsilon;
 
@@ -99,13 +99,169 @@ Node newNode(double x, double y, int priorityMax, Info i, DescritorTipoInfo d, F
 
     //calcula o BB individual.
     if(fCalcBb){
-        fCalcBb(d, i, &(newNode->BBnode.x), &(newNode->BBnode.y), (&newNode->BBnode.w), &(newNode->BBnode.h));
+        fCalcBb(d, i, &(newNode->BBinfo.x), &(newNode->BBinfo.y), &(newNode->BBinfo.w), &(newNode->BBinfo.h));
     } else fprintf(stderr, "(newNode) Erro: fCalcBb aponta NULL. Bounding box não calculado para o novo nó.\n");
     
     return newNode;
 }
 
-void rotacionaDir(node_internal *nd){
+//--------------------------------------TALVEZ, PARTE DE boundingBox.h!------------------------------------------//
+/**
+ * @brief Calcula a união de dois bounding boxes.
+ * O resultado é armazenado em bb_res.
+ */
+void uniaoBB(BB *bb_dest, BB *bb1, BB *bb2){
+    // VERIFICACAO VALIDADE DE AMBOS OS BB.
+    bool bb1_valido = bb1 && bb1->w >= 0 && bb1->h >= 0;
+    bool bb2_valido = bb2 && bb2->w >= 0 && bb2->h >= 0;
+
+    if (!bb1_valido) {
+        if (bb2_valido) {
+            *bb_dest = *bb2;
+        } else { // Ambos inválidos
+            bb_dest->w = -1; bb_dest->h = -1; // Marcar resultado como inválido
+        }
+        return;
+    }
+    if (!bb2_valido) { // bb1 é valido, bb2 é invalido
+        *bb_dest = *bb1;
+        return;
+    }
+
+    double min_x = fmin(bb1->x, bb2->x); // Ambos sao as coordenadas ancora da nova BB
+    double min_y = fmin(bb1->y, bb2->y);
+    double max_x = fmax(bb1->x + bb1->w, bb2->x + bb2->w);
+    double max_y = fmax(bb1->y + bb1->w, bb2->y + bb2->w);
+    
+    bb_dest->x = min_x;
+    bb_dest->y = min_y;
+    bb_dest->w = max_x - min_x;
+    bb_dest->h = max_y - min_y;
+
+    //DEFINE A ANCORA DO NOVO BB COMO A PARTE ESQUERDA MAIS ALTA NA TELA(parte inferior em relacao ao y, que cresce para baixo).
+}
+
+/* 
+* @brief Atualiza o bounding box da subárvore de um nó.
+*
+*  Esta função será chamada recursivamente de baixo para cima após qualquer modificação estrutural na 
+* árvore (inserção, remoção, rotações). Ela assume que o bb_info do nó n está correto e que os 
+* bb_subtree dos filhos de n (se existirem) já foram corretamente atualizados.
+*/
+void atualizaBB_subtree(node_internal *n){
+    if (!n){
+        fprintf(stderr, "(atualizaBB_subtree) Erro: no eh invalido (NULL)");
+        return;
+    }
+
+    if (n->BBinfo.w >= 0 && n->BBinfo.h >= 0) {
+        n->BBsubTree = n->BBinfo;
+    } else {
+        // Se o BBinfo do nó 'n' for inválido ou não definido,
+        // usar a âncora como um ponto é um fallback seguro.
+        n->BBsubTree.x = n->x;
+        n->BBsubTree.y = n->y; // Âncora é canto inferior-esquerdo
+        n->BBsubTree.w = 0;
+        n->BBsubTree.h = 0;
+    }
+
+    if (n->left) {
+        // A função uniao_bb deve ser capaz de lidar com um dos BBs sendo
+        // o "BB de ponto" (se o filho esquerdo for uma folha e seu bb_info
+        // não for válido, e seu bb_subtree for apenas sua âncora).
+        // Ela também deve ser capaz de lidar se n->left->bb_subtree for inválido (w < 0).
+        if (n->left->BBsubTree.w >= 0 && n->left->BBsubTree.h >= 0) {
+            uniao_bb(&(n->BBsubTree), &(n->BBsubTree), &(n->left->BBsubTree));
+        } else{
+            fprintf(stderr, "(atualizaBB_subtree) Erro: bounding box invalida.");
+            return;
+        }
+    }
+
+    if (n->right) {
+        if (n->right->BBsubTree.w >= 0 && n->right->BBsubTree.h >= 0) {
+            uniao_bb(&(n->BBsubTree), &(n->BBsubTree), &(n->right->BBsubTree));
+        } else{
+            fprintf(stderr, "(atualizaBB_subtree) Erro: bounding box invalida.");
+            return;
+        }
+    }
+
+
+}
+
+//------------------------------------------------------------------------------------------------------------------//
+
+/* "Eu" viro filho direito do meu filho esquerdo, 
+*   e os flhos direitos dele viram meus filhos esquerdos.
+*
+* @returns sucesso - No' do ANTIGO filho direito \n
+*          erro - NULL
+*/
+void rotacionaDir(node_internal **rootRef){
+    if(!rootRef){
+        fprintf(stderr, "(rotacionaDir) Erro: no' invalido.");
+        return;
+    }
+    node_internal *root = *rootRef;
+    if (!(root->left)){
+        fprintf(stderr, "(rotacionaDir) Erro: tentativa de acesso a NULL (nd->left = NULL).");
+        return;
+    }
+    
+    node_internal *leftSon = root->left;
+
+    // "filhos direitos dele viram meus filhos esquerdos"
+    root->left = root->left->right;
+
+    // "'Eu' viro filho direito do meu filho esquerdo"
+    leftSon->right = root;
+
+    atualizaBB_subtree(root); //atualiza root primeiro, pois agora é filho.
+    atualizaBB_subtree(leftSon); // Atualiza leftSon apenas depois que seus filhos estiverem corrigidos.
+
+    /* Faz o root da função que chamou a rotação  
+    * apontar para leftSon, sendo então atualizado
+    * na proxima volta da recursão.
+    */
+    *rootRef = leftSon;
+
+
+
+    // meu filho esquerdo vira meu pai, e eu viro pai dos filhos direitos dele
+
+}
+
+void rotacionaEsq(node_internal **rootRef){
+    if(!rootRef){
+        fprintf(stderr, "(rotacionaDir) Erro: no' invalido.");
+        return;
+    }
+    node_internal *root = *rootRef;
+    if (!(root->right)){
+        fprintf(stderr, "(rotacionaDir) Erro: tentativa de acesso a NULL (nd->left = NULL).");
+        return;
+    }
+
+    node_internal *rightSon = root->right;
+
+    // "filhos esquerdos dele viram meus filhos direitos"
+    root->right = root->right->left;
+
+    // "'Eu' viro filho esquerdo do meu filho direito"
+    rightSon->left = root;
+
+    atualizaBB_subtree(root); //atualiza root primeiro, pois agora é filho.
+    atualizaBB_subtree(rightSon); // Atualiza rightSon apenas depois que seus filhos estiverem corrigidos.
+
+    /* Faz o root da função que chamou a rotação  
+    * apontar para rightSon, sendo então atualizado
+    * na proxima volta da recursão.
+    */
+    *rootRef = rightSon;
+
+
+    // meu filho direito vira meu pai, e eu viro pai dos filhos esquerdos dele
 
 }
 
@@ -136,38 +292,71 @@ node_internal *insertSmuT_aux(node_internal *root, double x, double y, Info i, D
     if(x < root->x - epsilon_i){ // x e' menor do que o x minimo para que seja considerado como igual.
         // Vai para a esquerda.
         root->left = insertSmuT_aux(root->left, x, y, i, d, fCalcBb, t);
+
+        if (root->left->priority > root->priority){
+            rotacionaDir(&root);
+            root->right->dad = root;
+        }
         root->left->dad = root;
     } else{
         if (x > root->x + epsilon_i){ // x e' maior do que o x minimo para que seja considerado como igual.
             // Vai para a direita.
             root->right = insertSmuT_aux(root->right, x, y, i, d, fCalcBb, t);
+
+            if(root->right->priority > root->priority){
+                rotacionaEsq(&root);
+                root->left->dad = root;
+            }
             root->right->dad = root;
         } else{                   // Se chegou aqui, |px - noAtual_x| <= epsilon. Consideramos x = rooti->x.
             if (y < root->y - epsilon_i){ // Mesma logica dos demais.
                 // Vai para a esquerda.
                 root->left = insertSmuT_aux(root->left, x, y, i, d, fCalcBb, t);
+                
+                if (root->left->priority > root->priority){
+                    rotacionaDir(&root);
+                    root->right->dad = root;
+                }
                 root->left->dad = root;
             } else{
                 if (y > root->y + epsilon_i){ // Mesma logica dos demais.
                     // Vai para a direita.
                     root->right = insertSmuT_aux(root->right, x, y, i, d, fCalcBb, t);
+
+                    if(root->right->priority > root->priority){
+                        rotacionaEsq(&root);
+                        root->left->dad = root;
+                    }
                     root->right->dad = root;
                 } else{
                     fprintf(stderr, "(insertSmuT_aux) Erro: no' ja' existente.");
-                    exit (1);
+                    return root;
                 }
             }
         }
     }
 
+    if(root) atualizaBB_subtree(root);
 
 
-
-
+    return root;
 }
 
 Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCalculaBoundingBox fCalcBb){
+    if (!t){
+        fprintf(stderr, "(insertSmuT) Erro: arvore invalida.");
+        return NULL;
+    }
+    SmuTreap_internal *t_i = (SmuTreap_internal*)t;
 
+    // A versao do Gemini se preocupa em como passar fCalcBb para ca. Eu nao entendi, mas tomar nota!
+
+    int prioridade = rand() % (t_i->prioMax + 1);
+
+    node_internal *nd = (node_internal*)newNode(x, y, prioridade, i, d, fCalcBb);
+    t_i->root = insertSmuT_aux;
+    
+    return nd;
 }
 
 Node getNodeSmuT(SmuTreap t, double x, double y);
@@ -250,4 +439,4 @@ bool printDotSmuTreap(SmuTreap t, char *fn);
 
 void killSmuTreap(SmuTreap t);
 /* Libera a memoria usada pela arvore t.
- */
+*/
