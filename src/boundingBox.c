@@ -3,6 +3,7 @@
 #include <string.h>
 #include <math.h>
 
+//#include "boundingBox.h"
 #include "SmuTreap.h"
 #include "circulo.h"
 #include "retangulo.h"
@@ -109,10 +110,10 @@ double minD(double x, double y){
     return (x < y) ? x : y;
 }
 void calcBB_l(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
-    double x1 = get_X1L(i);
-    double y1 = get_Y1L(i);
-    double x2 = get_X2L(i);
-    double y2 = get_Y2L(i);
+    double x1 = get_X1L((LINHA)i);
+    double y1 = get_Y1L((LINHA)i);
+    double x2 = get_X2L((LINHA)i);
+    double y2 = get_Y2L((LINHA)i);
 
     *bbA_x = minD(x1, x2);
     *bbA_y = maxD(y1, y2);
@@ -120,7 +121,7 @@ void calcBB_l(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h
     *bbA_h = abs(y1 - y2);
 }
 
-void *fCalcBB(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
+void *fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
     switch (tp)
     {
     case 1:
@@ -140,3 +141,6 @@ void *fCalcBB(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double
         break;
     }
 }
+
+//TALVEZ HAVERA UMA
+void *fCalcBB_agrupada(){}

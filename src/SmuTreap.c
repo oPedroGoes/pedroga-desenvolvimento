@@ -104,6 +104,10 @@ Node newNode(double x, double y, int priorityMax, Info i, DescritorTipoInfo d, F
     return newNode;
 }
 
+void rotacionaDir(node_internal *nd){
+
+}
+
 //aux
 node_internal *insertSmuT_aux(node_internal *root, double x, double y, Info i, DescritorTipoInfo d, FCalculaBoundingBox fCalcBb, SmuTreap_internal *t){
     double epsilon_i = t->epsilon;
