@@ -79,7 +79,10 @@ SmuTreap newSmuTreap(int hitCount, int priorityMax, double promotionRate, double
 //aux
 Node newNode(double x, double y, int priorityMax, Info i, DescritorTipoInfo d, FCalculaBoundingBox fCalcBb){
     node_internal *newNode = (node_internal*) malloc(sizeof(node_internal));
-    if(!newNode) {printf("(newNode) Erro: falha ao alocar memoria."); return NULL;}
+    if (!newNode) {
+        perror("(newNode) Erro: falha ao alocar memoria para no"); // Adicionado perror para mais info
+        return NULL;
+    }
 
     newNode->x = x;
     newNode->y = y;
@@ -100,8 +103,21 @@ Node newNode(double x, double y, int priorityMax, Info i, DescritorTipoInfo d, F
     //calcula o BB individual.
     if(fCalcBb){
         fCalcBb(d, i, &(newNode->BBinfo.x), &(newNode->BBinfo.y), &(newNode->BBinfo.w), &(newNode->BBinfo.h));
-    } else fprintf(stderr, "(newNode) Erro: fCalcBb aponta NULL. Bounding box não calculado para o novo nó.\n");
-    
+    } else {
+        fprintf(stderr, "(newNode) Erro: fCalcBb aponta NULL. Bounding box não calculado para o novo nó.\n");
+        newNode->BBinfo.w = -1.0; // Marcar como inválido
+        newNode->BBinfo.h = -1.0;
+    }
+
+    if (newNode->BBinfo.w >= 0 && newNode->BBinfo.h >= 0) {
+        newNode->BBsubTree = newNode->BBinfo; // Cópia de struct
+    } else {
+        newNode->BBsubTree.x = newNode->x;
+        newNode->BBsubTree.y = newNode->y;
+        newNode->BBsubTree.w = 0;
+        newNode->BBsubTree.h = 0;
+    }
+
     return newNode;
 }
 
@@ -119,7 +135,7 @@ void uniaoBB(BB *bb_dest, BB *bb1, BB *bb2){
         if (bb2_valido) {
             *bb_dest = *bb2;
         } else { // Ambos inválidos
-            bb_dest->w = -1; bb_dest->h = -1; // Marcar resultado como inválido
+            bb_dest->w = -1.0; bb_dest->h = -1.0; // Marcar resultado como inválido
         }
         return;
     }
@@ -131,7 +147,7 @@ void uniaoBB(BB *bb_dest, BB *bb1, BB *bb2){
     double min_x = fmin(bb1->x, bb2->x); // Ambos sao as coordenadas ancora da nova BB
     double min_y = fmin(bb1->y, bb2->y);
     double max_x = fmax(bb1->x + bb1->w, bb2->x + bb2->w);
-    double max_y = fmax(bb1->y + bb1->w, bb2->y + bb2->w);
+    double max_y = fmax(bb1->y + bb1->h, bb2->y + bb2->h);
     
     bb_dest->x = min_x;
     bb_dest->y = min_y;
@@ -157,8 +173,8 @@ void atualizaBB_subtree(node_internal *n){
     if (n->BBinfo.w >= 0 && n->BBinfo.h >= 0) {
         n->BBsubTree = n->BBinfo;
     } else {
-        // Se o BBinfo do nó 'n' for inválido ou não definido,
-        // usar a âncora como um ponto é um fallback seguro.
+        // Se BBinfo do nó 'n' for inválido, seu BBsubTree inicial
+        // será apenas sua âncora (tratada como um ponto).
         n->BBsubTree.x = n->x;
         n->BBsubTree.y = n->y; // Âncora é canto inferior-esquerdo
         n->BBsubTree.w = 0;
@@ -170,21 +186,10 @@ void atualizaBB_subtree(node_internal *n){
         // o "BB de ponto" (se o filho esquerdo for uma folha e seu bb_info
         // não for válido, e seu bb_subtree for apenas sua âncora).
         // Ela também deve ser capaz de lidar se n->left->bb_subtree for inválido (w < 0).
-        if (n->left->BBsubTree.w >= 0 && n->left->BBsubTree.h >= 0) {
             uniao_bb(&(n->BBsubTree), &(n->BBsubTree), &(n->left->BBsubTree));
-        } else{
-            fprintf(stderr, "(atualizaBB_subtree) Erro: bounding box invalida.");
-            return;
-        }
     }
-
     if (n->right) {
-        if (n->right->BBsubTree.w >= 0 && n->right->BBsubTree.h >= 0) {
-            uniao_bb(&(n->BBsubTree), &(n->BBsubTree), &(n->right->BBsubTree));
-        } else{
-            fprintf(stderr, "(atualizaBB_subtree) Erro: bounding box invalida.");
-            return;
-        }
+        uniao_bb(&(n->BBsubTree), &(n->BBsubTree), &(n->right->BBsubTree));
     }
 
 
@@ -266,15 +271,9 @@ void rotacionaEsq(node_internal **rootRef){
 }
 
 //aux
-node_internal *insertSmuT_aux(node_internal *root, double x, double y, Info i, DescritorTipoInfo d, FCalculaBoundingBox fCalcBb, SmuTreap_internal *t){
+node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_internal *t){
     double epsilon_i = t->epsilon;
     if(!root){
-        node_internal *new = (node_internal*)newNode(x, y, t->prioMax, i, d, fCalcBb);
-        if(!new){
-            fprintf(stderr, "(insertSmuT_aux) Erro: falha ao alocar memoria para no'.");
-            exit (1);
-        }
-
         return new;
     }
 
@@ -289,51 +288,32 @@ node_internal *insertSmuT_aux(node_internal *root, double x, double y, Info i, D
     *  1. Quando x > rooti->x + epsilon
     *  2. Quando Quando rooti->x - epsilon <= x <= rooti->x + epsilon, mas y > rooti->y
     */
-    if(x < root->x - epsilon_i){ // x e' menor do que o x minimo para que seja considerado como igual.
-        // Vai para a esquerda.
-        root->left = insertSmuT_aux(root->left, x, y, i, d, fCalcBb, t);
 
+    bool podeIrDireita = (new->x < root->x - epsilon_i) || (fabs(new->x - root->x) < epsilon_i && (new->y < root->y - epsilon_i));
+    bool podeIrEsquerda = (new->x > root->x + epsilon_i) || (fabs(new->x - root->x) < epsilon_i && (new->y > root->y + epsilon_i));
+
+    if (podeIrDireita){
+        // Vai para a direita.
+        root->right = insertSmuT_aux(root->right, new, t);
+
+        if(root->right->priority > root->priority){
+            rotacionaEsq(&root);
+            root->left->dad = root;
+        }
+        root->right->dad = root;
+    } else if (podeIrEsquerda){
+        // Vai para a esquerda.
+        root->left = insertSmuT_aux(root->left, new, t);
+                
         if (root->left->priority > root->priority){
             rotacionaDir(&root);
             root->right->dad = root;
         }
         root->left->dad = root;
     } else{
-        if (x > root->x + epsilon_i){ // x e' maior do que o x minimo para que seja considerado como igual.
-            // Vai para a direita.
-            root->right = insertSmuT_aux(root->right, x, y, i, d, fCalcBb, t);
-
-            if(root->right->priority > root->priority){
-                rotacionaEsq(&root);
-                root->left->dad = root;
-            }
-            root->right->dad = root;
-        } else{                   // Se chegou aqui, |px - noAtual_x| <= epsilon. Consideramos x = rooti->x.
-            if (y < root->y - epsilon_i){ // Mesma logica dos demais.
-                // Vai para a esquerda.
-                root->left = insertSmuT_aux(root->left, x, y, i, d, fCalcBb, t);
-                
-                if (root->left->priority > root->priority){
-                    rotacionaDir(&root);
-                    root->right->dad = root;
-                }
-                root->left->dad = root;
-            } else{
-                if (y > root->y + epsilon_i){ // Mesma logica dos demais.
-                    // Vai para a direita.
-                    root->right = insertSmuT_aux(root->right, x, y, i, d, fCalcBb, t);
-
-                    if(root->right->priority > root->priority){
-                        rotacionaEsq(&root);
-                        root->left->dad = root;
-                    }
-                    root->right->dad = root;
-                } else{
-                    fprintf(stderr, "(insertSmuT_aux) Erro: no' ja' existente.");
-                    return root;
-                }
-            }
-        }
+        fprintf(stderr, "(insertSmuT_aux) Erro: no' ja' existente.");
+        free(new);
+        return root;
     }
 
     if(root) atualizaBB_subtree(root);
@@ -353,10 +333,14 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
 
     int prioridade = rand() % (t_i->prioMax + 1);
 
-    node_internal *nd = (node_internal*)newNode(x, y, prioridade, i, d, fCalcBb);
-    t_i->root = insertSmuT_aux;
+    node_internal *new = (node_internal*)newNode(x, y, prioridade, i, d, fCalcBb);
+    if (!new) return NULL;
+    t_i->root = insertSmuT_aux(t_i->root, new, t);
     
-    return nd;
+    if (t_i->root == new || (new->dad != NULL) ) {
+         // Se o novo nó é a raiz, ou se tem um pai, ele foi inserido.
+        return (Node)new;
+    } else return NULL;
 }
 
 Node getNodeSmuT(SmuTreap t, double x, double y);
