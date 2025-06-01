@@ -193,10 +193,10 @@ void atualizaBB_subtree(node_internal *n){
         // o "BB de ponto" (se o filho esquerdo for uma folha e seu bb_info
         // não for válido, e seu bb_subtree for apenas sua âncora).
         // Ela também deve ser capaz de lidar se n->left->bb_subtree for inválido (w < 0).
-            uniao_bb(&(n->BBsubTree), &(n->BBsubTree), &(n->left->BBsubTree));
+            uniaoBB(&(n->BBsubTree), &(n->BBsubTree), &(n->left->BBsubTree));
     }
     if (n->right) {
-        uniao_bb(&(n->BBsubTree), &(n->BBsubTree), &(n->right->BBsubTree));
+        uniaoBB(&(n->BBsubTree), &(n->BBsubTree), &(n->right->BBsubTree));
     }
 
 
@@ -390,7 +390,6 @@ node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_i
     bool xDentroDeEpsulon = fabs(x - root->x) < t->epsilon;
     bool yDentroDeEpsulon = fabs(y - root->y) < t->epsilon;
     bool podeIrDireita = (x > root->x + t->epsilon) || (fabs(x - root->x) < t->epsilon && (y > root->y + t->epsilon));
-    bool podeIrEsquerda = (x < root->x - t->epsilon) || (fabs(x - root->x) < t->epsilon && (y < root->y - t->epsilon));
 
 
     if (xDentroDeEpsulon && yDentroDeEpsulon){ // Encontrou!
@@ -422,121 +421,6 @@ Node getNodeSmuT(SmuTreap t, double x, double y){
     t_i->root = getNodeSmuT_aux(t_i, t_i->root, &result, x, y);
 
     return result;
-}
-
-DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n);
-/* 
- * Retorna o tipo da informacao associada ao no' n 
-*/
-
-void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
-
-    if (!t || !n || promotionRate <= 0){
-        fprintf(stderr, "(promoteNodeSmuT) Erro: parametros invalidos.");
-        return;
-    } 
-    if (promotionRate <= 0.0) {
-         fprintf(stderr, "(promoteNodeSmuT) Erro: promotionRate deve ser > 0.0.\n");
-        return;
-    }
-
-    SmuTreap_internal *treap = (SmuTreap_internal *)t;
-    node_internal *ni = (node_internal *)n;
-
-
-    int antiga_prioridade = ni->priority;
-    int nova_prioridade = (int)(ni->priority * promotionRate);
-
-    if (promotionRate > 1.0 && nova_prioridade == ni->priority){
-        nova_prioridade++; // Se no cast para int o valor permaneceu o mesmo, arredonda para cima.
-    } else if (promotionRate < 1.0 && nova_prioridade == ni->priority && nova_prioridade > 0) {
-        nova_prioridade--; //Se no cast para int o valor permaneceu o mesmo, arredonda para baixo.
-    }
-
-    // Tetos
-    if (nova_prioridade > treap->prioMax) nova_prioridade = treap->prioMax;
-    if (nova_prioridade < 0) nova_prioridade = 0;
-
-    // Salvar principais dados.
-    double x_copia = ni->x;
-    double y_copia = ni->y;
-    Info info_copia = ni->info;
-    DescritorTipoInfo descritor_copia = ni->descritor;
-    int hit_copia = ni->hitCountCounter;
-    BB BBinfo_copia = ni->BBinfo;
-    BB BBsubTree_copia = ni->BBsubTree;
-
-    removeNoSmuT_SemLiberarInfo(t, n); // 'n' (e 'ni_original') agora é um ponteiro para memória liberada!
-
-    // 4. Criar um novo nó com os dados salvos e a NOVA prioridade.
-    //    Precisamos de FCalculaBoundingBox para newNode.
-    //    Se não tivermos fCalcBb, passamos NULL, e newNode lidará com isso (marcando BBinfo como inválido).
-    //    Isso é problemático. Idealmente, a treap armazenaria fCalcBb.
-    FCalculaBoundingBox func_calc_bb_para_novo_no = NULL; // SUBSTITUA PELO MECANISMO CORRETO PARA OBTER fCalcBb
-                                                       // Ex: Se SmuTreapInternal tivesse um campo para isso:
-                                                       // func_calc_bb_para_novo_no = treap->func_calc_bb_armazenada;
-
-    // Criar novo no newNode: node_internal *no_promovido = ...
-    // Verificar se deu bom no return
-
-    // Reatribuir hitCountCounter para o novo no.
-
-    //Reinserir o nó "promovido" na árvore.
-
-
-
-
-    ni->priority = nova_prioridade;
-
-
-
-    node_internal *flag = removeNoSmuT_aux(treap, treap->root, ni); // Remove o no' desejado e guarda o resultado em uma flag para comparacao. 
-
-    if (flag){
-        insertSmuT_aux(treap->root, aux, t);
-        
-    } else {
-        // Algo deu errado na remoção, restaurar a prioridade original?
-        // Ou tentar reinserir mesmo assim? Para evitar perda de dados,
-        // vamos tentar reinserir, mas isso pode levar a duplicatas se a remoção falhou e o nó ainda existe.
-        // É mais seguro se a remoção for garantida.
-        // Se o nó 'n' veio de getNodeSmuT, ele existe.
-        fprintf(stderr, "Aviso (promoteNodeSmuT): falha ao remover no para promocao. O no pode nao ser reposicionado corretamente ou dados podem ser perdidos.\n");
-        // Para evitar perda, se remove_recursive falhar, poderíamos apenas deixar a prioridade atualizada
-        // e esperar que futuras operações corrijam a ordem do heap, ou ter uma função "heapify_up".
-        // A abordagem de remover e reinserir é mais simples se a remoção for robusta.
-    }
-}
-
-//aux
-void killNode(node_internal *n){
-    if (!n || !n->info){
-        fprintf(stderr, "(killNode) Erro: parametros invalidos.");
-        return ;
-    }
-
-    switch (n->descritor)
-    {
-    case TIPO_CIRCULO:
-        kill_circ((CIRCLE) n->info);
-        free(n);
-        break;
-    
-    case TIPO_RETANGULO:
-        kill_rectangle((RECTANGLE) n->info);
-        free(n);
-        break;
-
-    case TIPO_TEXTO:
-        kill_texto((TEXTO) n->info);
-        free(n);
-        break;
-
-    default:
-        kill_linha((LINHA) n->info);
-        free(n);
-        break;
-    }
 }
 
 //aux
@@ -606,6 +490,122 @@ void removeNoSmuT_SemLiberarInfo(SmuTreap t, Node n){
     ti->root = removeNoSmuT_aux(ti, ti->root, ni);
 }
 
+DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n){
+    if (!n){
+        fprintf(stderr, "(getTypeInfoSmuT) Erro: parametros invalidos");
+        return 0; // Ou um valor de erro/inválido
+    }
+    node_internal *ni = (node_internal*)n;
+    return ni->descritor;
+}
+
+//aux
+void killInfo(Info info, DescritorTipoInfo descritor){
+    if (!info || !descritor){
+        fprintf(stderr, "(killInfo) Erro: parametros invalidos.");
+        return ;
+    }
+
+    switch (descritor)
+    {
+    case TIPO_CIRCULO:
+        kill_circ((CIRCLE) info);
+        break;
+    
+    case TIPO_RETANGULO:
+        kill_rectangle((RECTANGLE) info);
+        break;
+
+    case TIPO_TEXTO:
+        kill_texto((TEXTO) info);
+        break;
+
+    default:
+        kill_linha((LINHA) info);
+        break;
+    }
+}
+
+void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
+
+    if (!t || !n || promotionRate <= 0){
+        fprintf(stderr, "(promoteNodeSmuT) Erro: parametros invalidos.");
+        return;
+    } 
+    if (promotionRate <= 0.0) {
+         fprintf(stderr, "(promoteNodeSmuT) Erro: promotionRate deve ser > 0.0.\n");
+        return;
+    }
+
+    SmuTreap_internal *treap = (SmuTreap_internal *)t;
+    node_internal *ni = (node_internal *)n;
+
+
+    int antiga_prioridade = ni->priority;
+    int nova_prioridade = (int)(ni->priority * promotionRate);
+
+    if (promotionRate > 1.0 && nova_prioridade == ni->priority){
+        nova_prioridade++; // Se no cast para int o valor permaneceu o mesmo, arredonda para cima.
+    } else if (promotionRate < 1.0 && nova_prioridade == ni->priority && nova_prioridade > 0) {
+        nova_prioridade--; //Se no cast para int o valor permaneceu o mesmo, arredonda para baixo.
+    }
+
+    // Tetos
+    if (nova_prioridade > treap->prioMax) nova_prioridade = treap->prioMax;
+    if (nova_prioridade < 0) nova_prioridade = 0;
+
+    // Salvar principais dados.
+    double x_copia = ni->x;
+    double y_copia = ni->y;
+    Info info_copia = ni->info;
+    DescritorTipoInfo descritor_copia = ni->descritor;
+    int hit_copia = ni->hitCountCounter;
+
+    removeNoSmuT_SemLiberarInfo(t, n); // 'n' (e 'ni_original') agora é um ponteiro para memória liberada!
+
+    node_internal *zombie_node = (Node)newNode(x_copia, y_copia, nova_prioridade, info_copia, descritor_copia, treap->fCalcBB);
+    if (!zombie_node){
+        fprintf(stderr, "(promoteNodeSmuT) Erro: falha ao criar novo no'");
+        killInfo(info_copia, descritor_copia);
+        return;
+    }
+
+    zombie_node->hitCountCounter = hit_copia;
+
+    treap->root = insertSmuT_aux(treap->root, zombie_node, treap);
+}
+
+//aux
+void killNode(node_internal *n){
+    if (!n || !n->info){
+        fprintf(stderr, "(killNode) Erro: parametros invalidos.");
+        return ;
+    }
+
+    switch (n->descritor)
+    {
+    case TIPO_CIRCULO:
+        kill_circ((CIRCLE) n->info);
+        free(n);
+        break;
+    
+    case TIPO_RETANGULO:
+        kill_rectangle((RECTANGLE) n->info);
+        free(n);
+        break;
+
+    case TIPO_TEXTO:
+        kill_texto((TEXTO) n->info);
+        free(n);
+        break;
+
+    default:
+        kill_linha((LINHA) n->info);
+        free(n);
+        break;
+    }
+}
+
 //aux
 node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
     if (!root){
@@ -673,15 +673,24 @@ void* removeNoSmuT(SmuTreap t, Node n){
     ti->root = removeNoSmuT_aux(ti, ti->root, ni);
 }
 
-Info getInfoSmuT(SmuTreap t, Node n);
-/* 
- * Retorna a informacao associada ao no' n 
- */
+Info getInfoSmuT(SmuTreap t, Node n){
+    if(!n){
+        fprintf(stderr, "(getInfoSmuT) Erro: parametros invalidos");
+        return NULL;
+    }
+}
 
-Info getBoundingBoxSmuT(SmuTreap t, Node n, double *x, double *y, double *w, double *h);
-/* 
- * Retorna o bounding box associado ao no' n 
- */
+Info getBoundingBoxSmuT(SmuTreap t, Node n, double *x, double *y, double *w, double *h){
+    if(!n){
+        fprintf(stderr, "(getBoundingBoxSmuT) Erro: parametro invalido");
+        return NULL;
+    }
+
+    node_internal *ni = (node_internal*)n;
+
+
+
+}
 
 
 bool getNodesDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, double y2, Lista L);
