@@ -59,10 +59,6 @@ typedef struct{
 * newNode - sempre que um novo no'foi alocado com sucesso.
 */
 
-
-
-//BUSCAR RESOLVER ERRO DA FALTA DO PARÂMETRO priorityMax.
-
 // É esperado que newSmuTreap receba todos os parâmetros corretamente.
 SmuTreap newSmuTreap(int hitCount, int priorityMax, double promotionRate, double epsilon){
     SmuTreap_internal *newSmu = (SmuTreap_internal*) malloc(sizeof(SmuTreap_internal));
