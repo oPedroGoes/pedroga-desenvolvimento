@@ -51,6 +51,7 @@ typedef struct{
     int prioMax;
     double promoRateConfig;
     double epsilon;
+    FCalculaBoundingBox fCalcBB;
 } SmuTreap_internal;
 
 /*DAR FREE EM:
@@ -72,6 +73,7 @@ SmuTreap newSmuTreap(int hitCount, int priorityMax, double promotionRate, double
     newSmu->prioMax = priorityMax;
     newSmu->promoRateConfig = promotionRate;
     newSmu->epsilon = epsilon;
+    newSmu->fCalcBB =   NULL;
 
     return newSmu;
 }
@@ -356,7 +358,15 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
     }
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
 
-    // A versao do Gemini se preocupa em como passar fCalcBb para ca. Eu nao entendi, mas tomar nota!
+    // Registra ou atualiza a função de cálculo de BB para a árvore
+    if (fCalcBb){
+        if (t_i->fCalcBB == NULL){
+            t_i->fCalcBB = fCalcBb;
+        } else if (t_i->fCalcBB != fCalcBb){ 
+            fprintf(stderr, "Aviso (insertSmuT): FCalculaBoundingBox esta sendo alterada para a arvore.\n");
+            t_i->fCalcBB = fCalcBb;
+        }
+    }
 
     int prioridade = rand() % (t_i->prioMax + 1);
 
@@ -370,12 +380,49 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
     } else return NULL;
 }
 
-Node getNodeSmuT(SmuTreap t, double x, double y);
-/*
- * Retorna o no' cuja ancora seja o ponto (x,y), admitida a discrepancia
- * epsilon definida na criacao da arvore.
- * Retorna NULL caso nao tenha encontrado o no'.
- */
+//aux
+node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_internal **resultRef, double x, double y){
+    if(root == NULL){
+        fprintf(stderr, "(fetNodeSmuT_aux) Erro: no'nao encontrado.");
+        exit (1); // Se retornasse NULL, a arvore seria destruida.
+    }
+
+    bool xDentroDeEpsulon = fabs(x - root->x) < t->epsilon;
+    bool yDentroDeEpsulon = fabs(y - root->y) < t->epsilon;
+    bool podeIrDireita = (x > root->x + t->epsilon) || (fabs(x - root->x) < t->epsilon && (y > root->y + t->epsilon));
+    bool podeIrEsquerda = (x < root->x - t->epsilon) || (fabs(x - root->x) < t->epsilon && (y < root->y - t->epsilon));
+
+
+    if (xDentroDeEpsulon && yDentroDeEpsulon){ // Encontrou!
+        root->hitCountCounter++;
+
+        if(root->hitCountCounter >= t->hitCountConfig){
+            promoteNodeSmuT(t, (Node)root, t->promoRateConfig);
+        }
+        *resultRef = root;
+        return root;
+    } else 
+
+    if(podeIrDireita){
+        root->right = getNodeSmuT_aux(t, root->right, resultRef, x, y);
+    } else{
+        root->left = getNodeSmuT_aux(t, root->left, resultRef, x, y);
+    }
+}
+
+Node getNodeSmuT(SmuTreap t, double x, double y){
+    if(!t){
+        fprintf(stderr, "(getNodeSmuT) Erro: ponteiro para arvore invalido.");
+        return NULL;
+    }
+
+    SmuTreap_internal *t_i = (SmuTreap_internal*)t;
+    node_internal *result;
+
+    t_i->root = getNodeSmuT_aux(t_i, t_i->root, &result, x, y);
+
+    return result;
+}
 
 DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n);
 /* 
@@ -416,6 +463,8 @@ void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
     Info info_copia = ni->info;
     DescritorTipoInfo descritor_copia = ni->descritor;
     int hit_copia = ni->hitCountCounter;
+    BB BBinfo_copia = ni->BBinfo;
+    BB BBsubTree_copia = ni->BBsubTree;
 
     removeNoSmuT_SemLiberarInfo(t, n); // 'n' (e 'ni_original') agora é um ponteiro para memória liberada!
 
@@ -561,7 +610,7 @@ void removeNoSmuT_SemLiberarInfo(SmuTreap t, Node n){
 node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
     if (!root){
         printf("(removeNoSmuT_aux) Erro: no nao encontrado.");
-        return NULL;
+        exit (1); // Se retornasse NULL, a arvore seria destruida.
     }
     double epsilon_i = t->epsilon;
 
@@ -612,7 +661,7 @@ node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_
 
     return root;
 }
-void removeNoSmuT(SmuTreap t, Node n){
+void* removeNoSmuT(SmuTreap t, Node n){
     if (!t || !n){
         fprintf(stderr, "(removeNoSmuT) Erro: parametros invalidos.\n");
         return;
@@ -622,7 +671,6 @@ void removeNoSmuT(SmuTreap t, Node n){
     node_internal *ni = (node_internal*)n;
 
     ti->root = removeNoSmuT_aux(ti, ti->root, ni);
-
 }
 
 Info getInfoSmuT(SmuTreap t, Node n);
