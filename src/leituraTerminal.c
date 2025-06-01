@@ -170,20 +170,32 @@ void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
     strcat(*fullNomeArq, nomeArq);
   }
 
+/*
+*   @brief Remove os ultimos 4 digitos do nome do arquivo.
+*
+*/
+char *removeIndicadorArq(char *dest, const char *src){
+  int lenSrc = strlen(src);
+
+    if (lenSrc > 4){
+        strncpy(dest, src, lenSrc - 4); // Copia a parte antes de ".geo"
+        dest[lenSrc - 4] = '\0';
+    } else {
+        fprintf(stderr, "(removeIndicadorArq) Erro: erro ao tratar src.");
+        exit(1);
+    }
+
+    return dest;
+}
+
+// Pode ser modularizada para .dot, .svg e o outro la kk
 void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
-    int lenGeo = strlen(nomeGeo);
-    int lenQry = strlen(nomeQry);
-    
-    char buff1[lenGeo];
-    char buff2[lenQry];
+    char nomeBaseGeo[512], nomeBaseQry[512];
 
-    strcpy(buff1, nomeGeo);
-    strcpy(buff2, nomeQry);
-    
-    buff1[strlen(buff1)-4] = '\0';
-    buff2[strlen(buff2)-4] = '\0';
+    nomeBaseGeo[0] = removeIndicadorArq(nomeBaseGeo, nomeGeo);
+    nomeBaseQry[0] = removeIndicadorArq(nomeBaseQry, nomeQry);
 
-    int lenArqTxt = strlen(pathOut) + 1 + strlen(buff1) + 1 + strlen(buff2) + 4;
+    int lenArqTxt = strlen(pathOut) + 1 + strlen(nomeBaseGeo) + 1 + strlen(nomeBaseQry) + 4;
 
     *arqTxt = (char*)malloc(sizeof(char)*(lenArqTxt + 1));
     if (arqTxt == NULL){
@@ -194,8 +206,8 @@ void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
 
     strcpy(*arqTxt, pathOut); 
     strcat(*arqTxt, "/");
-    strcat(*arqTxt, buff1);
+    strcat(*arqTxt, nomeBaseGeo);
     strcat(*arqTxt, "-");
-    strcat(*arqTxt, buff2);
+    strcat(*arqTxt, nomeBaseQry);
     strcat(*arqTxt, ".txt");
 }

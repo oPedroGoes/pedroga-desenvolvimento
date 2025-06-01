@@ -9,6 +9,8 @@
  #include "processaGeo.h"
  #include "leituraTerminal.h"
 
+#define EPSILON_CONFIG 0.001 //AJUSTAVEL.
+
  /* Falta decidir o que fazer com cada um dos full names.
  */
 
@@ -22,8 +24,9 @@
   char *dirEntrada = NULL, *dirSaida = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL,
        *nomeQry = NULL, *fullNomeQry = NULL; char *fullNomeTxt = NULL;
 
+  // DEFAULT: se NULL, return VALOR_DEFAULT.
+  // para que seja default, apenas deixar como NULL.
   int *prioMax = NULL, *hc = NULL;
-
   double *promoRate = NULL;
   
   /* MOSTRA OS PARAMETROS */
