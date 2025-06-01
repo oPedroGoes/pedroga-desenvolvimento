@@ -1,4 +1,8 @@
 #include "SmuTreap.h"
+#include "circulo.h"
+#include "retangulo.h"
+#include "texto.h"
+#include "linha.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -77,7 +81,7 @@ SmuTreap newSmuTreap(int hitCount, int priorityMax, double promotionRate, double
 }
 
 //aux
-Node newNode(double x, double y, int priorityMax, Info i, DescritorTipoInfo d, FCalculaBoundingBox fCalcBb){
+Node newNode(double x, double y, int priority, Info i, DescritorTipoInfo d, FCalculaBoundingBox fCalcBb){
     node_internal *newNode = (node_internal*) malloc(sizeof(node_internal));
     if (!newNode) {
         perror("(newNode) Erro: falha ao alocar memoria para no"); // Adicionado perror para mais info
@@ -87,9 +91,14 @@ Node newNode(double x, double y, int priorityMax, Info i, DescritorTipoInfo d, F
     newNode->x = x;
     newNode->y = y;
 
+
+    if (priority <= 0){
+        fprintf(stderr, "(newNode) Erro: prioridade invalida");
+        return NULL;
+    }
     /*Lembre-se de incluir <stdlib.h> para rand() e de inicializar a semente com srand(time(NULL)) em algum ponto no
     início do programa, preferencialmente no main, para não gerar sempre a mesma sequência de prioridades).*/
-    newNode->priority = rand() % (priorityMax + 1); //verificar isso.
+    newNode->priority = priority; //verificar isso.
 
     newNode->info = i;
     newNode->descritor = d;
@@ -215,12 +224,24 @@ void rotacionaDir(node_internal **rootRef){
     }
     
     node_internal *leftSon = root->left;
+    node_internal *grandpa = root->dad;
+
+    leftSon->dad = grandpa;
 
     // "filhos direitos dele viram meus filhos esquerdos"
     root->left = root->left->right;
 
+    if (leftSon->right){ // Se leftSin->right não for NULL.
+        // "e eu viro pai dos filhos direitos dele"
+        leftSon->right->dad = root;
+    }
+
+
     // "'Eu' viro filho direito do meu filho esquerdo"
     leftSon->right = root;
+    // "meu filho esquerdo vira meu pai"
+    root->dad = leftSon;
+
 
     atualizaBB_subtree(root); //atualiza root primeiro, pois agora é filho.
     atualizaBB_subtree(leftSon); // Atualiza leftSon apenas depois que seus filhos estiverem corrigidos.
@@ -235,26 +256,36 @@ void rotacionaDir(node_internal **rootRef){
 
     // meu filho esquerdo vira meu pai, e eu viro pai dos filhos direitos dele
 
+
 }
 
 void rotacionaEsq(node_internal **rootRef){
     if(!rootRef){
-        fprintf(stderr, "(rotacionaDir) Erro: no' invalido.");
+        fprintf(stderr, "(rotacionaEsq) Erro: no' invalido.");
         return;
     }
     node_internal *root = *rootRef;
     if (!(root->right)){
-        fprintf(stderr, "(rotacionaDir) Erro: tentativa de acesso a NULL (nd->left = NULL).");
+        fprintf(stderr, "(rotacionaEsq) Erro: tentativa de acesso a NULL (nd->left = NULL).");
         return;
     }
 
     node_internal *rightSon = root->right;
+    node_internal *grandpa = root->dad;
 
+    rightSon->dad = grandpa;
     // "filhos esquerdos dele viram meus filhos direitos"
     root->right = root->right->left;
 
+    if (rightSon->left){ // Se rightSon->right não for NULL.
+        // "e eu viro pai dos filhos esquerdos dele"
+        rightSon->left->dad = root;
+    }
+
     // "'Eu' viro filho esquerdo do meu filho direito"
     rightSon->left = root;
+    // "meu filho direito vira meu pai"
+    root->dad = rightSon;
 
     atualizaBB_subtree(root); //atualiza root primeiro, pois agora é filho.
     atualizaBB_subtree(rightSon); // Atualiza rightSon apenas depois que seus filhos estiverem corrigidos.
@@ -265,8 +296,8 @@ void rotacionaEsq(node_internal **rootRef){
     */
     *rootRef = rightSon;
 
-
     // meu filho direito vira meu pai, e eu viro pai dos filhos esquerdos dele
+
 
 }
 
@@ -289,8 +320,8 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
     *  2. Quando Quando rooti->x - epsilon <= x <= rooti->x + epsilon, mas y > rooti->y
     */
 
-    bool podeIrDireita = (new->x < root->x - epsilon_i) || (fabs(new->x - root->x) < epsilon_i && (new->y < root->y - epsilon_i));
-    bool podeIrEsquerda = (new->x > root->x + epsilon_i) || (fabs(new->x - root->x) < epsilon_i && (new->y > root->y + epsilon_i));
+    bool podeIrDireita = (new->x > root->x + epsilon_i) || (fabs(new->x - root->x) < epsilon_i && (new->y > root->y + epsilon_i));
+    bool podeIrEsquerda = (new->x < root->x - epsilon_i) || (fabs(new->x - root->x) < epsilon_i && (new->y < root->y - epsilon_i));
 
     if (podeIrDireita){
         // Vai para a direita.
@@ -312,7 +343,7 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
         root->left->dad = root;
     } else{
         fprintf(stderr, "(insertSmuT_aux) Erro: no' ja' existente.");
-        free(new);
+        if (new) free(new);
         return root;
     }
 
@@ -355,15 +386,248 @@ DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n);
  * Retorna o tipo da informacao associada ao no' n 
 */
 
-void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate);
-/*
- * Aumenta a prioridade do no' n pelo fator promotionRate.
- */
+void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
 
-void removeNoSmuT(SmuTreap t, Node n);
-/*
- * Remove o no' n da arvore. O no' n deve ser um no' valido.
- */
+    if (!t || !n || promotionRate <= 0){
+        fprintf(stderr, "(promoteNodeSmuT) Erro: parametros invalidos.");
+        return;
+    } 
+    if (promotionRate <= 0.0) {
+         fprintf(stderr, "(promoteNodeSmuT) Erro: promotionRate deve ser > 0.0.\n");
+        return;
+    }
+
+    SmuTreap_internal *treap = (SmuTreap_internal *)t;
+    node_internal *ni = (node_internal *)n;
+
+
+    int antiga_prioridade = ni->priority;
+    int nova_prioridade = (int)(ni->priority * promotionRate);
+
+    if (promotionRate > 1.0 && nova_prioridade == ni->priority){
+        nova_prioridade++; // Se no cast para int o valor permaneceu o mesmo, arredonda para cima.
+    } else if (promotionRate < 1.0 && nova_prioridade == ni->priority && nova_prioridade > 0) {
+        nova_prioridade--; //Se no cast para int o valor permaneceu o mesmo, arredonda para baixo.
+    }
+
+    // Tetos
+    if (nova_prioridade > treap->prioMax) nova_prioridade = treap->prioMax;
+    if (nova_prioridade < 0) nova_prioridade = 0;
+
+    // Salvar principais dados.
+    double x_copia = ni->x;
+    double y_copia = ni->y;
+    Info info_copia = ni->info;
+    DescritorTipoInfo descritor_copia = ni->descritor;
+    int hit_copia = ni->hitCountCounter;
+
+    removeNoSmuT_SemLiberarInfo(t, n); // 'n' (e 'ni_original') agora é um ponteiro para memória liberada!
+
+    // 4. Criar um novo nó com os dados salvos e a NOVA prioridade.
+    //    Precisamos de FCalculaBoundingBox para newNode.
+    //    Se não tivermos fCalcBb, passamos NULL, e newNode lidará com isso (marcando BBinfo como inválido).
+    //    Isso é problemático. Idealmente, a treap armazenaria fCalcBb.
+    FCalculaBoundingBox func_calc_bb_para_novo_no = NULL; // SUBSTITUA PELO MECANISMO CORRETO PARA OBTER fCalcBb
+                                                       // Ex: Se SmuTreapInternal tivesse um campo para isso:
+                                                       // func_calc_bb_para_novo_no = treap->func_calc_bb_armazenada;
+
+    // Criar novo no newNode: node_internal *no_promovido = ...
+    // Verificar se deu bom no return
+
+    // Reatribuir hitCountCounter para o novo no.
+
+    //Reinserir o nó "promovido" na árvore.
+
+
+
+
+    ni->priority = nova_prioridade;
+
+
+
+    node_internal *flag = removeNoSmuT_aux(treap, treap->root, ni); // Remove o no' desejado e guarda o resultado em uma flag para comparacao. 
+
+    if (flag){
+        insertSmuT_aux(treap->root, aux, t);
+        
+    } else {
+        // Algo deu errado na remoção, restaurar a prioridade original?
+        // Ou tentar reinserir mesmo assim? Para evitar perda de dados,
+        // vamos tentar reinserir, mas isso pode levar a duplicatas se a remoção falhou e o nó ainda existe.
+        // É mais seguro se a remoção for garantida.
+        // Se o nó 'n' veio de getNodeSmuT, ele existe.
+        fprintf(stderr, "Aviso (promoteNodeSmuT): falha ao remover no para promocao. O no pode nao ser reposicionado corretamente ou dados podem ser perdidos.\n");
+        // Para evitar perda, se remove_recursive falhar, poderíamos apenas deixar a prioridade atualizada
+        // e esperar que futuras operações corrijam a ordem do heap, ou ter uma função "heapify_up".
+        // A abordagem de remover e reinserir é mais simples se a remoção for robusta.
+    }
+}
+
+//aux
+void killNode(node_internal *n){
+    if (!n || !n->info){
+        fprintf(stderr, "(killNode) Erro: parametros invalidos.");
+        return ;
+    }
+
+    switch (n->descritor)
+    {
+    case TIPO_CIRCULO:
+        kill_circ((CIRCLE) n->info);
+        free(n);
+        break;
+    
+    case TIPO_RETANGULO:
+        kill_rectangle((RECTANGLE) n->info);
+        free(n);
+        break;
+
+    case TIPO_TEXTO:
+        kill_texto((TEXTO) n->info);
+        free(n);
+        break;
+
+    default:
+        kill_linha((LINHA) n->info);
+        free(n);
+        break;
+    }
+}
+
+//aux
+node_internal* removeNoSmuT_SemLiberarInfo_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
+    if (!root){
+        printf("(removeNoSmuT_aux) Erro: no nao encontrado.");
+        return NULL;
+    }
+    double epsilon_i = t->epsilon;
+
+    bool podeIrDireita = (n->x > root->x + epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y > root->y + epsilon_i));
+    bool podeIrEsquerda = (n->x < root->x - epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y < root->y - epsilon_i));
+
+    if (podeIrDireita){
+        root->right = removeNoSmuT_aux(t, root->right, n);
+    } else if(podeIrEsquerda){
+        root->left = removeNoSmuT_aux(t, root->left, n);
+    } else{ // Encontra o no' que se quer remover
+        // Aqui, ao que parece, a recomendacao é que se use uma flag bool que retorna true se o no'foi achado.
+
+        // Caso 1: no' folha.
+        if (!root->right && !root->left){
+            free(root);
+            return NULL;
+        }
+
+        // Caso 2: no' com apenas um filho.
+        else if(root->right == NULL){
+            node_internal *aux = root->left;
+            free(root);
+            return aux;
+        } else if(root->left == NULL){
+            node_internal *aux = root->right;
+            free(root);
+            return aux;
+        }
+
+        // Caso 3: no' com dois filhos
+        // Rotaciona o nó para baixo até que se torne uma folha ou tenha um filho,
+        // mantendo a propriedade de heap.
+        else{
+            if(root->right->priority > root->left->priority){
+                rotacionaEsq(&root);
+                root->right = removeNoSmuT_aux(t, root->right, n);
+            } else{
+                rotacionaDir(&root);
+                root->left = removeNoSmuT_aux(t, root->left, n);
+            }
+        }
+    }
+
+    if(root){
+        atualizaBB_subtree(root);
+    }
+
+    return root;
+}
+void removeNoSmuT_SemLiberarInfo(SmuTreap t, Node n){
+    if (!t || !n){
+        fprintf(stderr, "(removeNoSmuT) Erro: parametros invalidos.\n");
+        return;
+    }
+    
+    SmuTreap_internal *ti = (SmuTreap_internal*)t;
+    node_internal *ni = (node_internal*)n;
+
+    ti->root = removeNoSmuT_aux(ti, ti->root, ni);
+}
+
+//aux
+node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
+    if (!root){
+        printf("(removeNoSmuT_aux) Erro: no nao encontrado.");
+        return NULL;
+    }
+    double epsilon_i = t->epsilon;
+
+    bool podeIrDireita = (n->x > root->x + epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y > root->y + epsilon_i));
+    bool podeIrEsquerda = (n->x < root->x - epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y < root->y - epsilon_i));
+
+    if (podeIrDireita){
+        root->right = removeNoSmuT_aux(t, root->right, n);
+    } else if(podeIrEsquerda){
+        root->left = removeNoSmuT_aux(t, root->left, n);
+    } else{ // Encontra o no' que se quer remover
+        // Aqui, ao que parece, a recomendacao é que se use uma flag bool que retorna true se o no'foi achado.
+
+        // Caso 1: no' folha.
+        if (!root->right && !root->left){
+            killNode(root);
+            return NULL;
+        }
+
+        // Caso 2: no' com apenas um filho.
+        else if(root->right == NULL){
+            node_internal *aux = root->left;
+            killNode(root);
+            return aux;
+        } else if(root->left == NULL){
+            node_internal *aux = root->right;
+            killNode(root);
+            return aux;
+        }
+
+        // Caso 3: no' com dois filhos
+        // Rotaciona o nó para baixo até que se torne uma folha ou tenha um filho,
+        // mantendo a propriedade de heap.
+        else{
+            if(root->right->priority > root->left->priority){
+                rotacionaEsq(&root);
+                root->right = removeNoSmuT_aux(t, root->right, n);
+            } else{
+                rotacionaDir(&root);
+                root->left = removeNoSmuT_aux(t, root->left, n);
+            }
+        }
+    }
+
+    if(root){
+        atualizaBB_subtree(root);
+    }
+
+    return root;
+}
+void removeNoSmuT(SmuTreap t, Node n){
+    if (!t || !n){
+        fprintf(stderr, "(removeNoSmuT) Erro: parametros invalidos.\n");
+        return;
+    }
+    
+    SmuTreap_internal *ti = (SmuTreap_internal*)t;
+    node_internal *ni = (node_internal*)n;
+
+    ti->root = removeNoSmuT_aux(ti, ti->root, ni);
+
+}
 
 Info getInfoSmuT(SmuTreap t, Node n);
 /* 
