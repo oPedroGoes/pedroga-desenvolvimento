@@ -60,7 +60,6 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
             char *corp = get_cpC(c);
 
             fprintf(arq_svg, "\t<circle cx=\"%.2f\" cy=\"%.2f\" r=\"%.2f\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", xc, yc, r_circ, corb, corp);
-            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"black\" font-size=\"5\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d</text>\n", xc, yc, id);
             break;
         }
         case TIPO_RETANGULO: {
@@ -76,7 +75,6 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
             fprintf(arq_svg, "\t<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", xr, yr, w, h, corb, corp);
             // Posicionar ID no centro da âncora original do projeto (canto inferior esquerdo) pode ser uma opção, ou no centro visual.
             // Para centro visual:
-            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"black\" font-size=\"5\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d</text>\n", xr + w / 2, yr + h / 2, id);
             break;
         }
         case TIPO_LINHA: {
@@ -90,7 +88,6 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
 
             fprintf(arq_svg, "\t<line x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" stroke=\"%s\" stroke-width=\"1\" />\n", x1, y1, x2, y2, cor);
             // O ID da linha será desenhado na âncora da árvore para esta linha (x_ancora_no, y_ancora_no)
-            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"black\" font-size=\"5\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d</text>\n", x_ancora_no, y_ancora_no, id);
             break;
         }
         case TIPO_TEXTO: {
@@ -108,12 +105,42 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
 
             // A cor da borda do texto em SVG é controlada por 'stroke', não 'fill' da borda.
             // O preenchimento do texto é 'fill'.
-            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" stroke=\"%s\" fill=\"%s\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%s\" text-anchor=\"%s\" dominant-baseline=\"middle\">%s</text>\n",
-                    xt, yt, corb, corp, ff, fw, fs, ancora_svg, conteudo_txt);
+            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" stroke=\"%s\" fill=\"%s\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%s\" text-anchor=\"%s\" dominant-baseline=\"middle\">",
+                    xt, yt, corb, corp, ff, fw, fs, ancora_svg);
+
+            // Itera pelo conteudo_txt e escapa os caracteres especiais
+            if (conteudo_txt) {
+                char *p = conteudo_txt;
+                while (*p) {
+                    switch (*p) {
+                        case '<':
+                            fprintf(arq_svg, "&lt;");
+                            break;
+                        case '>':
+                            fprintf(arq_svg, "&gt;");
+                            break;
+                        case '&':
+                            fprintf(arq_svg, "&amp;");
+                            break;
+                        case '"': // Embora não estritamente necessário para o conteúdo da tag, é seguro escapar.
+                            fprintf(arq_svg, "&quot;");
+                            break;
+                        case '\'': // Similarmente, seguro escapar.
+                            fprintf(arq_svg, "&apos;");
+                            break;
+                        default:
+                            fputc(*p, arq_svg);
+                            break;
+                    }
+                    p++;
+                }
+            }
+            // Imprime a tag de fechamento do texto
+            fprintf(arq_svg, "</text>\n");
             
             // O ID da forma TEXTO pode ser desenhado na sua âncora (xt, yt) para diferenciação.
             // Usando uma cor diferente para o ID, por exemplo, vermelho.
-            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" font-size=\"4\" text-anchor=\"middle\" dominant-baseline=\"baseline\">(T%d)</text>\n", xt, yt + atof(fs)/2 + 2, id); // Desloca um pouco para baixo do texto principal
+        
             break;
         }
         default:
@@ -122,7 +149,7 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
     }
 }
 
-SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *instru, int *formcriadas/*, int *idUltimaForma*/) {
+SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *instru, int *formcriadas/*, int idUltimaForma*/) {
 
     char str[500];
     char tipo[4]; //Para "c ", "r ", "l ", "t ", "ts" + null
@@ -149,7 +176,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             printf("\n\n Ts lido!\nlinha lida: %s %s %s %s", tipo, fam, wei, size);
         }else 
 
-        if (strcmp(tipo, "c ") == 0) {
+        if (strcmp(tipo, "c") == 0) {
             int i;
             double x, y, r;
 
@@ -165,7 +192,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             (*formcriadas)++;
         } else
 
-        if (strcmp(tipo, "r ") == 0) {
+        if (strcmp(tipo, "r") == 0) {
             int i;
             double x, y, h, w;
 
@@ -181,7 +208,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             (*formcriadas)++;
         } else
 
-        if (strcmp(tipo, "l ") == 0) {
+        if (strcmp(tipo, "l") == 0) {
             int i;
             double x1, y1, x2, y2;
 
@@ -205,43 +232,22 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             (*formcriadas)++;
         } else
 
-        if (strcmp(tipo, "t ") == 0) {
+        if (strcmp(tipo, "t") == 0) {
             int i;
             double x, y;
-
-            char cb[50];
-            char cp[50];
-
+            char* cb = (char*)malloc(15 * sizeof(char));
+            char* cp = (char*)malloc(15 * sizeof(char));
             char a;
+            char* txt = (char*)malloc(300 * sizeof(char));
+            sscanf(str + 2, "%d %lf %lf %s %s %c %[^\n]", &i, &x, &y, cb, cp, &a, txt);
+            TEXTO tx = cria_texto(i, x, y, cb, cp, a, txt, fam, wei, size);
+            insertSmuT(t, x, y, (TEXTO)tx, TIPO_TEXTO, funcCalcBb);
 
-            char txt_contnt[500];
-            int consumed; // armazenar o número de caracteres consumidos (lidos) pela sscanf até ponto x;
-            sscanf(str + 1, "%d %lf %lf %49s %49s %c %n", &i, &x, &y, cb, cp, &a, &consumed);
+            printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c %s", tipo, i, x, y, cb, cp, a, txt);
 
-            char* p_inicio_texto = str + 1 + consumed; // Pula comando, id, x, y, cb, cp, a, e espaços
-
-            while(*p_inicio_texto == ' ') p_inicio_texto++; // Pula espaços antes da aspa inicial
-
-            if(*p_inicio_texto == '"') {
-                p_inicio_texto++; // Pula a aspa inicial
-                char* p_fim_texto = strrchr(p_inicio_texto, '"'); // Encontra a última aspa
-
-                if(p_fim_texto) {
-                    strncpy(txt_contnt, p_inicio_texto, p_fim_texto - p_inicio_texto);
-                    txt_contnt[p_fim_texto - p_inicio_texto] = '\0';
-                } else {
-                    fprintf(stderr, "(leituraGeo) Erro: falha ao ler txt_cntnt para criacao de forma texto.");
-                    strcpy(txt_contnt, "ERRO_PARSE_TEXTO"); // Fallback
-                }
-            } else {
-                fprintf(stderr, "(leituraGeo) Erro: falha ao ler txt_cntnt para criacao de forma texto.");
-                strcpy(txt_contnt, "ERRO_PARSE_TEXTO_ASPAS"); // Fallback
-            }
-            //idUltimaForma = i, por algum motivo! Pode ser util depois
-            TEXTO t = cria_texto(i, x, y, cb, cp, a, txt_contnt, fam, wei, size);
-            insertSmuT(t, x, y, (TEXTO)t, TIPO_TEXTO, funcCalcBb);
-
-            printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c \"%s\"", tipo, i, x, y, cb, cp, a, txt_contnt);
+            free(cb);
+            free(cp);
+            free(txt);
             (*formcriadas)++;
         }
     }
@@ -257,13 +263,14 @@ SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nom
     double def_promoRate;
     if(prioMax == NULL){
         def_prioMax = DEFAULT_PRIOMAX;
-    }
+    } else def_prioMax = *prioMax;
+
     if(hc == NULL){
         def_hc = DEFAULT_HITCOUNT;   
-    }
+    } else def_hc = *hc;
     if(promoRate == NULL){
         def_promoRate = DEFAULT_PROMORATE;
-    }
+    } else def_promoRate = *promoRate;
 
     FILE* arqGeo = fopen(pathgeo, "r");
     printf("Diretório do arquivo geo: %s\n", pathgeo);

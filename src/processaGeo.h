@@ -20,5 +20,5 @@
      * 
      * @return void
      */
-    void processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *instru, int *formcriadas, int *id);
+    void processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *instru, int *formcriadas, int *prioMax, int *hc, double *promoRate, double epsilonConfig);
 #endif

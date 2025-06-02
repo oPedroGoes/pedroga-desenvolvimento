@@ -91,7 +91,7 @@ Node newNode(double x, double y, int priority, Info i, DescritorTipoInfo d, FCal
     newNode->y = y;
 
 
-    if (priority <= 0){
+    if (priority < 0){
         fprintf(stderr, "(newNode) Erro: prioridade invalida");
         return NULL;
     }
@@ -330,7 +330,6 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
             rotacionaEsq(&root);
             root->left->dad = root;
         }
-        root->right->dad = root;
     } else if (podeIrEsquerda){
         // Vai para a esquerda.
         root->left = insertSmuT_aux(root->left, new, t);
@@ -339,7 +338,6 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
             rotacionaDir(&root);
             root->right->dad = root;
         }
-        root->left->dad = root;
     } else{
         fprintf(stderr, "(insertSmuT_aux) Erro: no' ja' existente.");
         if (new) free(new);
@@ -358,18 +356,20 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
         return NULL;
     }
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
-
+    
     // Registra ou atualiza a função de cálculo de BB para a árvore
     if (fCalcBb){
         if (t_i->fCalcBB == NULL){
             t_i->fCalcBB = fCalcBb;
         } else if (t_i->fCalcBB != fCalcBb){ 
             fprintf(stderr, "Aviso (insertSmuT): FCalculaBoundingBox esta sendo alterada para a arvore.\n");
-            t_i->fCalcBB = fCalcBb;
+            fCalcBb = t_i->fCalcBB;
         }
     }
+    
 
     int prioridade = rand() % (t_i->prioMax + 1);
+    printf("prioridade = %d\n", prioridade);
 
     node_internal *new = (node_internal*)newNode(x, y, prioridade, i, d, fCalcBb);
     if (!new) return NULL;

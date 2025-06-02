@@ -5,6 +5,7 @@
  #include <errno.h>  // Para errno, ERANGE
  #include <limits.h> // Para INT_MAX, INT_MIN, LONG_MAX, LONG_MIN
  #include <math.h>   // Para HUGE_VALF
+ #include <time.h> // Para srand()
  
  #include "processaGeo.h"
  #include "leituraTerminal.h"
@@ -23,6 +24,8 @@
  int main(int argc, char *argv[]){
   char *dirEntrada = NULL, *dirSaida = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL,
        *nomeQry = NULL, *fullNomeQry = NULL; char *fullNomeTxt = NULL;
+
+  srand(time(NULL));
 
   // DEFAULT: se NULL, return VALOR_DEFAULT.
   // para que seja default, apenas deixar como NULL.
@@ -142,13 +145,12 @@
   printf("fullNomeGeo    = %s\n", fullNomeGeo   ? fullNomeGeo    : "(null ou falha)");
   printf("fullNomeTxt    = %s\n", fullNomeTxt   ? fullNomeTxt    : "(null ou falha)");
 
-  int instru = 0, foramcriadas = 0, id = 0;
-  processa_geo(fullNomeGeo, dirSaida, nomeGeo, &instru, &foramcriadas, &id);
+  
 
 
 
   if (prioMax != NULL) {
-    printf("prioMax = %d\n", *prioMax);
+    printf("\nprioMax = %d\n", *prioMax);
   } else {
     printf("prioMax = (nao definido ou falha)\n");
   }
@@ -162,7 +164,8 @@
   } else {
     printf("promoRate = (nao definido ou falha)\n");
   }
-
+int instru = 0, foramcriadas = 0;
+  processa_geo(fullNomeGeo, dirSaida, nomeGeo, &instru, &foramcriadas, prioMax, hc, promoRate, EPSILON_CONFIG);
 frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória
   if(dirEntrada) free(dirEntrada);
