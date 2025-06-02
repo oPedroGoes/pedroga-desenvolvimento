@@ -12,10 +12,13 @@
 //#include "formas.h"
 
 
+#ifndef TIPO_FORMAS_DEFINED
+#define TIPO_FORMAS_DEFINED
 #define TIPO_CIRCULO 1
 #define TIPO_RETANGULO 2
 #define TIPO_TEXTO 3
 #define TIPO_LINHA 4
+#endif
 
 #define DEFAULT_PRIOMAX 10000
 #define DEFAULT_HITCOUNT 3
@@ -34,6 +37,88 @@ int ma(double x1, double x2, double y1, double y2){
         } else{
             return 4;
         }
+    }
+}
+
+// Função para ser usada com visitaProfundidadeSmuT ou visitaLarguraSmuT
+void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_ancora_no, void *aux_file_ptr) {
+    if (!i || !aux_file_ptr) {
+        return;
+    }
+
+    FILE *arq_svg = (FILE *)aux_file_ptr;
+    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n);
+
+    switch (tipo_forma) {
+        case TIPO_CIRCULO: {
+            CIRCLE c = (CIRCLE)i;
+            int id = get_idC(c);
+            double xc = get_XC(c);
+            double yc = get_YC(c);
+            double r_circ = get_rC(c);
+            char *corb = get_cbC(c);
+            char *corp = get_cpC(c);
+
+            fprintf(arq_svg, "\t<circle cx=\"%.2f\" cy=\"%.2f\" r=\"%.2f\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", xc, yc, r_circ, corb, corp);
+            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"black\" font-size=\"5\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d</text>\n", xc, yc, id);
+            break;
+        }
+        case TIPO_RETANGULO: {
+            RECTANGLE r_fig = (RECTANGLE)i;
+            int id = get_idR(r_fig); 
+            double xr = get_XR(r_fig); 
+            double yr = get_YR(r_fig); 
+            double w = get_wR(r_fig); 
+            double h = get_hR(r_fig); 
+            char *corb = get_cbR(r_fig); 
+            char *corp = get_cpR(r_fig); 
+
+            fprintf(arq_svg, "\t<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", xr, yr, w, h, corb, corp);
+            // Posicionar ID no centro da âncora original do projeto (canto inferior esquerdo) pode ser uma opção, ou no centro visual.
+            // Para centro visual:
+            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"black\" font-size=\"5\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d</text>\n", xr + w / 2, yr + h / 2, id);
+            break;
+        }
+        case TIPO_LINHA: {
+            LINHA l = (LINHA)i;
+            int id = get_idL(l);
+            double x1 = get_X1L(l);
+            double y1 = get_Y1L(l);
+            double x2 = get_X2L(l);
+            double y2 = get_Y2L(l);
+            char *cor = get_cL(l);
+
+            fprintf(arq_svg, "\t<line x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" stroke=\"%s\" stroke-width=\"1\" />\n", x1, y1, x2, y2, cor);
+            // O ID da linha será desenhado na âncora da árvore para esta linha (x_ancora_no, y_ancora_no)
+            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"black\" font-size=\"5\" text-anchor=\"middle\" dominant-baseline=\"middle\">%d</text>\n", x_ancora_no, y_ancora_no, id);
+            break;
+        }
+        case TIPO_TEXTO: {
+            TEXTO txt_fig = (TEXTO)i;
+            int id = get_idT(txt_fig);
+            double xt = get_XT(txt_fig);
+            double yt = get_YT(txt_fig);
+            char *corb = get_cbT(txt_fig);
+            char *corp = get_cpT(txt_fig);
+            char *ancora_svg = get_ancoraT(txt_fig); // Retorna "start", "middle", ou "end"
+            char *conteudo_txt = get_txtT(txt_fig);
+            char *ff = get_ffT(txt_fig);
+            char *fw = get_fwT(txt_fig);
+            char *fs = get_fsT(txt_fig);
+
+            // A cor da borda do texto em SVG é controlada por 'stroke', não 'fill' da borda.
+            // O preenchimento do texto é 'fill'.
+            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" stroke=\"%s\" fill=\"%s\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%s\" text-anchor=\"%s\" dominant-baseline=\"middle\">%s</text>\n",
+                    xt, yt, corb, corp, ff, fw, fs, ancora_svg, conteudo_txt);
+            
+            // O ID da forma TEXTO pode ser desenhado na sua âncora (xt, yt) para diferenciação.
+            // Usando uma cor diferente para o ID, por exemplo, vermelho.
+            fprintf(arq_svg, "\t<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" font-size=\"4\" text-anchor=\"middle\" dominant-baseline=\"baseline\">(T%d)</text>\n", xt, yt + atof(fs)/2 + 2, id); // Desloca um pouco para baixo do texto principal
+            break;
+        }
+        default:
+            fprintf(stderr, "Aviso (escreverFormaSvg): Tipo de forma desconhecido (%d) encontrado no no com ancora (%.2f, %.2f).\n", tipo_forma, x_ancora_no, y_ancora_no);
+            break;
     }
 }
 
@@ -160,7 +245,6 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             (*formcriadas)++;
         }
     }
-    //percursoSimetrico(a1, &printasvg, ssvg1);
 
     return t;
 }
@@ -231,9 +315,8 @@ if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
     // Popula a arvore t.
     leitura_geo(arqGeo, t, fCalcBB_individual, instru, formcriadas);
 
-    // FALTA IMPLEMENTAR!
     // Gera o SVG inicial percorrendo a SmuTreap
-    //visitaProfundidadeSmuT(arvoreFormas, escreverFormaSvg, (void *)ssvg1); // Ou visitaLarguraSmuT
+    visitaProfundidadeSmuT(t, escreverFormaSvg, (void *)saidaSvg1); // Ou visitaLarguraSmuT
 
 
     fprintf(saidaSvg1, "</svg>\n");
