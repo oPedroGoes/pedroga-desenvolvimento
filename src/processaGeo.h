@@ -1,5 +1,5 @@
-#ifndef processageo_h
-#define processageo_h
+#ifndef PROCESSAGEO_H
+#define PROCESSAGEO_H
     /*
     Esse cabeçalho header abre o arquivo .geo e insere em um árvore binária de busca todas as formas presentes no arquivo geo. Ele também retorna a estrutura da Arvore para ser utilizada em outras partes do codigo
     */

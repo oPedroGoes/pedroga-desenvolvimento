@@ -3,6 +3,7 @@
 #include "retangulo.h"
 #include "texto.h"
 #include "linha.h"
+#include "Lista.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -169,7 +170,7 @@ void uniaoBB(BB *bb_dest, BB *bb1, BB *bb2){
 *
 *  Esta função será chamada recursivamente de baixo para cima após qualquer modificação estrutural na 
 * árvore (inserção, remoção, rotações). Ela assume que o bb_info do nó n está correto e que os 
-* bb_subtree dos filhos de n (se existirem) já foram corretamente atualizados.
+* BBsubTree dos filhos de n (se existirem) já foram corretamente atualizados.
 */
 void atualizaBB_subtree(node_internal *n){
     if (!n){
@@ -191,8 +192,8 @@ void atualizaBB_subtree(node_internal *n){
     if (n->left) {
         // A função uniao_bb deve ser capaz de lidar com um dos BBs sendo
         // o "BB de ponto" (se o filho esquerdo for uma folha e seu bb_info
-        // não for válido, e seu bb_subtree for apenas sua âncora).
-        // Ela também deve ser capaz de lidar se n->left->bb_subtree for inválido (w < 0).
+        // não for válido, e seu BBsubTree for apenas sua âncora).
+        // Ela também deve ser capaz de lidar se n->left->BBsubTree for inválido (w < 0).
             uniaoBB(&(n->BBsubTree), &(n->BBsubTree), &(n->left->BBsubTree));
     }
     if (n->right) {
@@ -435,9 +436,9 @@ node_internal* removeNoSmuT_SemLiberarInfo_aux(SmuTreap_internal *t, node_intern
     bool podeIrEsquerda = (n->x < root->x - epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y < root->y - epsilon_i));
 
     if (podeIrDireita){
-        root->right = removeNoSmuT_aux(t, root->right, n);
+        root->right = removeNoSmuT_SemLiberarInfo_aux(t, root->right, n);
     } else if(podeIrEsquerda){
-        root->left = removeNoSmuT_aux(t, root->left, n);
+        root->left = removeNoSmuT_SemLiberarInfo_aux(t, root->left, n);
     } else{ // Encontra o no' que se quer remover
         // Aqui, ao que parece, a recomendacao é que se use uma flag bool que retorna true se o no'foi achado.
 
@@ -464,10 +465,10 @@ node_internal* removeNoSmuT_SemLiberarInfo_aux(SmuTreap_internal *t, node_intern
         else{
             if(root->right->priority > root->left->priority){
                 rotacionaEsq(&root);
-                root->right = removeNoSmuT_aux(t, root->right, n);
+                root->right = removeNoSmuT_SemLiberarInfo_aux(t, root->right, n);
             } else{
                 rotacionaDir(&root);
-                root->left = removeNoSmuT_aux(t, root->left, n);
+                root->left = removeNoSmuT_SemLiberarInfo_aux(t, root->left, n);
             }
         }
     }
@@ -487,7 +488,7 @@ void removeNoSmuT_SemLiberarInfo(SmuTreap t, Node n){
     SmuTreap_internal *ti = (SmuTreap_internal*)t;
     node_internal *ni = (node_internal*)n;
 
-    ti->root = removeNoSmuT_aux(ti, ti->root, ni);
+    ti->root = removeNoSmuT_SemLiberarInfo_aux(ti, ti->root, ni);
 }
 
 DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n){
@@ -541,7 +542,6 @@ void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
     node_internal *ni = (node_internal *)n;
 
 
-    int antiga_prioridade = ni->priority;
     int nova_prioridade = (int)(ni->priority * promotionRate);
 
     if (promotionRate > 1.0 && nova_prioridade == ni->priority){
@@ -661,7 +661,7 @@ node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_
 
     return root;
 }
-void* removeNoSmuT(SmuTreap t, Node n){
+void removeNoSmuT(SmuTreap t, Node n){
     if (!t || !n){
         fprintf(stderr, "(removeNoSmuT) Erro: parametros invalidos.\n");
         return;
@@ -687,52 +687,299 @@ Info getBoundingBoxSmuT(SmuTreap t, Node n, double *x, double *y, double *w, dou
     }
 
     node_internal *ni = (node_internal*)n;
+    if(ni->BBsubTree.h < 0 || ni->BBsubTree.w < 0){
+        fprintf(stderr, "(getBoundingBoxSmuT) Erro: Bounding Box invalido (h ou w < 1)");
+        return NULL;
+    }
 
+    *x = ni->BBsubTree.x;
+    *y = ni->BBsubTree.y;
+    *w = ni->BBsubTree.w;
+    *h = ni->BBsubTree.h;
 
+    return ni->info;
+}
+
+//aux
+bool retangulos_interceptam(const BB *bb1, const BB *bb2){
+    if(!bb1 || bb1->w < 0 || !bb2 || bb2->w < 0){
+        fprintf(stderr, "(retangulos_interceptam) Erro: parametros invalidos");
+        return false;
+    }
+
+    double bb1_x_min = bb1->x;
+    double bb1_x_max = bb1->x + bb1->w;
+    double bb1_y_min = bb1->y;
+    double bb1_y_max = bb1->y + bb1->h;
+
+    double bb2_x_min = bb2->x;
+    double bb2_x_max = bb2->x + bb2->w;
+    double bb2_y_min = bb2->y;
+    double bb2_y_max = bb2->y + bb2->h;
+
+    // Verifica intersecao
+    if(bb1_x_max < bb2_x_min || bb1_x_min > bb2_x_max || // Nao intercepta em x
+       bb1_y_max < bb2_y_min || bb1_y_min > bb2_y_max){ // Nao intercepta em y
+        return false;
+    }
+
+    return true;
+}
+
+//aux
+bool ponto_interno_retangulo(double px, double py, double rx, double ry, double rw, double rh, double epsilon){
+    if (rw < 0 || rh < 0) {
+        fprintf(stderr, "(ponto_interno_retangulo) Erro: Tentativa de verificar ponto em retângulo com dimensões inválidas (w=%.2f, h=%.2f).\n", rw, rh);
+        return false;
+    }
+
+    double rx_min = rx;
+    double rx_max = rx + rw;
+    double ry_min = ry;
+    double ry_max = ry + rh;
+
+    bool px_esta_dentro = (px >= rx_min - epsilon) && (px <= rx_max + epsilon);
+    bool py_esta_dentro = (py >= ry_min - epsilon) && (py <= ry_max + epsilon);
+
+    return px_esta_dentro && py_esta_dentro;
+}
+
+//aux
+void getNodesDentroRegiaoSmuT_aux(node_internal *root, double epsilon, Lista L, BB *bbRegiao){
+    if (!root){
+        return;
+    }
+
+    // 
+    if (!retangulos_interceptam(&(root->BBsubTree), bbRegiao)){
+        return;
+    }
+
+    if(ponto_interno_retangulo(root->x, root->y, bbRegiao->x, bbRegiao->y, bbRegiao->w, bbRegiao->h, epsilon)){
+        insereNaLista(L, (Item)root);
+    }
+
+    if (root->right) getNodesDentroRegiaoSmuT_aux(root->right, epsilon, L, &bbRegiao);
+    if (root->left) getNodesDentroRegiaoSmuT_aux(root->left, epsilon, L, &bbRegiao);
+
+    return;
+}
+
+bool getNodesDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, double y2, Lista L){
+    if(!t || !L){
+        fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: parametros invalidos.");
+        return false;
+    }
+
+    SmuTreap_internal *t_i = (SmuTreap_internal*)t;
+    if(!(t_i->root)){
+        fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
+    }
+
+    BB bbRegiao;
+    bbRegiao.x = fmin(x1, x2);
+    bbRegiao.y = fmin(y1, y2);
+    bbRegiao.w = fabs(x1 - x2);
+    bbRegiao.h = fabs(y1 - y2);
+
+    int tamanhoAntes = getTamanhoLista(L);
+
+    getNodesDentroRegiaoSmuT_aux(t_i->root, t_i->epsilon, L, &bbRegiao);
+
+    int tamanhoDepois = getTamanhoLista(L);
+
+    return tamanhoDepois > tamanhoAntes;
 
 }
 
+//aux
+void getInfosDentroRegiaoSmuT_aux(SmuTreap t, node_internal *root, BB *bbRegiao,
+				 FdentroDeRegiao f, Lista L){
+    if(!root || !f) return; // Verifica validade
 
-bool getNodesDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, double y2, Lista L);
-/* Insere na lista L os nos (Node) da arvore t cujas ancoras estao dentro da regiao 
-   delimitada pelos pontos (x1,y1) e (x2,y2).
-   Retorna falso, caso nao existam nos dentro da regiao; verdadeiro, caso contrario.
- */
+    if (!retangulos_interceptam(&(root->BBsubTree), bbRegiao)) { // Poda quando se deve, para otimizar a busca
+        return;
+    }
+
+    if(f(t, (Node)root, root->info, bbRegiao->x, bbRegiao->y, bbRegiao->w, bbRegiao->h)) insereNaLista(L, (Item)root);
+
+    // Se nao e' no' folha, anda na arvore.
+    if (root->right) getInfosDentroRegiaoSmuT_aux(t, root->right, bbRegiao, f, L);
+    if (root->left) getInfosDentroRegiaoSmuT_aux(t, root->left, bbRegiao, f, L);
+    return; // Volta um no'.
+}
 
 bool getInfosDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, double y2,
-				 FdentroDeRegiao f, Lista L);
-/* Insere na lista L os nos cujas respectivas informacoes associadas estao inteiramente dentro da regiao
-   delimitada pelos pontos (x1,y1) e (x2,y2). A funcao f e' usada para determinar se uma
-   informacao armazenada na arvore esta' dentro da regiao.
-   Retorna falso caso nao existam informacoes internas; verdadeiro, caso contrario.
- */
+				 FdentroDeRegiao f, Lista L){
+    if(!t || !f || !L){
+        fprintf(stderr, "(getInfosDentroRegiaoSmuT) Erro: parametros invalidos");
+        return false;
+    }
 
-bool getInfosAtingidoPontoSmuT(SmuTreap t, double x, double y, FpontoInternoAInfo f, Lista L);
-/* Insere na lista L  os nos para os quais o ponto (x,y) possa ser considerado
-  interno 'as  informacoes associadas ao no'. A funcao f e' invocada para determinar
-  se o ponto (x,y) e' interno a uma informacao especifica.
-  Retorna falso caso nao existam informacoes internas; verdadeiro, caso contrario.
- */
+    SmuTreap_internal *t_i = (SmuTreap_internal*)t;
+    if(!(t_i->root)){
+        fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
+    }
 
-void visitaProfundidadeSmuT(SmuTreap t, FvisitaNo f, void *aux);
-/* Percorre a arvore em profundidade. Invoca a funcao f em cada no visitado.
-   O apontador aux e' parametro em cada invocacao de f; assim alguns
-   dados podem ser compartilhados entre as diversas invocacoes de f.
- */
+    BB bbRegiao;
+    bbRegiao.x = fmin(x1, x2);
+    bbRegiao.y = fmin(y1, y2);
+    bbRegiao.w = fabs(x1 - x2);
+    bbRegiao.h = fabs(y1 - y2);
+
+    int tamanhoAntes = getTamanhoLista(L);
+    getInfosDentroRegiaoSmuT_aux(t, t_i->root, &bbRegiao, f, L);
+    int tamanhoDepois = getTamanhoLista(L);
+
+    return tamanhoDepois > tamanhoAntes;
+
+}
+
+//aux
+void getInfosAtingidoPontoSmuT_aux(SmuTreap_internal *t, node_internal *root, double x, double y, FpontoInternoAInfo f, Lista L){
+    if (!root || !f) return;
+
+    // Informacoes do BB que sera usado na busca. Atualiza a cada chamada recursiva.
+    double bb_rx = root->BBsubTree.x;
+    double bb_ry = root->BBsubTree.y;
+    double bb_rw = root->BBsubTree.w;
+    double bb_rh = root->BBsubTree.h;
+
+    //Se o ponto (px, py) não está dentro do BBsubTree (que contém âncoras),
+    // e' certo de que ele nao esta' dentro de alguma Info da subárvore.
+    if(!ponto_interno_retangulo(x, y, bb_rx, bb_ry, bb_rw, bb_rh, t->epsilon)){ // Se P nao e' interno 'a BB do no' atual, volta um passo.
+        return;
+    }
+
+    if(f((SmuTreap)t, (Node)root, root->info, x, y)){
+        insereNaLista(L, (Item)root);
+    }
+
+    if(root->right) getInfosAtingidoPontoSmuT_aux(t, root->right, x, y, f, L);
+    if(root->right) getInfosAtingidoPontoSmuT_aux(t, root->left, x, y, f, L);
+    return;
+}
+
+bool getInfosAtingidoPontoSmuT(SmuTreap t, double x, double y, FpontoInternoAInfo f, Lista L){
+    if(!t || !f || !L){
+        fprintf(stderr, "(getInfosAtingidoPontoSmuT) Erro: parametros invalidos");
+        return false;
+    }
+
+    SmuTreap_internal *t_i = (SmuTreap_internal*)t;
+    if(!(t_i->root)){
+        fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
+    }
+
+    int tamanhoAntes = getTamanhoLista(L);
+    getInfosAtingidoPontoSmuT_aux(t_i, t_i->root, x, y, f, L);
+    int tamanhoDepois = getTamanhoLista(L);
+
+    return tamanhoDepois > tamanhoAntes;
+}
+
+//aux
+void visitaProfundidadeSmuT_aux(SmuTreap t, node_internal *root, FvisitaNo f, void* aux){ // Preorder
+    if(!root || !f) return;
+
+    f(t, root, root->info, root->x, root->y, aux);       // Visita raiz.
+    visitaProfundidadeSmuT_aux(t, root->left, f, aux);   // Visita subarvore esquerda.
+    visitaProfundidadeSmuT_aux(t, root->right, f, aux);  // Visita subarvore direita.
+}
+
+void visitaProfundidadeSmuT(SmuTreap t, FvisitaNo f, void *aux){
+    if (!t || !f){
+        fprintf(stderr, "(visitaProfundidadeSmuT) Erro: parametros invalidos");
+        return;
+    }
+    SmuTreap_internal *t_i = (SmuTreap_internal*)t;
+    visitaProfundidadeSmuT_aux(t, t_i->root, f, aux);
+}
 
 void visitaLarguraSmuT(SmuTreap t, FvisitaNo f, void *aux);
 /* Similar a visitaProfundidadeSmuT, porem, faz o percurso em largura.
  */
 
-Node procuraNoSmuT(SmuTreap t, FsearchNo f, void *aux);
-/* Procura o no' da arvore que contenha um dado especifico.
-   Visita cada no' da arvore e invoca a funcao f. A funcao f
-   retornara' verdadeiro se o no' contem o dado procurado.
-   Neste caso, retorna o no' encontrado. Caso a busca falhe,
-   retorna NULL.
- */
+//aux
+node_internal *procuraNoSmuT_aux(SmuTreap t, node_internal *root, FsearchNo f, void *aux, bool *flag_encontrado){
+    if(root == NULL || !f || *flag_encontrado) return NULL;
 
-bool printDotSmuTreap(SmuTreap t, char *fn);
+    // Verifica o no atual
+    if(f(t, (Node)root, root->info, root->x, root->y, aux)){
+        *flag_encontrado = true;
+        return root;
+    }
+
+    // Busca na subarvore direita
+    node_internal *encontrado_dir = procuraNoSmuT_aux(t, root->right, f, aux, flag_encontrado);
+    if(*flag_encontrado) return encontrado_dir;
+
+    // Busca na subarvore esquerda
+    node_internal *encontrado_esq = procuraNoSmuT_aux(t, root->left, f, aux, flag_encontrado);
+    if(*flag_encontrado) return encontrado_esq;
+
+}
+
+Node procuraNoSmuT(SmuTreap t, FsearchNo f, void *aux){
+    if (!t || !f) return NULL;
+    SmuTreap_internal *t_i = (SmuTreap_internal*)t;
+    bool encontrado_flag = false;
+    return (Node) procura_no_recursive(t, t_i->root, f, aux, &encontrado_flag);
+}
+
+/**
+ * @brief Função auxiliar para escrever a representação DOT de um nó.
+ */
+void print_dot_node(node_internal *node, FILE *fp) {
+    if (node == NULL) return;
+
+    // Nó atual
+    // Usaremos o endereço do nó como identificador único no DOT para evitar colisões com valores de âncora.
+    fprintf(fp, "  node_%p [label=\"(%.2f, %.2f)\\nPrio: %d\\nBBsub[%.1f,%.1f,%.1f,%.1f]\"];\n",
+            (void*)node, node->x, node->y, node->priority,
+            node->BBsubTree.x, node->BBsubTree.y, node->BBsubTree.w, node->BBsubTree.h);
+
+    // Conexões com filhos
+    if (node->left) {
+        fprintf(fp, "  node_%p -> node_%p [label=\"L\"];\n", (void*)node, (void*)node->left);
+        print_dot_node(node->left, fp);
+    } else {
+         fprintf(fp, "  left_null_%p [shape=point, style=invis];\n", (void*)node);
+         fprintf(fp, "  node_%p -> left_null_%p [style=invis];\n", (void*)node, (void*)node);
+    }
+
+    if (node->right) {
+        fprintf(fp, "  node_%p -> node_%p [label=\"R\"];\n", (void*)node, (void*)node->right);
+        print_dot_node(node->right, fp);
+    } else {
+        fprintf(fp, "  right_null_%p [shape=point, style=invis];\n", (void*)node);
+        fprintf(fp, "  node_%p -> right_null_%p [style=invis];\n", (void*)node, (void*)node);
+    }
+}
+
+bool printDotSmuTreap(SmuTreap t, char *fn){
+    if (!t || !fn) return false;
+    SmuTreap_internal *treap = (SmuTreap_internal*)t;
+
+    FILE *fp = fopen(fn, "w");
+    if (!fp) {
+        perror("Erro ao abrir arquivo DOT para escrita");
+        return false;
+    }
+
+    fprintf(fp, "digraph SmuTreap {\n");
+    fprintf(fp, "  node [fontname=\"Helvetica\", shape=record];\n"); // Configurações globais de nó
+
+    if (treap->root == NULL) {
+        fprintf(fp, "  empty [label=\"Arvore Vazia\"];\n");
+    } else {
+        print_dot_node(treap->root, fp);
+    }
+
+    fprintf(fp, "}\n");
+    fclose(fp);
+    return true;
+}
 /* Gera representacao da arvore no arquivo fn, usando a Dot Language
    (ver https://graphviz.org/). Retorna falso, caso o arquivo nao possa
    ser criado (para escrita); true, caso contrario)

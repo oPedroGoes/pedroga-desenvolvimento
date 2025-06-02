@@ -1,5 +1,5 @@
-#ifndef circulo_h
-#define circulo_h
+#ifndef CIRCULO_H
+#define CIRCULO_H
 
 typedef void* CIRCLE;
 

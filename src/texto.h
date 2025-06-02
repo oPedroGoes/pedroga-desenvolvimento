@@ -1,5 +1,5 @@
-#ifndef texto_h
-#define texto_h
+#ifndef TEXTO_H
+#define TEXTO_H
     
     typedef void* TEXTO;
 

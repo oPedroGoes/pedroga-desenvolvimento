@@ -1,5 +1,5 @@
-#ifndef leituraTerminal_h
-#define leituraTerminal_h
+#ifndef LEITURATERMINAL_H
+#define LEITURATERMINAL_H
 
 /*
  * Processa um argumento de string que representa um caminho de diretório.
