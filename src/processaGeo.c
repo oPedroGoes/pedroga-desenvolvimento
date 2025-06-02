@@ -202,7 +202,12 @@ SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nom
     }
 
     char nome_saidasvg1[512];
-    snprintf(nome_saidasvg1, sizeof(nome_saidasvg1), "%s/%s.svg", dirsaida, nomeBaseGeo); // Concatena e prepara o nome da saida svg.
+    int chars_escritos = snprintf(nome_saidasvg1, sizeof(nome_saidasvg1), "%s/%s.svg", dirsaida, nomeBaseGeo);
+
+if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
+    fprintf(stderr, "Alerta (processa_geo): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", dirsaida, nomeBaseGeo, nome_saidasvg1);
+    exit(1);
+}
     printf("Diretório do arquivo svg1: %s\n", nome_saidasvg1);
 
     FILE* saidaSvg1 = fopen(nome_saidasvg1, "w");
