@@ -27,8 +27,6 @@
 
   srand(time(NULL));
 
-  // DEFAULT: se NULL, return VALOR_DEFAULT.
-  // para que seja default, apenas deixar como NULL.
   int *prioMax = NULL, *hc = NULL;
   double *promoRate = NULL;
   
@@ -144,11 +142,6 @@
   printf("fullNomeQry    = %s\n", fullNomeQry    ? fullNomeQry    : "(null ou falha)");
   printf("fullNomeGeo    = %s\n", fullNomeGeo   ? fullNomeGeo    : "(null ou falha)");
   printf("fullNomeTxt    = %s\n", fullNomeTxt   ? fullNomeTxt    : "(null ou falha)");
-
-  
-
-
-
   if (prioMax != NULL) {
     printf("\nprioMax = %d\n", *prioMax);
   } else {
@@ -164,8 +157,11 @@
   } else {
     printf("promoRate = (nao definido ou falha)\n");
   }
+
+
+
 int instru = 0, foramcriadas = 0;
-  processa_geo(fullNomeGeo, dirSaida, nomeGeo, &instru, &foramcriadas, prioMax, hc, promoRate, EPSILON_CONFIG);
+  processa_geo(fullNomeGeo, dirSaida, nomeGeo, prioMax, hc, promoRate, EPSILON_CONFIG);
 frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória
   if(dirEntrada) free(dirEntrada);

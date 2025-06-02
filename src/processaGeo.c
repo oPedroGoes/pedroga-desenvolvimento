@@ -149,16 +149,13 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
     }
 }
 
-SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *instru, int *formcriadas/*, int idUltimaForma*/) {
+SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
 
     char str[500];
     char tipo[4]; //Para "c ", "r ", "l ", "t ", "ts" + null
     char fam[50] = "sans-serif"; // Default
     char wei[50] = "normal";     // Default
     char size[50] = "10";        // Default
-
-    *formcriadas = 0;
-    *instru = 0;
 
     //FORMASGEO f1;
     while (fgets(str, 500, arqGeo)) {
@@ -168,7 +165,6 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
         str[strcspn(str, "\r")] = 0;
         
         sscanf(str, "%3s", tipo); // Lê até 3 caracteres para o comando.
-        (*instru)++;
 
 
         if (strcmp(tipo, "ts") == 0) {
@@ -189,7 +185,6 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             insertSmuT(t, x, y, (CIRCLE)c, TIPO_CIRCULO, funcCalcBb);
 
             printf("\n\n Circulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, r, cb, cp);
-            (*formcriadas)++;
         } else
 
         if (strcmp(tipo, "r") == 0) {
@@ -205,7 +200,6 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             insertSmuT(t, x, y, (RECTANGLE)r, TIPO_RETANGULO, funcCalcBb);
 
             printf("\n\n Retangulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, w, h, cb, cp);
-            (*formcriadas)++;
         } else
 
         if (strcmp(tipo, "l") == 0) {
@@ -229,7 +223,6 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             insertSmuT(t, anc_x, anc_y, (LINHA) l, TIPO_LINHA, funcCalcBb);
 
             printf("\n\n Linha criada!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s", tipo, i, x1, y1, x2, y2, c_cor);
-            (*formcriadas)++;
         } else
 
         if (strcmp(tipo, "t") == 0) {
@@ -248,15 +241,14 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
             free(cb);
             free(cp);
             free(txt);
-            (*formcriadas)++;
         }
     }
 
     return t;
 }
 // Não esquecer de processar os default, e nem de consultar o que os documentos fala sobre isso.
-SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nomegeo, int *instru, 
-                    int *formcriadas, /*int *idUltimaForma,*/ int *prioMax, int *hc, double *promoRate, double epsilonConfig){
+SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nomegeo, 
+                    /*int *idUltimaForma,*/ int *prioMax, int *hc, double *promoRate, double epsilonConfig){
 
     int def_prioMax;
     int def_hc;
@@ -320,7 +312,7 @@ if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
     }
 
     // Popula a arvore t.
-    leitura_geo(arqGeo, t, fCalcBB_individual, instru, formcriadas);
+    leitura_geo(arqGeo, t, fCalcBB_individual);
 
     // Gera o SVG inicial percorrendo a SmuTreap
     visitaProfundidadeSmuT(t, escreverFormaSvg, (void *)saidaSvg1); // Ou visitaLarguraSmuT
