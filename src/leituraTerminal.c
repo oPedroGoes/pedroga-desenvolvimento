@@ -190,21 +190,27 @@ char *removeIndicadorArq(char *dest, const char *src){
 
 // Pode ser modularizada para .dot, .svg e o outro la kk
 void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
-    char nomeBaseGeo[512], nomeBaseQry[512];
+    char nomeBaseGeo[512], nomeBaseQry[512]; // Buffers para os nomes base
 
-    nomeBaseGeo[0] = removeIndicadorArq(nomeBaseGeo, nomeGeo);
-    nomeBaseQry[0] = removeIndicadorArq(nomeBaseQry, nomeQry);
+    // char *nomeBGeoAdequado = nomeBaseGeo[0]; // Esta linha era problemática e não utilizada, removida.
 
+    // Modifica nomeBaseGeo e nomeBaseQry diretamente.
+    // Passa o array (que decai para char*), não o endereço do array.
+    removeIndicadorArq(nomeBaseGeo, nomeGeo);
+    removeIndicadorArq(nomeBaseQry, nomeQry);
+
+    // Calcula o comprimento necessário para a string final
+    // strlen(pathOut) + '/' (1) + strlen(nomeBaseGeo) + '-' (1) + strlen(nomeBaseQry) + ".txt" (4) + '\0' (1)
     int lenArqTxt = strlen(pathOut) + 1 + strlen(nomeBaseGeo) + 1 + strlen(nomeBaseQry) + 4;
 
-    *arqTxt = (char*)malloc(sizeof(char)*(lenArqTxt + 1));
-    if (arqTxt == NULL){
-      fprintf(stderr, "(trataArqTxt) ERRO: falha ao alocar memoria para '%s'\n", *arqTxt);
-    // Deixa *pathDir como NULL para ser checado em main
-    return ;
+    *arqTxt = (char*)malloc(sizeof(char)*(lenArqTxt + 1)); // +1 para o terminador nulo
+    if (*arqTxt == NULL){ // Verifica se a alocação falhou
+      fprintf(stderr, "(trataArqTxt) ERRO: falha ao alocar memoria para o nome do arquivo de saida .txt\n");
+      return; // Retorna, e *arqTxt permanece NULL ou como estava (idealmente definido como NULL)
     }
 
-    strcpy(*arqTxt, pathOut); 
+    // Constrói o nome completo do arquivo de saída
+    strcpy(*arqTxt, pathOut);
     strcat(*arqTxt, "/");
     strcat(*arqTxt, nomeBaseGeo);
     strcat(*arqTxt, "-");

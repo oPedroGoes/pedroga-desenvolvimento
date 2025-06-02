@@ -37,7 +37,7 @@ int ma(double x1, double x2, double y1, double y2){
     }
 }
 
-void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *instru, int *formcriadas/*, int *idUltimaForma*/) {
+SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *instru, int *formcriadas/*, int *idUltimaForma*/) {
 
     char str[500];
     char tipo[4]; //Para "c ", "r ", "l ", "t ", "ts" + null
@@ -48,7 +48,6 @@ void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *
     *formcriadas = 0;
     *instru = 0;
 
-    int contadorforms=1;
     //FORMASGEO f1;
     while (fgets(str, 500, arqGeo)) {
 
@@ -72,12 +71,12 @@ void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *
             char cb[50];
             char cp[50];
 
-            sscanf(str + 2, "%d %f %f %f %s %s", &i, &x, &y, &r, cb, cp);
+            sscanf(str + 2, "%d %lf %lf %lf %s %s", &i, &x, &y, &r, cb, cp);
             //idUltimaForma = i, por algum motivo! Pode ser util depois
             CIRCLE c = create_circle(i, x, y, r, cb, cp);
             insertSmuT(t, x, y, (CIRCLE)c, TIPO_CIRCULO, funcCalcBb);
 
-            printf("\n\n Circulo criado!\nlinha lida: %s %d %f %f %f %s %s", tipo, i, x, y, r, cb, cp);
+            printf("\n\n Circulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, r, cb, cp);
             (*formcriadas)++;
         } else
 
@@ -88,12 +87,12 @@ void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *
             char cb[50];
             char cp[50];
 
-            sscanf(str + 2, "%d %f %f %f %f %s %s", &i, &x, &y, &w, &h, cb, cp);
+            sscanf(str + 2, "%d %lf %lf %lf %lf %s %s", &i, &x, &y, &w, &h, cb, cp);
             //idUltimaForma = i, por algum motivo! Pode ser util depois
             RECTANGLE r = create_rectangle(i, x, y, w, h, cb, cp);
             insertSmuT(t, x, y, (RECTANGLE)r, TIPO_RETANGULO, funcCalcBb);
 
-            printf("\n\n Retangulo criado!\nlinha lida: %s %d %f %f %f %f %s %s", tipo, i, x, y, w, h, cb, cp);
+            printf("\n\n Retangulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, w, h, cb, cp);
             (*formcriadas)++;
         } else
 
@@ -101,9 +100,9 @@ void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *
             int i;
             double x1, y1, x2, y2;
 
-            char* c_cor[50];
+            char c_cor[50];
 
-            sscanf(str + 2, "%d %f %f %f %f %s", &i, &x1, &y1, &x2, &y2, c_cor);
+            sscanf(str + 2, "%d %lf %lf %lf %lf %s", &i, &x1, &y1, &x2, &y2, c_cor);
             //idUltimaForma = i, por algum motivo! Pode ser util depois
             LINHA l = cria_linha(i, x1, y1, x2, y2, c_cor);
 
@@ -117,7 +116,7 @@ void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *
 
             insertSmuT(t, anc_x, anc_y, (LINHA) l, TIPO_LINHA, funcCalcBb);
 
-            printf("\n\n Linha criada!\nlinha lida: %s %d %f %f %f %f %s", tipo, i, x1, y1, x2, y2, c_cor);
+            printf("\n\n Linha criada!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s", tipo, i, x1, y1, x2, y2, c_cor);
             (*formcriadas)++;
         } else
 
@@ -130,7 +129,7 @@ void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *
 
             char a;
 
-            char* txt_contnt[500];
+            char txt_contnt[500];
             int consumed; // armazenar o número de caracteres consumidos (lidos) pela sscanf até ponto x;
             sscanf(str + 1, "%d %lf %lf %49s %49s %c %n", &i, &x, &y, cb, cp, &a, &consumed);
 
@@ -157,7 +156,7 @@ void leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *
             TEXTO t = cria_texto(i, x, y, cb, cp, a, txt_contnt, fam, wei, size);
             insertSmuT(t, x, y, (TEXTO)t, TIPO_TEXTO, funcCalcBb);
 
-            printf("\n\n Texto criado!\nlinha lida: %s %d %.2f %.2f %s %s %c \"%s\"", tipo, i, x, y, cb, cp, a, txt_contnt);
+            printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c \"%s\"", tipo, i, x, y, cb, cp, a, txt_contnt);
             (*formcriadas)++;
         }
     }
@@ -171,7 +170,7 @@ SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nom
 
     int def_prioMax;
     int def_hc;
-    int def_promoRate;
+    double def_promoRate;
     if(prioMax == NULL){
         def_prioMax = DEFAULT_PRIOMAX;
     }

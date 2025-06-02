@@ -384,7 +384,7 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
 //aux
 node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_internal **resultRef, double x, double y){
     if(root == NULL){
-        fprintf(stderr, "(fetNodeSmuT_aux) Erro: no'nao encontrado.");
+        fprintf(stderr, "(fetNodeSmuT_aux) Erro: no' nao encontrado.");
         exit (1); // Se retornasse NULL, a arvore seria destruida.
     }
 
@@ -576,7 +576,7 @@ void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
 }
 
 //aux
-void killNode(node_internal *n){
+void  killNode(node_internal *n){
     if (!n || !n->info){
         fprintf(stderr, "(killNode) Erro: parametros invalidos.");
         return ;
@@ -678,6 +678,8 @@ Info getInfoSmuT(SmuTreap t, Node n){
         fprintf(stderr, "(getInfoSmuT) Erro: parametros invalidos");
         return NULL;
     }
+    node_internal *ni = (node_internal*)n;
+    return ni->info;
 }
 
 Info getBoundingBoxSmuT(SmuTreap t, Node n, double *x, double *y, double *w, double *h){
@@ -759,8 +761,8 @@ void getNodesDentroRegiaoSmuT_aux(node_internal *root, double epsilon, Lista L, 
         insereNaLista(L, (Item)root);
     }
 
-    if (root->right) getNodesDentroRegiaoSmuT_aux(root->right, epsilon, L, &bbRegiao);
-    if (root->left) getNodesDentroRegiaoSmuT_aux(root->left, epsilon, L, &bbRegiao);
+    if (root->right) getNodesDentroRegiaoSmuT_aux(root->right, epsilon, L, bbRegiao);
+    if (root->left) getNodesDentroRegiaoSmuT_aux(root->left, epsilon, L, bbRegiao);
 
     return;
 }
@@ -896,9 +898,47 @@ void visitaProfundidadeSmuT(SmuTreap t, FvisitaNo f, void *aux){
     visitaProfundidadeSmuT_aux(t, t_i->root, f, aux);
 }
 
-void visitaLarguraSmuT(SmuTreap t, FvisitaNo f, void *aux);
-/* Similar a visitaProfundidadeSmuT, porem, faz o percurso em largura.
- */
+void visitaLarguraSmuT(SmuTreap t, FvisitaNo f, void *aux){
+    if (!t || !f) {
+        fprintf(stderr, "(visitaLarguraSmuT) Erro: Parametros invalidos (arvore ou funcao de visita nula).\n");
+        return;
+    }
+
+    SmuTreap_internal *treap_i = (SmuTreap_internal *)t;
+    if (treap_i->root == NULL) {
+        // Arvore vazia, nada a visitar.
+        return;
+    }
+
+    Lista fila = criaLista();
+    if (!fila) {
+        fprintf(stderr, "(visitaLarguraSmuT) Erro: Nao foi possivel criar a fila para o percurso.\n");
+        return;
+    }
+
+    // Adiciona a raiz à fila
+    insereNaLista(fila, (Item)treap_i->root);
+
+    while (!listaEstaVazia(fila)) {
+        node_internal *no_atual = (node_internal *)removePrimeiroDaLista(fila);
+
+        if (no_atual) {
+            // Visita o nó atual
+            f(t, (Node)no_atual, no_atual->info, no_atual->x, no_atual->y, aux);
+
+            // Adiciona os filhos à fila, se existirem
+            if (no_atual->left) {
+                insereNaLista(fila, (Item)no_atual->left);
+            }
+            if (no_atual->right) {
+                insereNaLista(fila, (Item)no_atual->right);
+            }
+        }
+    }
+
+    // Libera a memória usada pela estrutura da lista (não os nós da árvore)
+    destroiLista(fila, NULL);
+}
 
 //aux
 node_internal *procuraNoSmuT_aux(SmuTreap t, node_internal *root, FsearchNo f, void *aux, bool *flag_encontrado){
@@ -924,7 +964,7 @@ Node procuraNoSmuT(SmuTreap t, FsearchNo f, void *aux){
     if (!t || !f) return NULL;
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
     bool encontrado_flag = false;
-    return (Node) procura_no_recursive(t, t_i->root, f, aux, &encontrado_flag);
+    return (Node) procuraNoSmuT_aux(t, t_i->root, f, aux, &encontrado_flag);
 }
 
 /**
@@ -980,11 +1020,30 @@ bool printDotSmuTreap(SmuTreap t, char *fn){
     fclose(fp);
     return true;
 }
-/* Gera representacao da arvore no arquivo fn, usando a Dot Language
-   (ver https://graphviz.org/). Retorna falso, caso o arquivo nao possa
-   ser criado (para escrita); true, caso contrario)
-*/
 
-void killSmuTreap(SmuTreap t);
-/* Libera a memoria usada pela arvore t.
-*/
+//aux
+void killSmuTreap_aux(node_internal *no) {
+    if (no == NULL) {
+        return;
+    }
+
+    killSmuTreap_aux(no->left);   // Libera subárvore esquerda
+    killSmuTreap_aux(no->right);  // Libera subárvore direita
+
+    // Libera a informação associada ao nó, e o nó
+    killNode(no);
+}
+
+void killSmuTreap(SmuTreap t){
+    if (t == NULL) {
+        return;
+    }
+
+    SmuTreap_internal *treap_i = (SmuTreap_internal *)t;
+
+    // Chama a função auxiliar recursiva para liberar todos os nós
+    killSmuTreap_aux(treap_i->root);
+
+    // Libera a estrutura da SmuTreap
+    free(treap_i);
+}

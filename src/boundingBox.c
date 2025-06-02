@@ -119,11 +119,11 @@ void calcBB_l(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h
 
     *bbA_x = minD(x1, x2);
     *bbA_y = maxD(y1, y2);
-    *bbA_w = abs(x1 - x2);
-    *bbA_h = abs(y1 - y2);
+    *bbA_w = fabs(x1 - x2);
+    *bbA_h = fabs(y1 - y2);
 }
 
-void *fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
+void fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
     switch (tp)
     {
     case 1:
@@ -161,4 +161,4 @@ void *fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bb
 }*/
 
 //TALVEZ HAVERA UMA
-void *fCalcBB_agrupada(){}
+//void *fCalcBB_agrupada(){}
