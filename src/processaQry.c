@@ -19,10 +19,134 @@
 #define TIPO_LINHA 4
 #endif
 
+//----------------------------HANDLE_SELR---------------------------------------------------------------------//
+// Estrutura auxiliar para passar dados para a função de callback de percorreLista
+typedef struct {
+    FILE* pathTxt;
+    SmuTreap smutreap_tree;
+    Lista lista_anotacoes_svg;
+} InfoSelrData;
+
+void escreverFormaSvg1(SmuTreap t, Node n, Info i, double x_ancora_no, double y_ancora_no, void *aux_file_ptr) {
+    if (!i || !aux_file_ptr) {
+        return;
+    }
+
+    FILE *arq_svg = (FILE *)aux_file_ptr;
+    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n);
+
+    switch (tipo_forma) {
+        case TIPO_CIRCULO: {
+            CIRCLE c = (CIRCLE)i;
+            int id = get_idC(c);
+            double xc = get_XC(c);
+            double yc = get_YC(c);
+            double r_circ = get_rC(c);
+            char *corb = get_cbC(c);
+            char *corp = get_cpC(c);
+
+            fprintf(arq_svg, "\t<circle id=\"%d\" cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", id, xc, yc, r_circ, corb, corp);
+            break;
+        }
+        case TIPO_RETANGULO: {
+            RECTANGLE r_fig = (RECTANGLE)i;
+            int id = get_idR(r_fig); 
+            double xr = get_XR(r_fig); 
+            double yr = get_YR(r_fig); 
+            double w = get_wR(r_fig); 
+            double h = get_hR(r_fig); 
+            char *corb = get_cbR(r_fig); 
+            char *corp = get_cpR(r_fig); 
+
+            fprintf(arq_svg, "\t<rect id=\"%d\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", id, xr, yr, w, h, corb, corp);
+            // Posicionar ID no centro da âncora original do projeto (canto inferior esquerdo) pode ser uma opção, ou no centro visual.
+            // Para centro visual:
+            break;
+        }
+        case TIPO_LINHA: {
+            LINHA l = (LINHA)i;
+            int id = get_idL(l);
+            double x1 = get_X1L(l);
+            double y1 = get_Y1L(l);
+            double x2 = get_X2L(l);
+            double y2 = get_Y2L(l);
+            char *cor = get_cL(l);
+
+            fprintf(arq_svg, "\t<line id=\"%d\" x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" stroke=\"%s\" stroke-width=\"1\" />\n",id, x1, y1, x2, y2, cor);
+            // O ID da linha será desenhado na âncora da árvore para esta linha (x_ancora_no, y_ancora_no)
+            break;
+        }
+        case TIPO_TEXTO: {
+            TEXTO txt_fig = (TEXTO)i;
+            int id = get_idT(txt_fig);
+            double xt = get_XT(txt_fig);
+            double yt = get_YT(txt_fig);
+            char *corb = get_cbT(txt_fig);
+            char *corp = get_cpT(txt_fig);
+            char *ancora_svg = get_ancoraT(txt_fig); // Retorna "start", "middle", ou "end"
+            char *conteudo_txt = get_txtT(txt_fig);
+            char *ff = get_ffT(txt_fig);
+            char *fw = get_fwT(txt_fig);
+            char *fs = get_fsT(txt_fig);
+
+            // A cor da borda do texto em SVG é controlada por 'stroke', não 'fill' da borda.
+            // O preenchimento do texto é 'fill'.
+            fprintf(arq_svg, "\t<text id=\"%d\" x=\"%.2f\" y=\"%.2f\" stroke=\"%s\" fill=\"%s\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%s\" text-anchor=\"%s\" dominant-baseline=\"middle\">",
+                    id, xt, yt, corb, corp, ff, fw, fs, ancora_svg);
+
+            // Itera pelo conteudo_txt e escapa os caracteres especiais
+            if (conteudo_txt) {
+                char *p = conteudo_txt;
+                while (*p) {
+                    switch (*p) {
+                        case '<':
+                            fprintf(arq_svg, "&lt;");
+                            break;
+                        case '>':
+                            fprintf(arq_svg, "&gt;");
+                            break;
+                        case '&':
+                            fprintf(arq_svg, "&amp;");
+                            break;
+                        case '"': // Embora não estritamente necessário para o conteúdo da tag, é seguro escapar.
+                            fprintf(arq_svg, "&quot;");
+                            break;
+                        case '\'': // Similarmente, seguro escapar.
+                            fprintf(arq_svg, "&apos;");
+                            break;
+                        default:
+                            fputc(*p, arq_svg);
+                            break;
+                    }
+                    p++;
+                }
+            }
+            // Imprime a tag de fechamento do texto
+            fprintf(arq_svg, "</text>\n");
+            break;
+        }
+        default:
+            fprintf(stderr, "Aviso (escreverFormaSvg1): Tipo de forma desconhecido (%d) encontrado no no com ancora (%.2f, %.2f).\n", tipo_forma, x_ancora_no, y_ancora_no);
+            break;
+    }
+}
+
+void visitaListaSvg(Item anotacao, void *aux){
+    if(!anotacao || !aux){
+        fprintf(stderr, "(visitaListaSvg) Erro: parametros invalidos");
+        return;
+    }
+
+    FILE *arqSvg2 = (FILE*)aux;
+
+    const char *buff = (const char*)anotacao;
+    fprintf(arqSvg2, "%s/n", buff);
+}
+
 //aux
-bool retanguloInternoRetangulo(double Dx1, double Dy1, double Dx2, double Dy2, double Fx1, double Fy1, double Fx2, double Fy2){
+bool retanguloInternoRetangulo1(double Dx1, double Dy1, double Dx2, double Dy2, double Fx1, double Fy1, double Fx2, double Fy2){
     if(Dx1 < 0 || Dy1 < 0 || Dx2 < 0 || Dy2 < 0 || Fx1 < 0 || Fy1 < 0 || Fx2 < 0 || Fy2 < 0){
-        fprintf(stderr, "(retanguloInternoRetangulo) Erro: parametros invalidos");
+        fprintf(stderr, "(retanguloInternoRetangulo1) Erro: parametros invalidos");
         return false;
     }
 
@@ -44,14 +168,6 @@ bool retanguloInternoRetangulo(double Dx1, double Dy1, double Dx2, double Dy2, d
     return false;
 }
 
-//----------------------------HANDLE_SELR---------------------------------------------------------------------//
-// Estrutura auxiliar para passar dados para a função de callback de percorreLista
-typedef struct {
-    FILE* pathTxt;
-    SmuTreap smutreap_tree;
-    Lista lista_anotacoes_svg;
-} InfoSelrData;
-
 void killAnotacaoCallback(char *anotacao){
     if(!anotacao){
         fprintf(stderr, "(killAnotacaoCallback) Erro: parametros invalidos.");
@@ -62,59 +178,18 @@ void killAnotacaoCallback(char *anotacao){
 bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2) {
     DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n_node);
 
-    if (tipo_forma == TIPO_CIRCULO) {
-        CIRCLE c = (CIRCLE)forma_info;
-        double cx;
-        double cy;
-        double cw;
-        double ch;
-        getBoundingBoxSmuT(t, n_node, &cx, &cy, &cw, &ch);
+    if (tipo_forma == TIPO_CIRCULO || tipo_forma == TIPO_RETANGULO || tipo_forma == TIPO_TEXTO || tipo_forma == TIPO_LINHA ){
+        double ndx;
+    double ndy;
+    double ndw;
+    double ndh;
+    getBoundingBoxSmuT(t, n_node, &ndx, &ndy, &ndw, &ndh);
 
-        double cxMax = cx + cw;
-        double cyMax = cy + ch;
+    double ndxMax = ndx + ndw;
+    double ndyMax = ndy + ndh;
 
-        return (retanguloInternoRetangulo(cx ,cy, cxMax, cyMax, reg_x1, reg_y1, reg_x2, reg_y2));
-
-    } else if (tipo_forma == TIPO_RETANGULO) {
-        RECTANGLE r = (RECTANGLE)forma_info;
-        double rx;
-        double ry;
-        double rw;
-        double rh;
-        getBoundingBoxSmuT(t, n_node, &rx, &ry, &rw, &rh);
-
-        double rxMax = rx + rw;
-        double ryMax = ry + rh;
-
-        return (retanguloInternoRetangulo(rx ,ry, rxMax, ryMax, reg_x1, reg_y1, reg_x2, reg_y2));
-
-    } else if (tipo_forma == TIPO_LINHA) {
-        LINHA l = (LINHA)forma_info;
-        double lx;
-        double ly;
-        double lw;
-        double lh;
-        getBoundingBoxSmuT(t, n_node, &lx, &ly, &lw, &lh);
-
-        double lxMax = lx + lw;
-        double lyMax = ly + lh;
-
-        return (retanguloInternoRetangulo(lx ,ly, lxMax, lyMax, reg_x1, reg_y1, reg_x2, reg_y2));
-
-    } else if (tipo_forma == TIPO_TEXTO) {
-        double tx;
-        double ty;
-        double tw;
-        double th;
-        getBoundingBoxSmuT(t, n_node, &tx, &ty, &tw, &th);
-
-        double txMax = tx + tw;
-        double tyMax = ty + th;
-
-        return (retanguloInternoRetangulo(tx ,ty, txMax, tyMax, reg_x1, reg_y1, reg_x2, reg_y2));
-
-    }
-    return false; // Tipo desconhecido não está contido
+    return (retanguloInternoRetangulo1(ndy, ndx, ndxMax, ndyMax, reg_x1, reg_y1, reg_x2, reg_y2));
+    } else return false; // Tipo desconhecido.
 }
 
 // Função de callback para percorreLista (para processar nós selecionados)
@@ -165,9 +240,7 @@ void processaNoParaSaida(Item item_node, void *aux_data) {
     if(!anota_ancora_svg){
         fprintf(stderr, "(processaNoParaSaida) Erro: falha ao alocar memoria.");
         return;
-    }
-
-    if (anota_ancora_svg){
+    } else{
         sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya);
         insereNaLista(data->lista_anotacoes_svg, (Item)anota_ancora_svg);
     }
@@ -938,14 +1011,14 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             int n;
             double x, y;
             if (sscanf(str, "seli %d %lf %lf", &n, &x, &y) == 3) {
-                handle_seli(t, pathTxt, n, x, y, array_selecoes, lista_anotacoes_svg);
+                //handle_seli(t, pathTxt, n, x, y, array_selecoes, lista_anotacoes_svg);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para seli\n", str);
             }
         } else if (strcmp(comm, "disp") == 0) {
             int id, n_sel;
             if (sscanf(str, "disp %d %d", &id, &n_sel) == 2) {
-                handle_disp(t, pathTxt, id, n_sel);
+                //handle_disp(t, pathTxt, id, n_sel);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para disp\n", str);
             }
@@ -953,7 +1026,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             int id;
             double x, y;
             if (sscanf(str, "transp %d %lf %lf", &id, &x, &y) == 3) {
-                handle_transp(t, pathTxt, id, x, y);
+                //handle_transp(t, pathTxt, id, x, y);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para transp\n", str);
             }
@@ -961,14 +1034,14 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             int n;
             double dx, dy;
             if (sscanf(str, "cln %d %lf %lf", &n, &dx, &dy) == 3) {
-                handle_cln(t, pathTxt, n, dx, dy);
+                //handle_cln(t, pathTxt, n, dx, dy);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para cln\n", str);
             }
         } else if (strcmp(comm, "spy") == 0) {
             int id;
             if (sscanf(str, "spy %d", &id) == 1) {
-                handle_spy(t, pathTxt, id);
+                //handle_spy(t, pathTxt, id);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para spy\n", str);
             }
@@ -977,14 +1050,14 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             char cb[50], cp[50];
             // Formato: cmflg id corBorda corPreenchimento larguraPx
             if (sscanf(str, "cmflg %d %s %s %d", &id, cb, cp, &w_px) == 4) {
-                handle_cmflg(t, pathTxt, id, cb, cp, w_px);
+                //handle_cmflg(t, pathTxt, id, cb, cp, w_px);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para cmflg\n", str);
             }
         } else if (strcmp(comm, "blow") == 0) {
             int id;
             if (sscanf(str, "blow %d", &id) == 1) {
-                handle_blow(t, pathTxt, id);
+                //handle_blow(t, pathTxt, id);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para blow\n", str);
             }
@@ -1010,7 +1083,7 @@ SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, co
     }
 
     // PENSAR EM COMO PASSAR NOMEGEO DE MODO QUE NAO SEJA NECESSARIO ESSA PARTE NESSA FUNCAO.
-    // Remover ".geo" de nomegeo.
+    // Remover ".qry" de nomeQry.
     char nomeBaseQry[512];
     int lenNomeQry = strlen(nomeQry);
 
@@ -1050,7 +1123,7 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
     if(chars_escritos_Txt >= (int)sizeof(nome_saidaTxt)){
         fprintf(stderr, "Alerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
         exit(1);
-}
+    }
     printf("Diretório do arquivo stxt: %s\n", nome_saidaTxt);
 
     FILE* saidaTxt = fopen(nome_saidaTxt, "w");
@@ -1061,7 +1134,20 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
         exit(1);
     }
 
-    leitura_qry(t, arqQry, saidaTxt, array_anotacoes, lista_anotacoes_svg, fCalcBB_individual)
+    leitura_qry(t, arqQry, saidaTxt, array_anotacoes, lista_anotacoes_svg, fCalcBB_individual);
     
     //PRINTAR TXT E LISTA DE ANOTACOES SVG!!!!!!!!!
+
+    // Escreve a arvore modificada no svg 2.
+    visitaProfundidadeSmuT(t, escreverFormaSvg1, (void *)saidaSvg2);
+
+    // Escreve as anotacoes no svg 2.
+    percorreLista(lista_anotacoes_svg, visitaListaSvg, (void*)saidaSvg2);
+
+    fprintf(saidaSvg2, "</svg>\n");
+    fclose(arqQry);
+    fclose(saidaSvg2);
+    return t;
+
+
 }
