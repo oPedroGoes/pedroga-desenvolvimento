@@ -137,10 +137,6 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
             }
             // Imprime a tag de fechamento do texto
             fprintf(arq_svg, "</text>\n");
-            
-            // O ID da forma TEXTO pode ser desenhado na sua âncora (xt, yt) para diferenciação.
-            // Usando uma cor diferente para o ID, por exemplo, vermelho.
-        
             break;
         }
         default:
@@ -168,9 +164,10 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
 
 
         if (strcmp(tipo, "ts") == 0) {
-            sscanf(str + 2, "%s %s %s", fam, wei, size); //+2 pula "ts"
-            printf("\n\n Ts lido!\nlinha lida: %s %s %s %s", tipo, fam, wei, size);
-        }else 
+            if (sscanf(str + 2, "%s %s %s", fam, wei, size) == 3){  //+2 pula "ts"
+                printf("\n\n Ts lido!\nlinha lida: %s %s %s %s", tipo, fam, wei, size);
+            } 
+        }else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para ts.");
 
         if (strcmp(tipo, "c") == 0) {
             int i;
@@ -179,12 +176,14 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
             char cb[50];
             char cp[50];
 
-            sscanf(str + 2, "%d %lf %lf %lf %s %s", &i, &x, &y, &r, cb, cp);
-            //idUltimaForma = i, por algum motivo! Pode ser util depois
-            CIRCLE c = create_circle(i, x, y, r, cb, cp);
-            insertSmuT(t, x, y, (CIRCLE)c, TIPO_CIRCULO, funcCalcBb);
+            if (sscanf(str + 2, "%d %lf %lf %lf %s %s", &i, &x, &y, &r, cb, cp)){
+                //idUltimaForma = i, por algum motivo! Pode ser util depois
+                CIRCLE c = create_circle(i, x, y, r, cb, cp);
+                insertSmuT(t, x, y, (CIRCLE)c, TIPO_CIRCULO, funcCalcBb);
+                
+                printf("\n\n Circulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, r, cb, cp);
+            } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para c.");
 
-            printf("\n\n Circulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, r, cb, cp);
         } else
 
         if (strcmp(tipo, "r") == 0) {
@@ -194,12 +193,13 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
             char cb[50];
             char cp[50];
 
-            sscanf(str + 2, "%d %lf %lf %lf %lf %s %s", &i, &x, &y, &w, &h, cb, cp);
-            //idUltimaForma = i, por algum motivo! Pode ser util depois
-            RECTANGLE r = create_rectangle(i, x, y, w, h, cb, cp);
-            insertSmuT(t, x, y, (RECTANGLE)r, TIPO_RETANGULO, funcCalcBb);
-
-            printf("\n\n Retangulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, w, h, cb, cp);
+            if (sscanf(str + 2, "%d %lf %lf %lf %lf %s %s", &i, &x, &y, &w, &h, cb, cp)){
+                //idUltimaForma = i, por algum motivo! Pode ser util depois
+                RECTANGLE r = create_rectangle(i, x, y, w, h, cb, cp);
+                insertSmuT(t, x, y, (RECTANGLE)r, TIPO_RETANGULO, funcCalcBb);
+    
+                printf("\n\n Retangulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, w, h, cb, cp);
+            } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para r.");
         } else
 
         if (strcmp(tipo, "l") == 0) {
@@ -208,39 +208,44 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
 
             char c_cor[50];
 
-            sscanf(str + 2, "%d %lf %lf %lf %lf %s", &i, &x1, &y1, &x2, &y2, c_cor);
-            //idUltimaForma = i, por algum motivo! Pode ser util depois
-            LINHA l = cria_linha(i, x1, y1, x2, y2, c_cor);
-
-            double anc_x, anc_y;
-            int maior = ma(x1, x2, y1, y2);
-            if(maior == 1 || maior == 3){
-                anc_x = x1; anc_y = y1;
-            } else {
-                anc_x = x2; anc_y = y2;
-            }
-
-            insertSmuT(t, anc_x, anc_y, (LINHA) l, TIPO_LINHA, funcCalcBb);
-
-            printf("\n\n Linha criada!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s", tipo, i, x1, y1, x2, y2, c_cor);
+            if (sscanf(str + 2, "%d %lf %lf %lf %lf %s", &i, &x1, &y1, &x2, &y2, c_cor)){
+                //idUltimaForma = i, por algum motivo! Pode ser util depois
+                LINHA l = cria_linha(i, x1, y1, x2, y2, c_cor);
+    
+                double anc_x, anc_y;
+                int maior = ma(x1, x2, y1, y2);
+                if(maior == 1 || maior == 3){
+                    anc_x = x1; anc_y = y1;
+                } else {
+                    anc_x = x2; anc_y = y2;
+                }
+    
+                insertSmuT(t, anc_x, anc_y, (LINHA) l, TIPO_LINHA, funcCalcBb);
+    
+                printf("\n\n Linha criada!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s", tipo, i, x1, y1, x2, y2, c_cor);
+            } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para l.");
         } else
 
         if (strcmp(tipo, "t") == 0) {
             int i;
             double x, y;
+
             char* cb = (char*)malloc(15 * sizeof(char));
             char* cp = (char*)malloc(15 * sizeof(char));
+
             char a;
+
             char* txt = (char*)malloc(300 * sizeof(char));
-            sscanf(str + 2, "%d %lf %lf %s %s %c %[^\n]", &i, &x, &y, cb, cp, &a, txt);
-            TEXTO tx = cria_texto(i, x, y, cb, cp, a, txt, fam, wei, size);
-            insertSmuT(t, x, y, (TEXTO)tx, TIPO_TEXTO, funcCalcBb);
-
-            printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c %s", tipo, i, x, y, cb, cp, a, txt);
-
-            free(cb);
-            free(cp);
-            free(txt);
+            if (sscanf(str + 2, "%d %lf %lf %s %s %c %[^\n]", &i, &x, &y, cb, cp, &a, txt)){
+                TEXTO tx = cria_texto(i, x, y, cb, cp, a, txt, fam, wei, size);
+                insertSmuT(t, x, y, (TEXTO)tx, TIPO_TEXTO, funcCalcBb);
+    
+                printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c %s", tipo, i, x, y, cb, cp, a, txt);
+    
+                free(cb);
+                free(cp);
+                free(txt);
+            } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para t.");
         }
     }
 

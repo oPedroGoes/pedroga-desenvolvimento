@@ -9,6 +9,7 @@
  
  #include "processaGeo.h"
  #include "leituraTerminal.h"
+ #include "Lista.h"
 
 #define EPSILON_CONFIG 0.001 //AJUSTAVEL.
 
@@ -158,10 +159,15 @@
     printf("promoRate = (nao definido ou falha)\n");
   }
 
-
-
-int instru = 0, foramcriadas = 0;
   processa_geo(fullNomeGeo, dirSaida, nomeGeo, prioMax, hc, promoRate, EPSILON_CONFIG);
+
+  Lista array_selecoes[100];
+  for (int i = 0; i < 100; i++){
+    array_selecoes[i] = NULL;
+  }
+
+  Lista lista_svg_qry = criaLista();
+
 frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória
   if(dirEntrada) free(dirEntrada);

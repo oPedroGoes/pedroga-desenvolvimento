@@ -19,14 +19,44 @@
 #define TIPO_LINHA 4
 #endif
 
+//aux
+bool retanguloInternoRetangulo(double Dx1, double Dy1, double Dx2, double Dy2, double Fx1, double Fy1, double Fx2, double Fy2){
+    if(Dx1 < 0 || Dy1 < 0 || Dx2 < 0 || Dy2 < 0 || Fx1 < 0 || Fy1 < 0 || Fx2 < 0 || Fy2 < 0){
+        fprintf(stderr, "(retanguloInternoRetangulo) Erro: parametros invalidos");
+        return false;
+    }
+
+    double x_dentro_min = fmin(Dx1, Dx2);
+    double x_dentro_max = fmax(Dx1, Dx2);
+    double y_dentro_min = fmin(Dy1, Dy2);
+    double y_dentro_max = fmax(Dy1, Dy2);
+
+    double x_fora_min = fmin(Fx1, Fx2);
+    double x_fora_max = fmax(Fx1, Fx2);
+    double y_fora_min = fmin(Fy1, Fy2);
+    double y_fora_max = fmax(Fy1, Fy2);
+
+    if (x_dentro_min >= x_fora_min && x_dentro_max <= x_fora_max && // X e' valido
+        y_dentro_min >= y_fora_min && y_dentro_max <= y_fora_max){  // y e' valido
+            return true;
+    }
+
+    return false;
+}
 
 //----------------------------HANDLE_SELR---------------------------------------------------------------------//
 // Estrutura auxiliar para passar dados para a função de callback de percorreLista
 typedef struct {
-    FILE* file_txt_out;
+    FILE* pathTxt;
     SmuTreap smutreap_tree;
     Lista lista_anotacoes_svg;
-} VisitaInfoSelrData;
+} InfoSelrData;
+
+void killAnotacaoCallback(char *anotacao){
+    if(!anotacao){
+        fprintf(stderr, "(killAnotacaoCallback) Erro: parametros invalidos.");
+    } else free(anotacao);
+}
 
 // Função de callback para getInfosDentroRegiaoSmuT: verifica se uma forma está totalmente contida na região
 bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2) {
@@ -34,182 +64,190 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
 
     if (tipo_forma == TIPO_CIRCULO) {
         CIRCLE c = (CIRCLE)forma_info;
-        double cx = get_XC(c);
-        double cy = get_YC(c);
-        double cr = get_rC(c);
-        // Verifica se o círculo está totalmente dentro da região retangular (reg_x1, reg_y1) a (reg_x2, reg_y2)
-        return (cx - cr >= reg_x1 && cx + cr <= reg_x2 &&
-                cy - cr >= reg_y1 && cy + cr <= reg_y2);
+        double cx;
+        double cy;
+        double cw;
+        double ch;
+        getBoundingBoxSmuT(t, n_node, &cx, &cy, &cw, &ch);
+
+        double cxMax = cx + cw;
+        double cyMax = cy + ch;
+
+        return (retanguloInternoRetangulo(cx ,cy, cxMax, cyMax, reg_x1, reg_y1, reg_x2, reg_y2));
+
     } else if (tipo_forma == TIPO_RETANGULO) {
         RECTANGLE r = (RECTANGLE)forma_info;
-        double fx = get_XR(r); // Coordenada x da âncora da forma (canto superior esquerdo)
-        double fy = get_YR(r); // Coordenada y da âncora da forma
-        double fw = get_wR(r);
-        double fh = get_hR(r);
-        return (fx >= reg_x1 && fx + fw <= reg_x2 &&
-                fy >= reg_y1 && fy + fh <= reg_y2);
+        double rx;
+        double ry;
+        double rw;
+        double rh;
+        getBoundingBoxSmuT(t, n_node, &rx, &ry, &rw, &rh);
+
+        double rxMax = rx + rw;
+        double ryMax = ry + rh;
+
+        return (retanguloInternoRetangulo(rx ,ry, rxMax, ryMax, reg_x1, reg_y1, reg_x2, reg_y2));
+
     } else if (tipo_forma == TIPO_LINHA) {
         LINHA l = (LINHA)forma_info;
-        double x1 = get_X1L(l);
-        double y1 = get_Y1L(l);
-        double x2 = get_X2L(l);
-        double y2 = get_Y2L(l);
-        // Ambos os pontos da linha devem estar dentro da região
-        bool p1_dentro = (x1 >= reg_x1 && x1 <= reg_x2 && y1 >= reg_y1 && y1 <= reg_y2);
-        bool p2_dentro = (x2 >= reg_x1 && x2 <= reg_x2 && y2 >= reg_y1 && y2 <= reg_y2);
-        return p1_dentro && p2_dentro;
+        double lx;
+        double ly;
+        double lw;
+        double lh;
+        getBoundingBoxSmuT(t, n_node, &lx, &ly, &lw, &lh);
+
+        double lxMax = lx + lw;
+        double lyMax = ly + lh;
+
+        return (retanguloInternoRetangulo(lx ,ly, lxMax, lyMax, reg_x1, reg_y1, reg_x2, reg_y2));
+
     } else if (tipo_forma == TIPO_TEXTO) {
-        // Para o texto, verificamos se seu bounding box está contido na região
-        double bb_texto_x, bb_texto_y, bb_texto_w, bb_texto_h;
-        // Usamos a função fCalcBB_individual que você implementou em boundingBox.c
-        fCalcBB_individual(tipo_forma, forma_info, &bb_texto_x, &bb_texto_y, &bb_texto_w, &bb_texto_h);
-        return (bb_texto_x >= reg_x1 && bb_texto_x + bb_texto_w <= reg_x2 &&
-                bb_texto_y >= reg_y1 && bb_texto_y + bb_texto_h <= reg_y2);
+        double tx;
+        double ty;
+        double tw;
+        double th;
+        getBoundingBoxSmuT(t, n_node, &tx, &ty, &tw, &th);
+
+        double txMax = tx + tw;
+        double tyMax = ty + th;
+
+        return (retanguloInternoRetangulo(tx ,ty, txMax, tyMax, reg_x1, reg_y1, reg_x2, reg_y2));
+
     }
     return false; // Tipo desconhecido não está contido
 }
 
 // Função de callback para percorreLista (para processar nós selecionados)
-void processaNoSelecionadoParaTXTESVG(Item item_node, void *aux_data) {
-    VisitaInfoSelrData* visita_data = (VisitaInfoSelrData*)aux_data;
-    Node no_selecionado = (Node)item_node; // O Item da lista é o Node da SmuTreap
-    Info info_forma = getInfoSmuT(visita_data->smutreap_tree, no_selecionado);
-    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(visita_data->smutreap_tree, no_selecionado);
+void processaNoParaSaida(Item item_node, void *aux_data) {
+    InfoSelrData* data = (InfoSelrData*)aux_data;
+    Node nd = (Node)item_node; // O Item da lista é o Node da SmuTreap
+    Info info_forma = getInfoSmuT(data->smutreap_tree, nd);
+    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(data->smutreap_tree, nd);
 
     int id_forma = -1;
-    char* nome_tipo_forma = "Desconhecido";
-    double ancora_svg_x, ancora_svg_y; // Âncora da FORMA para o círculo SVG
+    char* nome_forma = "Desconhecido";
+    double xa, ya; // Âncora da FORMA para o círculo SVG
 
     if (tipo_forma == TIPO_CIRCULO) {
         CIRCLE c = (CIRCLE)info_forma;
         id_forma = get_idC(c);
-        nome_tipo_forma = "circulo";
-        ancora_svg_x = get_XC(c); // Centro do círculo é sua âncora
-        ancora_svg_y = get_YC(c);
+        nome_forma = "circulo";
+        xa = get_XC(c); // Centro do círculo é sua âncora
+        ya = get_YC(c);
     } else if (tipo_forma == TIPO_RETANGULO) {
         RECTANGLE r = (RECTANGLE)info_forma;
         id_forma = get_idR(r);
-        nome_tipo_forma = "retangulo";
-        ancora_svg_x = get_XR(r); // Âncora do retângulo (canto superior esquerdo)
-        ancora_svg_y = get_YR(r);
+        nome_forma = "retangulo";
+        xa = get_XR(r); // Âncora do retângulo (canto superior esquerdo)
+        ya = get_YR(r);
     } else if (tipo_forma == TIPO_LINHA) {
         LINHA l = (LINHA)info_forma;
         id_forma = get_idL(l);
-        nome_tipo_forma = "linha";
+        nome_forma = "linha";
         // A "âncora da forma" para a linha pode ser o primeiro ponto (x1,y1)
         // ou a âncora do nó na SmuTreap, que é um dos seus pontos finais.
         // Usaremos (x1,y1) para consistência com outras formas.
-        ancora_svg_x = get_X1L(l);
-        ancora_svg_y = get_Y1L(l);
+        xa = get_X1L(l);
+        ya = get_Y1L(l);
     } else if (tipo_forma == TIPO_TEXTO) {
         TEXTO t = (TEXTO)info_forma;
         id_forma = get_idT(t);
-        nome_tipo_forma = "texto";
-        ancora_svg_x = get_XT(t); // Âncora original do texto
-        ancora_svg_y = get_YT(t);
+        nome_forma = "texto";
+        xa = get_XT(t); // Âncora original do texto
+        ya = get_YT(t);
     }
 
     // Escrever no arquivo TXT
-    fprintf(visita_data->file_txt_out, "%d: %s\n", id_forma, nome_tipo_forma);
+    fprintf(data->pathTxt, "%d: %s\n", id_forma, nome_forma);
 
     // Adicionar anotação para SVG: pequena circunferência vermelha na âncora da forma
-    char* anotacao_circ_ancora = (char*)malloc(200 * sizeof(char));
-    if (anotacao_circ_ancora) {
-        sprintf(anotacao_circ_ancora, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", ancora_svg_x, ancora_svg_y);
-        insereNaLista(visita_data->lista_anotacoes_svg, (Item)anotacao_circ_ancora);
+    char* anota_ancora_svg = (char*)malloc(200 * sizeof(char));
+    if(!anota_ancora_svg){
+        fprintf(stderr, "(processaNoParaSaida) Erro: falha ao alocar memoria.");
+        return;
+    }
+
+    if (anota_ancora_svg){
+        sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya);
+        insereNaLista(data->lista_anotacoes_svg, (Item)anota_ancora_svg);
     }
 }
 
 void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x, double sel_y, double sel_w, double sel_h, Lista* array_selecoes, Lista lista_anotacoes_svg) {
-    // Escreve o comando original no arquivo TXT, precedido por "[*]"
+    // Escreve o comando original no arquivo TXT
     fprintf(pathTxtOut, "[*] selr %d %.2f %.2f %.2f %.2f\n", n_id_selecao, sel_x, sel_y, sel_w, sel_h);
     printf("Processando comando selr: n=%d, x=%.2f, y=%.2f, w=%.2f, h=%.2f\n", n_id_selecao, sel_x, sel_y, sel_w, sel_h);
 
-    // 1. Criar uma lista para armazenar os nós (formas) selecionados nesta operação
+    // Cria uma lista para armazenar os nós (formas) selecionados nesta operação
     Lista lista_formas_encontradas = criaLista();
     if (!lista_formas_encontradas) {
-        fprintf(pathTxtOut, "Erro critico: Falha ao alocar memoria para lista de selecao.\n");
+        fprintf(pathTxtOut, "(handle_selr) Erro: Falha ao alocar memoria para lista de selecao.\n");
         return;
     }
 
-    // 2. Definir a região de seleção para a SmuTreap
-    // A SmuTreap espera (x1,y1) e (x2,y2) como cantos opostos.
-    // (sel_x, sel_y) é o canto superior esquerdo.
+    // Define (x1, y1) e (x2, y2) como pontos opostos.
     double reg_x1 = sel_x;
     double reg_y1 = sel_y;
     double reg_x2 = sel_x + sel_w;
     double reg_y2 = sel_y + sel_h;
 
-    // 3. Chamar a função da SmuTreap para obter as formas dentro da região
-    // A função getInfosDentroRegiaoSmuT vai usar formaTotalmenteContidaCallback
-    // para verificar cada forma.
+    // Adiciona as formas dentro da lista.
     getInfosDentroRegiaoSmuT(tree, reg_x1, reg_y1, reg_x2, reg_y2, formaTotalmenteContidaCallback, lista_formas_encontradas);
 
-    // 4. Armazenar a lista de formas encontradas no array de seleções
-    // O índice 'n_id_selecao' deve estar entre 0 e 99 [cite: 165]
-    if (n_id_selecao >= 0 && n_id_selecao < 100) { // Assumindo que o array_selecoes tem tamanho 100
-        // Se já existe uma seleção com este 'n_id_selecao', ela deve ser substituída.
-        // Primeiro, liberamos a lista antiga, se houver.
-        if (array_selecoes[n_id_selecao] != NULL) {
-            // Os itens da lista são ponteiros para Node da SmuTreap,
-            // não devemos liberar os Nodes em si, apenas a estrutura da lista.
+    // Adiciona a lista no array de selecoes.
+    if (n_id_selecao >= 0 && n_id_selecao < 100){
+
+        // Se selecao n ja' existe, apaga-se a existente, e a substitui.
+        if (array_selecoes[n_id_selecao] != NULL){
             destroiLista(array_selecoes[n_id_selecao], NULL);
         }
+
         array_selecoes[n_id_selecao] = lista_formas_encontradas;
     } else {
-        fprintf(pathTxtOut, "Erro: Numero de identificacao de selecao 'n' (%d) invalido. Deve ser entre 0 e 99.\n", n_id_selecao);
-        // Como a seleção não será armazenada, destruímos a lista que criamos.
+        fprintf(pathTxtOut, "(handle_selr) Erro: Numero de identificacao de selecao 'n' (%d) invalido. Deve ser entre 0 e 99.\n", n_id_selecao);
         destroiLista(lista_formas_encontradas, NULL);
-        // Adicionar anotação SVG para o retângulo de seleção mesmo se 'n' for inválido, pois o comando foi dado
-        char* anot_rect_sel_svg = (char*)malloc(256 * sizeof(char));
-        if (anot_rect_sel_svg) {
-            sprintf(anot_rect_sel_svg, "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"red\" fill=\"none\" stroke-dasharray=\"5,5\" />",
-                    sel_x, sel_y, sel_w, sel_h);
-            insereNaLista(lista_anotacoes_svg, (Item)anot_rect_sel_svg);
-        }
-        return; // Interrompe o processamento deste comando selr
+        return;
     }
 
     // 5. Gerar a saída TXT e preparar anotações SVG para as formas selecionadas
     if (listaEstaVazia(lista_formas_encontradas)) {
         fprintf(pathTxtOut, "Nenhuma forma inteiramente contida na regiao especificada.\n");
     } else {
-        VisitaInfoSelrData data_visita;
-        data_visita.file_txt_out = pathTxtOut;
-        data_visita.smutreap_tree = tree;
-        data_visita.lista_anotacoes_svg = lista_anotacoes_svg;
+        InfoSelrData data;
+        data.pathTxt = pathTxtOut;
+        data.smutreap_tree = tree;
+        data.lista_anotacoes_svg = lista_anotacoes_svg;
 
         // Percorre a lista de nós selecionados para gerar saída TXT e anotações SVG
-        percorreLista(lista_formas_encontradas, processaNoSelecionadoParaTXTESVG, &data_visita);
+        percorreLista(lista_formas_encontradas, processaNoParaSaida, &data);
     }
 
-    // 6. Adicionar anotação SVG para o retângulo de seleção
-    // Esta string será adicionada à lista_anotacoes_svg e depois escrita no arquivo SVG principal.
-    char* anot_rect_sel_svg = (char*)malloc(256 * sizeof(char));
-    if (anot_rect_sel_svg) {
-        // Desenha o retângulo de seleção (x,y,w,h) em vermelho tracejado
-        sprintf(anot_rect_sel_svg, "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"red\" fill=\"none\" stroke-dasharray=\"5,5\" />",
+    // Adiciona anotação SVG para o retângulo de seleção
+    char* anota_selec_r = (char*)malloc(256 * sizeof(char));
+    if(!anota_selec_r){
+        fprintf(stderr, "(handle_selr) Erro: falha ao alocar memoria.");
+        return;
+    } else{
+        sprintf(anota_selec_r, "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"red\" fill=\"none\" stroke-dasharray=\"5,5\" />",
                 sel_x, sel_y, sel_w, sel_h);
-        insereNaLista(lista_anotacoes_svg, (Item)anot_rect_sel_svg);
+
+        insereNaLista(lista_anotacoes_svg, (Item)anota_selec_r);
     }
     // Nota: A lista 'lista_formas_encontradas' agora é de responsabilidade do 'array_selecoes[n_id_selecao]'.
     // Não a destrua aqui se 'n_id_selecao' for válido.
 
-    //COMO INTEGRAR:
+
     //1. Colocar array de selecoes na MAIN
     //2. Inicializar uma lista de anotacoes para svg na MAIN
-    //3. Funcao para cuidar das anotacoes para svg, que sao alocadas dinamicamente.
+    //3. LEMBRAR DE DAR KILL NAS ANOTACOES!!!!!!!!
+}
 //------------------------------------------------------------------------------------------------------------//
 
 
 //--------------------------------------HANDLE_SELI-----------------------------------------------------------//
 // Definições dos tipos de formas (assumindo que já existem em algum lugar acessível)
-// #define TIPO_CIRCULO 1
-// #define TIPO_RETANGULO 2
-// #define TIPO_TEXTO 3
-// #define TIPO_LINHA 4
 
-void handle_seli(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x, double sel_y, Lista* array_selecoes, Lista lista_anotacoes_svg) {
+void handle_seli(SmuTreap t, FILE *pathTxtOut, int n_id_selecao, double sel_x, double sel_y, Lista *array_selecoes, Lista lista_anotacoes_svg){
     // Escreve o comando original no arquivo TXT
     fprintf(pathTxtOut, "[*] seli %d %.2f %.2f\n", n_id_selecao, sel_x, sel_y);
     printf("Processando comando seli: n=%d, x=%.2f, y=%.2f\n", n_id_selecao, sel_x, sel_y);
@@ -217,7 +255,7 @@ void handle_seli(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
     // 1. Buscar o nó na SmuTreap usando as coordenadas (sel_x, sel_y)
     // A função getNodeSmuT já considera a tolerância epsilon.
     // Ela também pode promover o nó se o hitCount for atingido.
-    Node no_encontrado = getNodeSmuT(tree, sel_x, sel_y);
+    Node no_encontrado = getNodeSmuT(t, sel_x, sel_y);
 
     // 2. Validar o número de seleção 'n_id_selecao' e preparar a lista de seleção
     Lista lista_para_esta_selecao = NULL;
@@ -245,8 +283,8 @@ void handle_seli(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
             fprintf(pathTxtOut, "Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
         } else {
             // Lógica para reportar a forma encontrada (sem armazenar na seleção inválida 'n')
-            Info info_forma = getInfoSmuT(tree, no_encontrado);
-            DescritorTipoInfo tipo_forma = getTypeInfoSmuT(tree, no_encontrado);
+            Info info_forma = getInfoSmuT(t, no_encontrado);
+            DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, no_encontrado);
             int id_forma_report = -1;
             char* nome_tipo_report = "Desconhecido";
 
@@ -276,31 +314,31 @@ void handle_seli(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
         insereNaLista(lista_para_esta_selecao, (Item)no_encontrado);
 
         // Obter informações da forma para saída TXT e anotação SVG
-        Info info_forma = getInfoSmuT(tree, no_encontrado);
-        DescritorTipoInfo tipo_forma = getTypeInfoSmuT(tree, no_encontrado);
+        Info info_forma = getInfoSmuT(t, no_encontrado);
+        DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, no_encontrado);
         int id_forma = -1;
-        char* nome_tipo_forma = "Desconhecido";
+        char* nome_forma = "Desconhecido";
 
         // Determinar ID e tipo para o relatório TXT
         if (tipo_forma == TIPO_CIRCULO) {
             id_forma = get_idC((CIRCLE)info_forma);
-            nome_tipo_forma = "circulo";
+            nome_forma = "circulo";
         } else if (tipo_forma == TIPO_RETANGULO) {
             RECTANGLE r_info = (RECTANGLE)info_forma;
             id_forma = get_idR(r_info);
-            nome_tipo_forma = "retangulo";
+            nome_forma = "retangulo";
         } else if (tipo_forma == TIPO_LINHA) {
             LINHA l_info = (LINHA)info_forma;
             id_forma = get_idL(l_info);
-            nome_tipo_forma = "linha";
+            nome_forma = "linha";
         } else if (tipo_forma == TIPO_TEXTO) {
             TEXTO t_info = (TEXTO)info_forma;
             id_forma = get_idT(t_info);
-            nome_tipo_forma = "texto";
+            nome_forma = "texto";
         }
 
         // Escrever no arquivo TXT
-        fprintf(pathTxtOut, "%d: %s\n", id_forma, nome_tipo_forma);
+        fprintf(pathTxtOut, "selr: forma %d (%s) selecionada \n", id_forma, nome_forma);
 
         // Adicionar anotação SVG: pequena circunferência vermelha na âncora da forma (sel_x, sel_y)
         char* anot_svg_circ_ancora = (char*)malloc(200 * sizeof(char));
@@ -310,4 +348,720 @@ void handle_seli(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
         }
     }
 }
+
+//------------------------------------------------------------------------------------------------------------------------//
+
+/*
+
+
+
+//-----------------------------------------------HANDLE_DISP-----------------------------------------------------------//
+
+
+//---------------------------------------------------------------------------------------------------------------------//
+
+
+
+//-----------------------------------------------HANDLE_CLN-----------------------------------------------------------//
+
+// Definições dos tipos de formas (já devem existir)
+// #define TIPO_CIRCULO 1
+// #define TIPO_RETANGULO 2
+// #define TIPO_TEXTO 3
+// #define TIPO_LINHA 4
+
+// Função auxiliar para criar um clone de uma Info de forma, transladá-la e trocar cores.
+// Retorna a nova Info clonada, ou NULL em caso de falha.
+// O ID do clone é atribuído usando p_proximo_id_unico.
+
+Info criarInfoClonada(SmuTreap tree, Node no_original, double dx, double dy, int* p_proximo_id_unico) {
+    if (!no_original || !p_proximo_id_unico) return NULL;
+
+    Info info_original = getInfoSmuT(tree, no_original);
+    DescritorTipoInfo tipo_original = getTypeInfoSmuT(tree, no_original);
+    Info clone_info = NULL;
+    int novo_id_clone = (*p_proximo_id_unico)++; // Pega o próximo ID único e incrementa o contador
+
+    switch (tipo_original) {
+        case TIPO_CIRCULO: {
+            CIRCLE original_c = (CIRCLE)info_original;
+            double novo_x = get_XC(original_c) + dx;
+            double novo_y = get_YC(original_c) + dy;
+            // Troca de cores para o clone
+            char* nova_cor_borda = get_cpC(original_c); // Borda do clone é preenchimento do original
+            char* nova_cor_preenchimento = get_cbC(original_c); // Preenchimento do clone é borda do original
+            clone_info = (Info)create_circle(novo_id_clone, novo_x, novo_y, get_rC(original_c), nova_cor_borda, nova_cor_preenchimento);
+            break;
+        }
+        case TIPO_RETANGULO: {
+            RECTANGLE original_r = (RECTANGLE)info_original;
+            double novo_x = get_XR(original_r) + dx;
+            double novo_y = get_YR(original_r) + dy;
+            char* nova_cor_borda = get_cpR(original_r);
+            char* nova_cor_preenchimento = get_cbR(original_r);
+            clone_info = (Info)create_rectangle(novo_id_clone, novo_x, novo_y, get_wR(original_r), get_hR(original_r), nova_cor_borda, nova_cor_preenchimento);
+            break;
+        }
+        case TIPO_LINHA: {
+            LINHA original_l = (LINHA)info_original;
+            // Para a linha, ambos os pontos são transladados
+            double novo_x1 = get_X1L(original_l) + dx;
+            double novo_y1 = get_Y1L(original_l) + dy;
+            double novo_x2 = get_X2L(original_l) + dx;
+            double novo_y2 = get_Y2L(original_l) + dy;
+            // Linhas têm apenas uma cor, então a cor do clone é a mesma da original.
+            char* cor_original_linha = get_cL(original_l);
+            clone_info = (Info)cria_linha(novo_id_clone, novo_x1, novo_y1, novo_x2, novo_y2, cor_original_linha);
+            break;
+        }
+        case TIPO_TEXTO: {
+            TEXTO original_t = (TEXTO)info_original;
+            double novo_x = get_XT(original_t) + dx;
+            double novo_y = get_YT(original_t) + dy;
+            char* nova_cor_borda = get_cpT(original_t);
+            char* nova_cor_preenchimento = get_cbT(original_t);
+            // O clone herda as propriedades de fonte (família, peso, tamanho) e o conteúdo do texto original.
+            clone_info = (Info)cria_texto(novo_id_clone, novo_x, novo_y,
+                                          nova_cor_borda, nova_cor_preenchimento,
+                                          get_charancoraT(original_t), // Mesmo tipo de âncora
+                                          get_txtT(original_t),        // Mesmo conteúdo de texto
+                                          get_ffT(original_t),         // Mesma família de fonte
+                                          get_fwT(original_t),         // Mesmo peso de fonte
+                                          get_fsT(original_t));        // Mesmo tamanho de fonte
+            break;
+        }
+        default:
+            // Tipo de forma desconhecido, não pode clonar.
+            fprintf(stderr, "Erro (criarInfoClonada): Tipo de forma desconhecido %d.\n", tipo_original);
+            (*p_proximo_id_unico)--; // Reverte o incremento do ID, pois não foi usado.
+            return NULL;
+    }
+    return clone_info;
+}
+
+// Estrutura de dados para passar informações para a função de callback de percorreLista
+typedef struct {
+    SmuTreap tree_param;
+    FILE* pathTxt_param;
+    double dx_param, dy_param;
+    int* p_id_unico_param;             // Ponteiro para o contador global de IDs
+    FCalculaBoundingBox func_calc_bb_param; // Função para calcular BB ao inserir na SmuTreap
+} ProcessaCloneCallbackData;
+
+// Função de callback para ser usada com percorreLista, processa cada forma da seleção
+void clonarEInserirFormaCallback(Item item_no_original, void* aux_data) {
+    ProcessaCloneCallbackData* data = (ProcessaCloneCallbackData*)aux_data;
+    Node no_original = (Node)item_no_original;
+
+    DescritorTipoInfo tipo_original = getTypeInfoSmuT(data->tree_param, no_original);
+    Info info_original_para_id = getInfoSmuT(data->tree_param, no_original);
+    int id_original = -1;
+
+    // Obter ID da forma original para o relatório TXT
+    if (tipo_original == TIPO_CIRCULO) id_original = get_idC((CIRCLE)info_original_para_id);
+    else if (tipo_original == TIPO_RETANGULO) id_original = get_idR((RECTANGLE)info_original_para_id);
+    else if (tipo_original == TIPO_LINHA) id_original = get_idL((LINHA)info_original_para_id);
+    else if (tipo_original == TIPO_TEXTO) id_original = get_idT((TEXTO)info_original_para_id);
+
+    // 1. Criar a Info clonada (já transladada, com cores trocadas e novo ID)
+    Info info_clonada = criarInfoClonada(data->tree_param, no_original, data->dx_param, data->dy_param, data->p_id_unico_param);
+
+    if (info_clonada) {
+        double ancora_clone_x, ancora_clone_y;
+        int id_clone = -1; // O ID já foi atribuído dentro de criarInfoClonada
+
+        // 2. Determinar as coordenadas da âncora do clone para inserção na SmuTreap
+        //    e obter o ID do clone para o relatório.
+        if (tipo_original == TIPO_CIRCULO) {
+            CIRCLE c_clone = (CIRCLE)info_clonada;
+            ancora_clone_x = get_XC(c_clone);
+            ancora_clone_y = get_YC(c_clone);
+            id_clone = get_idC(c_clone);
+        } else if (tipo_original == TIPO_RETANGULO) {
+            RECTANGLE r_clone = (RECTANGLE)info_clonada;
+            ancora_clone_x = get_XR(r_clone);
+            ancora_clone_y = get_YR(r_clone);
+            id_clone = get_idR(r_clone);
+        } else if (tipo_original == TIPO_LINHA) {
+            LINHA l_clone = (LINHA)info_clonada;
+            id_clone = get_idL(l_clone);
+            // A âncora da linha na SmuTreap é um de seus pontos finais.
+            // A escolha é baseada em qual ponto vem "primeiro" (menor x, ou menor y se x for igual).
+            // Esta lógica está em processaGeo.c e deve ser replicada aqui para consistência.
+            double x1_c = get_X1L(l_clone); double y1_c = get_Y1L(l_clone);
+            double x2_c = get_X2L(l_clone); double y2_c = get_Y2L(l_clone);
+            if (x1_c < x2_c - 1e-9 || (fabs(x1_c - x2_c) < 1e-9 && y1_c < y2_c - 1e-9)) { // Tolerância para comparação de float
+                 ancora_clone_x = x1_c; ancora_clone_y = y1_c;
+            } else if (fabs(x1_c - x2_c) < 1e-9 && fabs(y1_c - y2_c) < 1e-9) { // Pontos são iguais
+                 ancora_clone_x = x1_c; ancora_clone_y = y1_c;
+            }
+             else {
+                 ancora_clone_x = x2_c; ancora_clone_y = y2_c;
+            }
+        } else if (tipo_original == TIPO_TEXTO) {
+            TEXTO t_clone = (TEXTO)info_clonada;
+            ancora_clone_x = get_XT(t_clone);
+            ancora_clone_y = get_YT(t_clone);
+            id_clone = get_idT(t_clone);
+        } else {
+             fprintf(data->pathTxt_param, "  Alerta: Tipo de forma original %d desconhecido ao determinar âncora para clone.\n", tipo_original);
+             // Libera a info_clonada, pois não pode ser inserida sem âncora correta.
+             // killInfo(info_clonada, tipo_original); // Supondo que uma função killInfo(Info, Descritor) exista
+             return;
+        }
+
+        // 3. Inserir o clone na SmuTreap
+        Node no_inserido_clonado = insertSmuT(data->tree_param, ancora_clone_x, ancora_clone_y, info_clonada, tipo_original, data->func_calc_bb_param);
+
+        if (no_inserido_clonado) {
+            fprintf(data->pathTxt_param, "  Forma original ID %d clonada. Novo clone ID %d inserido em (%.2f, %.2f).\n",
+                    id_original, id_clone, ancora_clone_x, ancora_clone_y);
+        } else {
+            fprintf(data->pathTxt_param, "  Falha ao inserir clone da forma original ID %d (novo ID seria %d) na SmuTreap.\n", id_original, id_clone);
+            // Se a inserção falhar, a memória alocada para 'info_clonada' precisa ser liberada.
+            // Esta é uma responsabilidade importante. Se SmuTreap.c->killNode existe e é acessível:
+            // killInfo(info_clonada, tipo_original); // Você precisaria de uma função killInfo que só libere a Info.
+            // Por exemplo:
+            // if (tipo_original == TIPO_CIRCULO) kill_circ(info_clonada); else if ...
+            // É mais seguro que as funções `create_` retornem NULL em caso de falha de malloc para as strings de cor.
+            // Se `info_clonada` foi criada, mas a inserção falhou, ela vaza memória se não for liberada.
+            // A função killNode em SmuTreap.c libera info + node. Precisamos apenas liberar a Info.
+        }
+    } else {
+        fprintf(data->pathTxt_param, "  Falha ao criar estrutura de clone para forma original ID %d.\n", id_original);
+    }
+}
+
+// Função principal para o comando cln
+void handle_cln(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double dx, double dy, Lista* array_selecoes, int* p_proximo_id_unico, FCalculaBoundingBox func_calc_bb_global) {
+    fprintf(pathTxtOut, "[*] cln %d %.2f %.2f\n", n_id_selecao, dx, dy);
+    printf("Processando comando cln: n_selecao=%d, dx=%.2f, dy=%.2f\n", n_id_selecao, dx, dy);
+
+    // 1. Validar e obter a lista de formas da seleção 'n'
+    if (n_id_selecao < 0 || n_id_selecao >= 100 || array_selecoes[n_id_selecao] == NULL) {
+        fprintf(pathTxtOut, "Erro: Selecao 'n' (%d) invalida ou nao existe.\n", n_id_selecao);
+        return;
+    }
+    Lista lista_formas_a_clonar = array_selecoes[n_id_selecao];
+    if (listaEstaVazia(lista_formas_a_clonar)) {
+        fprintf(pathTxtOut, "Selecao 'n' (%d) esta vazia. Nada a clonar.\n", n_id_selecao);
+        return;
+    }
+
+    // 2. Preparar a estrutura de dados para o callback
+    ProcessaCloneCallbackData data_callback;
+    data_callback.tree_param = tree;
+    data_callback.pathTxt_param = pathTxtOut;
+    data_callback.dx_param = dx;
+    data_callback.dy_param = dy;
+    data_callback.p_id_unico_param = p_proximo_id_unico; // Passa o ponteiro para o contador de ID
+    data_callback.func_calc_bb_param = func_calc_bb_global; // Passa a função de cálculo de BB
+
+    // 3. Iterar sobre a lista de formas a serem clonadas
+    fprintf(pathTxtOut, "Clonando formas da selecao %d:\n", n_id_selecao);
+    percorreLista(lista_formas_a_clonar, clonarEInserirFormaCallback, &data_callback);
+
+    fprintf(pathTxtOut, "Clonagem da selecao %d concluida.\n", n_id_selecao);
+}
+//---------------------------------------------------------------------------------------------------------------------//
+
+
+
+//-----------------------------------------------HANDLE_SPY-----------------------------------------------------------//
+// Estrutura para auxiliar na busca de qualquer forma por ID
+typedef struct {
+    int id_procurado;
+    Node no_encontrado;         // Ponteiro para o nó encontrado
+    DescritorTipoInfo tipo_encontrado; // Tipo da forma encontrada
+    Info info_encontrada;       // Ponteiro para a Info da forma encontrada
+} SearchDataById;
+
+// Callback para SmuTreap->procuraNoSmuT: encontrar qualquer forma pelo seu ID
+bool findFormByIdCallback(SmuTreap t, Node n_atual, Info info_atual, double x_ancora_no, double y_ancora_no, void *aux_data) {
+    SearchDataById *data_busca = (SearchDataById *)aux_data;
+    DescritorTipoInfo tipo_forma_atual = getTypeInfoSmuT(t, n_atual);
+    int id_forma_atual = -1;
+
+    // Obtém o ID da forma atual, dependendo do seu tipo
+    if (tipo_forma_atual == TIPO_CIRCULO) id_forma_atual = get_idC((CIRCLE)info_atual);
+    else if (tipo_forma_atual == TIPO_RETANGULO) id_forma_atual = get_idR((RECTANGLE)info_atual);
+    else if (tipo_forma_atual == TIPO_LINHA) id_forma_atual = get_idL((LINHA)info_atual);
+    else if (tipo_forma_atual == TIPO_TEXTO) id_forma_atual = get_idT((TEXTO)info_atual);
+
+    if (id_forma_atual == data_busca->id_procurado) {
+        data_busca->no_encontrado = n_atual;
+        data_busca->tipo_encontrado = tipo_forma_atual;
+        data_busca->info_encontrada = info_atual;
+        return true; // Encontrou, para a busca
+    }
+    return false; // Não é esta forma, continua a busca
+}
+
+// Reutilização da função de callback de handle_selr
+// Esta função verifica se uma forma está totalmente contida em uma região retangular.
+// bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2)
+// { ... implementação como definida anteriormente em handle_selr ... }
+// Certifique-se de que esta função esteja definida e acessível.
+// Você precisará de:
+// #include "boundingBox.h" // para fCalcBB_individual
+// void fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h); // protótipo
+
+// Estrutura para passar dados para a função de callback de percorreLista (para reportar formas)
+typedef struct {
+    FILE* pathTxt;
+    SmuTreap smutreap_tree;
+} ReportSpyFormData;
+
+// Função de callback para percorrer a lista de formas encontradas e reportá-las
+void reportarFormaSpyCallback(Item item_no_forma, void *aux_data) {
+    ReportSpyFormData *data_reporte = (ReportSpyFormData *)aux_data;
+    Node no_forma_reportar = (Node)item_no_forma;
+    Info info_forma = getInfoSmuT(data_reporte->smutreap_tree, no_forma_reportar);
+    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(data_reporte->smutreap_tree, no_forma_reportar);
+
+    int id_forma_reportar = -1;
+    char* nome_tipo_reportar = "Desconhecido";
+
+    if (tipo_forma == TIPO_CIRCULO) { id_forma_reportar = get_idC((CIRCLE)info_forma); nome_tipo_reportar = "circulo"; }
+    else if (tipo_forma == TIPO_RETANGULO) { id_forma_reportar = get_idR((RECTANGLE)info_forma); nome_tipo_reportar = "retangulo"; }
+    else if (tipo_forma == TIPO_LINHA) { id_forma_reportar = get_idL((LINHA)info_forma); nome_tipo_reportar = "linha"; }
+    else if (tipo_forma == TIPO_TEXTO) { id_forma_reportar = get_idT((TEXTO)info_forma); nome_tipo_reportar = "texto"; }
+
+    fprintf(data_reporte->pathTxt, "  ID %d: %s\n", id_forma_reportar, nome_tipo_reportar);
+}
+
+// Função principal para o comando spy
+void handle_spy(SmuTreap tree, FILE* pathTxtOut, int id_referencia) {
+    fprintf(pathTxtOut, "[*] spy %d\n", id_referencia);
+    printf("Processando comando spy: id_referencia=%d\n", id_referencia);
+
+    // 1. Encontrar a forma de referência (retângulo ou texto) com o ID fornecido
+    SearchDataById dados_forma_ref;
+    dados_forma_ref.id_procurado = id_referencia;
+    dados_forma_ref.no_encontrado = NULL; // Inicializa como não encontrado
+
+    procuraNoSmuT(tree, findFormByIdCallback, &dados_forma_ref);
+
+    if (!dados_forma_ref.no_encontrado) {
+        fprintf(pathTxtOut, "Erro: Forma de referencia com ID %d nao encontrada na SmuTreap.\n", id_referencia);
+        return;
+    }
+
+    // Lista para armazenar as formas que serão reportadas
+    Lista lista_formas_a_reportar = criaLista();
+    if (!lista_formas_a_reportar) {
+        fprintf(pathTxtOut, "Erro critico: Falha ao criar lista para reportar formas do comando spy.\n");
+        return;
+    }
+
+    // 2. Verificar o tipo da forma de referência e agir de acordo
+    if (dados_forma_ref.tipo_encontrado == TIPO_RETANGULO) {
+        RECTANGLE retangulo_ref = (RECTANGLE)dados_forma_ref.info_encontrada;
+        double r_ref_x = get_XR(retangulo_ref);
+        double r_ref_y = get_YR(retangulo_ref);
+        double r_ref_w = get_wR(retangulo_ref);
+        double r_ref_h = get_hR(retangulo_ref);
+
+        fprintf(pathTxtOut, "Formas inteiramente contidas dentro do retangulo de referencia ID %d (x:%.2f, y:%.2f, w:%.2f, h:%.2f):\n",
+                id_referencia, r_ref_x, r_ref_y, r_ref_w, r_ref_h);
+
+        // Usa getInfosDentroRegiaoSmuT com a callback formaTotalmenteContidaCallback (de handle_selr)
+        // A região é definida pelo retângulo de referência.
+        getInfosDentroRegiaoSmuT(tree, r_ref_x, r_ref_y, r_ref_x + r_ref_w, r_ref_y + r_ref_h,
+                                 formaTotalmenteContidaCallback, lista_formas_a_reportar);
+
+    } else if (dados_forma_ref.tipo_encontrado == TIPO_TEXTO) {
+        TEXTO texto_ref = (TEXTO)dados_forma_ref.info_encontrada;
+        double txt_ref_x = get_XT(texto_ref); // Coordenada da âncora do texto de referência
+        double txt_ref_y = get_YT(texto_ref);
+
+        fprintf(pathTxtOut, "Forma(s) cuja ancora esta em (%.2f, %.2f) (coordenada do texto de referencia ID %d):\n",
+                txt_ref_x, txt_ref_y, id_referencia);
+
+        // Encontra o nó (ou nós, se SmuTreap permitir múltiplas formas na mesma âncora exata)
+        // usando getNodeSmuT, que considera epsilon.
+        Node no_na_coordenada = getNodeSmuT(tree, txt_ref_x, txt_ref_y);
+        if (no_na_coordenada) {
+            // getNodeSmuT retorna um único nó. Se múltiplas formas pudessem ter a mesma âncora
+            // (o que não deve acontecer com a implementação atual de insertSmuT se x e y forem idênticos
+            // dentro de epsilon), seria necessário usar getNodesDentroRegiaoSmuT com uma pequena caixa.
+            // Como getNodeSmuT é mais direto para "exatamente na coordenada", vamos usá-lo.
+            insereNaLista(lista_formas_a_reportar, (Item)no_na_coordenada);
+        }
+
+    } else {
+        fprintf(pathTxtOut, "Erro: Forma de referencia ID %d (tipo %d) nao e um retangulo nem um texto. Comando spy nao aplicavel para este tipo.\n",
+                id_referencia, dados_forma_ref.tipo_encontrado);
+        destroiLista(lista_formas_a_reportar, NULL);
+        return;
+    }
+
+    // 3. Reportar as formas encontradas (se houver)
+    if (listaEstaVazia(lista_formas_a_reportar)) {
+        if (dados_forma_ref.tipo_encontrado == TIPO_RETANGULO) {
+            fprintf(pathTxtOut, "  Nenhuma forma encontrada dentro do retangulo de referencia.\n");
+        } else if (dados_forma_ref.tipo_encontrado == TIPO_TEXTO) {
+            fprintf(pathTxtOut, "  Nenhuma forma encontrada exatamente na coordenada do texto de referencia (considerando epsilon).\n");
+        }
+    } else {
+        ReportSpyFormData data_para_reporte;
+        data_para_reporte.pathTxt = pathTxtOut;
+        data_para_reporte.smutreap_tree = tree;
+        percorreLista(lista_formas_a_reportar, reportarFormaSpyCallback, &data_para_reporte);
+    }
+
+    // 4. Liberar a lista usada para coletar as formas
+    destroiLista(lista_formas_a_reportar, NULL); // Os itens (Node*) não são liberados aqui, pois pertencem à SmuTreap
+}
+//---------------------------------------------------------------------------------------------------------------------//
+
+
+//-----------------------------------------------HANDLE_BLOW-----------------------------------------------------------//
+
+// Protótipos de funções auxiliares (definidas em respostas anteriores ou que você precisa ter)
+// bool findFormByIdCallback(SmuTreap t, Node n, Info i, double x_anc, double y_anc, void *aux_data);
+// bool pontoFinalInternoAFormaAlvoCallback(SmuTreap t, Node n_forma_alvo, Info info_forma_alvo, double p_final_x, double p_final_y);
+// void fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h); // Se usado por pontoFinalInternoAFormaAlvoCallback
+
+
+// Estrutura para callback de percorreLista ao processar alvos atingidos pelo blow
+typedef struct {
+    SmuTreap tree_ctx;
+    FILE* file_txt_ctx;
+    Lista lista_svg_ctx;
+    Lista nos_geral_remover_ctx; // Lista para acumular todos os nós a serem removidos
+    Node no_ogiva_explodida_ctx; // Para evitar que a ogiva se "atinja" a si mesma na lista de alvos
+} ProcessaAlvoBlowDataCallback;
+
+// Callback para processar cada alvo atingido pela explosão do "blow"
+void processaAlvoAtingidoBlowCallback(Item item_no_alvo, void* aux_data) {
+    ProcessaAlvoBlowDataCallback* data = (ProcessaAlvoBlowDataCallback*)aux_data;
+    Node no_alvo_atual = (Node)item_no_alvo;
+
+    // A ogiva que explodiu já será adicionada à lista de remoção principal.
+    // Não precisamos fazer nada se o "alvo" for a própria ogiva.
+    if (no_alvo_atual == data->no_ogiva_explodida_ctx) {
+        return;
+    }
+
+    // Adicionar o alvo à lista de nós a serem removidos
+    // (Idealmente, verificar se já está na lista para evitar duplicatas antes de inserir)
+    insereNaLista(data->nos_geral_remover_ctx, no_alvo_atual);
+
+    // Obter informações do alvo para TXT e SVG
+    Info info_alvo = getInfoSmuT(data->tree_ctx, no_alvo_atual);
+    DescritorTipoInfo tipo_alvo = getTypeInfoSmuT(data->tree_ctx, no_alvo_atual);
+    int id_alvo = -1;
+    char* nome_tipo_alvo = "Desconhecido";
+    double ancora_alvo_svg_x = 0.0, ancora_alvo_svg_y = 0.0; // Âncora da FORMA ALVO para o 'x' do SVG
+
+    if (tipo_alvo == TIPO_CIRCULO) { CIRCLE c = (CIRCLE)info_alvo; id_alvo = get_idC(c); nome_tipo_alvo = "circulo"; ancora_alvo_svg_x = get_XC(c); ancora_alvo_svg_y = get_YC(c); }
+    else if (tipo_alvo == TIPO_RETANGULO) { RECTANGLE r_ = (RECTANGLE)info_alvo; id_alvo = get_idR(r_); nome_tipo_alvo = "retangulo"; ancora_alvo_svg_x = get_XR(r_); ancora_alvo_svg_y = get_YR(r_); }
+    else if (tipo_alvo == TIPO_LINHA) { LINHA l = (LINHA)info_alvo; id_alvo = get_idL(l); nome_tipo_alvo = "linha"; ancora_alvo_svg_x = get_X1L(l); ancora_alvo_svg_y = get_Y1L(l); }
+    else if (tipo_alvo == TIPO_TEXTO) { TEXTO t_ = (TEXTO)info_alvo; id_alvo = get_idT(t_); nome_tipo_alvo = "texto"; ancora_alvo_svg_x = get_XT(t_); ancora_alvo_svg_y = get_YT(t_); }
+
+    fprintf(data->file_txt_ctx, "    ID %d (%s) na PosAncora (%.2f, %.2f)\n", id_alvo, nome_tipo_alvo, ancora_alvo_svg_x, ancora_alvo_svg_y);
+
+    // Anotação SVG para forma destruída ('x')
+    char* anot_svg_destruido = (char*)malloc(200 * sizeof(char));
+    if (anot_svg_destruido) {
+        sprintf(anot_svg_destruido, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" font-size=\"12\" font-weight=\"bold\">x</text>",
+                ancora_alvo_svg_x, ancora_alvo_svg_y);
+        insereNaLista(data->lista_svg_ctx, (Item)anot_svg_destruido);
+    }
+}
+
+
+void handle_blow(SmuTreap tree, FILE* pathTxtOut, int id_ogiva_a_explodir, Lista lista_anotacoes_svg, Lista* array_selecoes) {
+    fprintf(pathTxtOut, "[*] blow %d\n", id_ogiva_a_explodir);
+    printf("Processando comando blow: id_ogiva_a_explodir=%d\n", id_ogiva_a_explodir);
+
+    // 1. Encontrar a "ogiva" (forma) com o ID fornecido
+    SearchDataById dados_ogiva; // Reutilizando a struct definida para handle_spy
+    dados_ogiva.id_procurado = id_ogiva_a_explodir;
+    dados_ogiva.no_encontrado = NULL;
+
+    // Reutiliza o findFormByIdCallback (definido em handle_spy)
+    procuraNoSmuT(tree, findFormByIdCallback, &dados_ogiva);
+
+    if (!dados_ogiva.no_encontrado) {
+        fprintf(pathTxtOut, "Erro: Ogiva com ID %d nao encontrada para explodir.\n", id_ogiva_a_explodir);
+        return;
+    }
+
+    Node no_ogiva = dados_ogiva.no_encontrado;
+    Info info_ogiva = dados_ogiva.info_encontrada;
+    DescritorTipoInfo tipo_ogiva = dados_ogiva.tipo_encontrado;
+
+    // 2. Determinar o local da explosão (âncora da ogiva)
+    double local_explosao_x, local_explosao_y;
+    char* nome_tipo_ogiva = "Desconhecido";
+    int id_ogiva_real = -1; // Para o relatório TXT, o ID já é id_ogiva_a_explodir
+
+    // Obtém a âncora do nó da SmuTreap (que é o local da explosão)
+    // E o tipo/id para o relatório.
+    // Se sua SmuTreap.h não tiver getCoordenadasAncoraNo, use a âncora da Info:
+    if (tipo_ogiva == TIPO_CIRCULO) { CIRCLE c = (CIRCLE)info_ogiva; id_ogiva_real = get_idC(c); nome_tipo_ogiva = "circulo"; local_explosao_x = get_XC(c); local_explosao_y = get_YC(c); }
+    else if (tipo_ogiva == TIPO_RETANGULO) { RECTANGLE r_ = (RECTANGLE)info_ogiva; id_ogiva_real = get_idR(r_); nome_tipo_ogiva = "retangulo"; local_explosao_x = get_XR(r_); local_explosao_y = get_YR(r_); }
+    else if (tipo_ogiva == TIPO_LINHA) { LINHA l = (LINHA)info_ogiva; id_ogiva_real = get_idL(l); nome_tipo_ogiva = "linha"; local_explosao_x = get_X1L(l); local_explosao_y = get_Y1L(l); // Ou a âncora efetiva do nó na SmuTreap  }
+    else if (tipo_ogiva == TIPO_TEXTO) { TEXTO t_ = (TEXTO)info_ogiva; id_ogiva_real = get_idT(t_); nome_tipo_ogiva = "texto"; local_explosao_x = get_XT(t_); local_explosao_y = get_YT(t_); }
+    else {
+        fprintf(pathTxtOut, "Erro: Ogiva ID %d tem tipo desconhecido (%d).\n", id_ogiva_a_explodir, tipo_ogiva);
+        return;
+    }
+
+    // 3. Reportar no TXT que a ogiva explodiu
+    fprintf(pathTxtOut, "Ogiva ID %d (%s) explodiu em sua posicao (%.2f, %.2f).\n",
+            id_ogiva_a_explodir, nome_tipo_ogiva, local_explosao_x, local_explosao_y);
+
+    // 4. Adicionar anotação SVG para o local da explosão ('#')
+    char* anot_svg_explosao = (char*)malloc(200 * sizeof(char));
+    if (anot_svg_explosao) {
+        sprintf(anot_svg_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" font-size=\"12\" font-weight=\"bold\">#</text>",
+                local_explosao_x, local_explosao_y);
+        insereNaLista(lista_anotacoes_svg, (Item)anot_svg_explosao);
+    }
+
+    // 5. Encontrar formas atingidas pela explosão no local (local_explosao_x, local_explosao_y)
+    //    Reutiliza pontoFinalInternoAFormaAlvoCallback de handle_disp
+    Lista lista_temporal_alvos_atingidos = criaLista();
+    if (!lista_temporal_alvos_atingidos) {
+        fprintf(pathTxtOut, "  Erro critico: Falha ao criar lista para alvos atingidos.\n");
+        // A ogiva ainda precisa ser removida, mesmo que não possamos verificar alvos.
+        // (Lógica de remoção da ogiva aqui se a função terminar prematuramente)
+        return;
+    }
+    getInfosAtingidoPontoSmuT(tree, local_explosao_x, local_explosao_y, pontoFinalInternoAFormaAlvoCallback, lista_temporal_alvos_atingidos);
+
+    // 6. Preparar lista de todos os nós a serem removidos e processar alvos
+    Lista nos_a_remover_desta_explosao = criaLista();
+    if (!nos_a_remover_desta_explosao) {
+        fprintf(pathTxtOut, "  Erro critico: Falha ao criar lista final para remocao de nos.\n");
+        destroiLista(lista_temporal_alvos_atingidos, NULL);
+        return;
+    }
+    // A ogiva que explodiu é sempre destruída.
+    insereNaLista(nos_a_remover_desta_explosao, (Item)no_ogiva);
+
+    if (listaEstaVazia(lista_temporal_alvos_atingidos)) {
+        fprintf(pathTxtOut, "  Nenhuma forma adicional foi atingida pela explosao.\n");
+    } else {
+        fprintf(pathTxtOut, "  Formas atingidas pela explosao:\n");
+        ProcessaAlvoBlowDataCallback data_para_callback_alvos;
+        data_para_callback_alvos.tree_ctx = tree;
+        data_para_callback_alvos.file_txt_ctx = pathTxtOut;
+        data_para_callback_alvos.lista_svg_ctx = lista_anotacoes_svg;
+        data_para_callback_alvos.nos_geral_remover_ctx = nos_a_remover_desta_explosao; // Todos os alvos vão para esta lista
+        data_para_callback_alvos.no_ogiva_explodida_ctx = no_ogiva;
+
+        percorreLista(lista_temporal_alvos_atingidos, processaAlvoAtingidoBlowCallback, &data_para_callback_alvos);
+    }
+    destroiLista(lista_temporal_alvos_atingidos, NULL); // Libera a lista temporária de coleta de alvos
+
+    // 7. Remover efetivamente todos os nós coletados (ogiva + alvos únicos) da SmuTreap
+    //    É importante garantir que cada nó seja removido apenas uma vez.
+    Lista unicos_para_remover = criaLista(); // Para garantir remoção única
+    if (unicos_para_remover) {
+        NoLista* iter_coleta = getPrimeiroNoLista(nos_a_remover_desta_explosao); // Requer funções de iteração do TAD Lista
+        while (iter_coleta) {
+            Node no_candidato = getItemLista(iter_coleta);
+            bool ja_em_unicos = false;
+            // Verifica se no_candidato já está em unicos_para_remover
+            // (Requer uma função ListaContemItem ou iteração manual em unicos_para_remover)
+            // Exemplo de verificação manual (ineficiente para listas grandes):
+            NoLista* check_unico = getPrimeiroNoLista(unicos_para_remover);
+            while(check_unico) {
+                if(getItemLista(check_unico) == no_candidato) {
+                    ja_em_unicos = true;
+                    break;
+                }
+                check_unico = getProximoNoLista(check_unico);
+            }
+
+            if (!ja_em_unicos) {
+                insereNaLista(unicos_para_remover, no_candidato);
+            }
+            iter_coleta = getProximoNoLista(iter_coleta);
+        }
+
+        // Agora, remove os nós da lista de únicos
+        NoLista* iter_remocao = getPrimeiroNoLista(unicos_para_remover);
+        while (iter_remocao) {
+            Node no_a_remover_final = (Node)getItemLista(iter_remocao);
+            removeNoSmuT(tree, no_a_remover_final); // removeNoSmuT deve liberar Info e Node
+
+            // Se o nó removido estava em alguma lista de seleção, essa referência se torna inválida.
+            // O projeto não especifica limpar seleções, mas seria bom.
+            // (Opcional: iterar array_selecoes e remover no_a_remover_final de cada lista de seleção)
+            if (array_selecoes) { // Verifica se array_selecoes é válido
+                for (int i = 0; i < 100; i++) {
+                    if (array_selecoes[i]) {
+                        // Se você tiver uma função como:
+                        // ListaRemoveTodasOcorrenciasDoItem(array_selecoes[i], (Item)no_a_remover_final);
+                        // Chame-a aqui.
+                    }
+                }
+            }
+            iter_remocao = getProximoNoLista(iter_remocao);
+        }
+        destroiLista(unicos_para_remover, NULL);
+    }
+    destroiLista(nos_a_remover_desta_explosao, NULL);
+}
+//---------------------------------------------------------------------------------------------------------------------//
+*/
+
+void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, FCalculaBoundingBox fCalcBb){
+
+    char *str = (char*)malloc(sizeof(char)*1024);
+    char *comm = (char*)malloc(sizeof(char)*7);
+
+    while (fgets(str, sizeof(str), arqQry)) {
+        // Remover nova linha do final, se houver
+        str[strcspn(str, "\n")] = 0;
+        str[strcspn(str, "\r")] = 0; // Para compatibilidade Windows/Linux
+
+        sscanf(str, "%7s", comm);
+
+
+        // Processar com base no comando
+        if (strcmp(comm, "selr") == 0) {
+            int n;
+            double x, y, w, h;
+            // sscanf é uma boa forma de parsear o restante da str_original
+            if (sscanf(str, "selr %d %lf %lf %lf %lf", &n, &x, &y, &w, &h) == 5) {
+                handle_selr(t, pathTxt, n, x, y, w, h, array_selecoes, lista_anotacoes_svg);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para selr\n", str);
+            }
+        } else if (strcmp(comm, "seli") == 0) {
+            int n;
+            double x, y;
+            if (sscanf(str, "seli %d %lf %lf", &n, &x, &y) == 3) {
+                handle_seli(t, pathTxt, n, x, y, array_selecoes, lista_anotacoes_svg);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para seli\n", str);
+            }
+        } else if (strcmp(comm, "disp") == 0) {
+            int id, n_sel;
+            if (sscanf(str, "disp %d %d", &id, &n_sel) == 2) {
+                handle_disp(t, pathTxt, id, n_sel);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para disp\n", str);
+            }
+        } else if (strcmp(comm, "transp") == 0) {
+            int id;
+            double x, y;
+            if (sscanf(str, "transp %d %lf %lf", &id, &x, &y) == 3) {
+                handle_transp(t, pathTxt, id, x, y);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para transp\n", str);
+            }
+        } else if (strcmp(comm, "cln") == 0) {
+            int n;
+            double dx, dy;
+            if (sscanf(str, "cln %d %lf %lf", &n, &dx, &dy) == 3) {
+                handle_cln(t, pathTxt, n, dx, dy);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para cln\n", str);
+            }
+        } else if (strcmp(comm, "spy") == 0) {
+            int id;
+            if (sscanf(str, "spy %d", &id) == 1) {
+                handle_spy(t, pathTxt, id);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para spy\n", str);
+            }
+        } else if (strcmp(comm, "cmflg") == 0) {
+            int id, w_px;
+            char cb[50], cp[50];
+            // Formato: cmflg id corBorda corPreenchimento larguraPx
+            if (sscanf(str, "cmflg %d %s %s %d", &id, cb, cp, &w_px) == 4) {
+                handle_cmflg(t, pathTxt, id, cb, cp, w_px);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para cmflg\n", str);
+            }
+        } else if (strcmp(comm, "blow") == 0) {
+            int id;
+            if (sscanf(str, "blow %d", &id) == 1) {
+                handle_blow(t, pathTxt, id);
+            } else {
+                fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para blow\n", str);
+            }
+        } else {
+            // Comando desconhecido
+            fprintf(pathTxt, "[*] %s\nComando desconhecido: %s\n", str, comm);
+            printf("Comando desconhecido: %s\n", comm);
+        }
+    }
+}
+
+SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, 
+                        Lista lista_anotacoes_svg /*int idUltimaForma?*/){
+    if(!pathQry || !pathSaida || !nomeQry || array_anotacoes || !lista_anotacoes_svg){
+        fprintf(stderr, "(processa_qry) Erro: parametros invalidos.");
+        return NULL;
+    }
+
+    FILE *arqQry = fopen(pathQry, "r");
+    if (!arqQry){
+        fprintf(stderr, "(processa_qry) Erro: falha ao abrir arquivo qry.");
+        exit (1);
+    }
+
+    // PENSAR EM COMO PASSAR NOMEGEO DE MODO QUE NAO SEJA NECESSARIO ESSA PARTE NESSA FUNCAO.
+    // Remover ".geo" de nomegeo.
+    char nomeBaseQry[512];
+    int lenNomeQry = strlen(nomeQry);
+
+    if (lenNomeQry > 4 && strcmp(nomeQry + lenNomeQry - 4, ".qry") == 0) {
+        strncpy(nomeBaseQry, nomeQry, lenNomeQry - 4); // Copia a parte antes de ".geo"
+        nomeBaseQry[lenNomeQry - 4] = '\0';
+    } else {
+        fprintf(stderr, "(processa_qry) Erro: erro ao tratar nomeQry.");
+        fclose(arqQry);
+        exit(1);
+    }
+
+    char nome_saidasvg2[512];
+    int chars_escritos_svg2 = snprintf(nome_saidasvg2, sizeof(nome_saidasvg2), "%s/%s.svg", pathSaida, nomeBaseQry);
+
+if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
+    fprintf(stderr, "Alerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
+    exit(1);
+}
+    printf("Diretório do arquivo svg2: %s\n", nome_saidasvg2);
+
+    FILE* saidaSvg2 = fopen(nome_saidasvg2, "w");
+    if (saidaSvg2 == NULL) {
+        fprintf(stderr, "Erro na criação do arquivo SVG: %s\n", nome_saidasvg2);
+        fclose(arqQry);
+        exit(1);
+    }
+
+    fprintf(saidaSvg2, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(saidaSvg2, "<svg width=\"2000\" height=\"2000\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+
+
+
+    char nome_saidaTxt[512];
+    int chars_escritos_Txt = snprintf(nome_saidaTxt, sizeof(nome_saidaTxt), "%s/%s.txt", pathSaida, nomeBaseQry);
+
+    if(chars_escritos_Txt >= (int)sizeof(nome_saidaTxt)){
+        fprintf(stderr, "Alerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
+        exit(1);
+}
+    printf("Diretório do arquivo stxt: %s\n", nome_saidaTxt);
+
+    FILE* saidaTxt = fopen(nome_saidaTxt, "w");
+    if (saidaTxt == NULL) {
+        fprintf(stderr, "Erro na criação do arquivo txt: %s\n", nome_saidaTxt);
+        fclose(arqQry);
+        fclose(saidaSvg2);
+        exit(1);
+    }
+
+    leitura_qry(t, arqQry, saidaTxt, array_anotacoes, lista_anotacoes_svg, fCalcBB_individual)
+    
+    //PRINTAR TXT E LISTA DE ANOTACOES SVG!!!!!!!!!
 }
