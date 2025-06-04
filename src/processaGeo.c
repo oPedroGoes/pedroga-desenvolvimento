@@ -166,8 +166,8 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
         if (strcmp(tipo, "ts") == 0) {
             if (sscanf(str + 2, "%s %s %s", fam, wei, size) == 3){  //+2 pula "ts"
                 printf("\n\n Ts lido!\nlinha lida: %s %s %s %s", tipo, fam, wei, size);
-            } 
-        }else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para ts.");
+            } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para ts.");
+        }else
 
         if (strcmp(tipo, "c") == 0) {
             int i;
