@@ -3,15 +3,13 @@
 #include <string.h>
 #include <math.h>
 
-//#include "boundingBox.h"
+#include "boundingBox.h"
 #include "SmuTreap.h"
 #include "circulo.h"
 #include "retangulo.h"
 #include "texto.h"
 #include "linha.h"
-
-//c: 1, r: 2, t: 3, l: 4
-typedef void* BB; //ADICIONAR NO .H!!!!!!!
+#include "formas.h"
 
 
 void calcBB_c(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
@@ -105,20 +103,14 @@ void calcBB_t(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h
     *bbA_h = calc_bb_h;
 }
 
-double maxD(double x, double y){
-    return (x > y) ? x : y;
-}
-double minD(double x, double y){
-    return (x < y) ? x : y;
-}
 void calcBB_l(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
     double x1 = get_X1L((LINHA)i);
     double y1 = get_Y1L((LINHA)i);
     double x2 = get_X2L((LINHA)i);
     double y2 = get_Y2L((LINHA)i);
 
-    *bbA_x = minD(x1, x2);
-    *bbA_y = maxD(y1, y2);
+    *bbA_x = fmin(x1, x2);
+    *bbA_y = fmin(y1, y2);
     *bbA_w = fabs(x1 - x2);
     *bbA_h = fabs(y1 - y2);
 }
@@ -126,21 +118,25 @@ void calcBB_l(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h
 void fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h){
     switch (tp)
     {
-    case 1:
+    case TIPO_CIRCULO:
         calcBB_c(i, bbA_x, bbA_y, bbA_w, bbA_h);
         break;
 
-    case 2:
+    case TIPO_RETANGULO:
         calcBB_r(i, bbA_x, bbA_y, bbA_w, bbA_h);
         break;
 
-    case 3:
+    case TIPO_TEXTO:
         calcBB_t(i, bbA_x, bbA_y, bbA_w, bbA_h);
         break;
     
-    default:
+    case TIPO_LINHA:
         calcBB_l(i, bbA_x, bbA_y, bbA_w, bbA_h);
         break;
+
+    default:
+        fprintf(stderr, "(fCalcBB_individual) Erro: tipo de forma invalido.");
+        return;
     }
 }
 
