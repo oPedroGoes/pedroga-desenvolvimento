@@ -1,7 +1,7 @@
 #ifndef BOUNDINGBOX_H
 #define BOUNDINGBOX_H
 
-//c: 1, r: 2, t: 3, l: 4
+#include "SmuTreap.h"
 typedef void* BB; 
 
 
