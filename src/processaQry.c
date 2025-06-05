@@ -193,7 +193,12 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
 }
 
 // Função de callback para percorreLista (para processar nós selecionados)
-void processaNoParaSaida(Item item_node, void *aux_data) {
+void processaNoParaSaidaSelr(Item item_node, void *aux_data){
+    if(!item_node || !aux_data){
+        fprintf(stderr, "(processaNoParaSaidaSelr) Erro: parametros invalidos.");
+        return;
+    }
+
     InfoSelrData* data = (InfoSelrData*)aux_data;
     Node nd = (Node)item_node; // O Item da lista é o Node da SmuTreap
     Info info_forma = getInfoSmuT(data->smutreap_tree, nd);
@@ -213,15 +218,12 @@ void processaNoParaSaida(Item item_node, void *aux_data) {
         RECTANGLE r = (RECTANGLE)info_forma;
         id_forma = get_idR(r);
         nome_forma = "retangulo";
-        xa = get_XR(r); // Âncora do retângulo (canto superior esquerdo)
+        xa = get_XR(r); // Âncora do retângulo (canto superior esquerdo na tela)
         ya = get_YR(r);
     } else if (tipo_forma == TIPO_LINHA) {
         LINHA l = (LINHA)info_forma;
         id_forma = get_idL(l);
         nome_forma = "linha";
-        // A "âncora da forma" para a linha pode ser o primeiro ponto (x1,y1)
-        // ou a âncora do nó na SmuTreap, que é um dos seus pontos finais.
-        // Usaremos (x1,y1) para consistência com outras formas.
         xa = get_X1L(l);
         ya = get_Y1L(l);
     } else if (tipo_forma == TIPO_TEXTO) {
@@ -233,12 +235,66 @@ void processaNoParaSaida(Item item_node, void *aux_data) {
     }
 
     // Escrever no arquivo TXT
-    fprintf(data->pathTxt, "%d: %s\n", id_forma, nome_forma);
+    fprintf(data->pathTxt, "selr: forma %d (%s) selecionada.\n", id_forma, nome_forma);
 
     // Adicionar anotação para SVG: pequena circunferência vermelha na âncora da forma
     char* anota_ancora_svg = (char*)malloc(200 * sizeof(char));
     if(!anota_ancora_svg){
-        fprintf(stderr, "(processaNoParaSaida) Erro: falha ao alocar memoria.");
+        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: falha ao alocar memoria.");
+        return;
+    } else{
+        sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya);
+        insereNaLista(data->lista_anotacoes_svg, (Item)anota_ancora_svg);
+    }
+}
+
+void processaNoParaSaidaSeli(Item item_node, void *aux_data){
+    if(!item_node || !aux_data){
+        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: parametros invalidos.");
+        return;
+    }
+    InfoSelrData* data = (InfoSelrData*)aux_data;
+    Node nd = (Node)item_node; // O Item da lista é o Node da SmuTreap
+    Info info_forma = getInfoSmuT(data->smutreap_tree, nd);
+    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(data->smutreap_tree, nd);
+
+    int id_forma = -1;
+    char* nome_forma = "Desconhecido";
+    double xa, ya; // Âncora da FORMA para o círculo SVG
+
+    if (tipo_forma == TIPO_CIRCULO) {
+        CIRCLE c = (CIRCLE)info_forma;
+        id_forma = get_idC(c);
+        nome_forma = "circulo";
+        xa = get_XC(c); // Centro do círculo é sua âncora
+        ya = get_YC(c);
+    } else if (tipo_forma == TIPO_RETANGULO) {
+        RECTANGLE r = (RECTANGLE)info_forma;
+        id_forma = get_idR(r);
+        nome_forma = "retangulo";
+        xa = get_XR(r); // Âncora do retângulo (canto superior esquerdo na tela)
+        ya = get_YR(r);
+    } else if (tipo_forma == TIPO_LINHA) {
+        LINHA l = (LINHA)info_forma;
+        id_forma = get_idL(l);
+        nome_forma = "linha";
+        xa = get_X1L(l);
+        ya = get_Y1L(l);
+    } else if (tipo_forma == TIPO_TEXTO) {
+        TEXTO t = (TEXTO)info_forma;
+        id_forma = get_idT(t);
+        nome_forma = "texto";
+        xa = get_XT(t); // Âncora original do texto
+        ya = get_YT(t);
+    }
+
+    // Escrever no arquivo TXT
+    fprintf(data->pathTxt, "seli: forma %d (%s) selecionada.\n", id_forma, nome_forma);
+
+    // Adicionar anotação para SVG: pequena circunferência vermelha na âncora da forma
+    char* anota_ancora_svg = (char*)malloc(200 * sizeof(char));
+    if(!anota_ancora_svg){
+        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: falha ao alocar memoria.");
         return;
     } else{
         sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya);
@@ -252,8 +308,8 @@ void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
     printf("Processando comando selr: n=%d, x=%.2f, y=%.2f, w=%.2f, h=%.2f\n", n_id_selecao, sel_x, sel_y, sel_w, sel_h);
 
     // Cria uma lista para armazenar os nós (formas) selecionados nesta operação
-    Lista lista_formas_encontradas = criaLista();
-    if (!lista_formas_encontradas) {
+    Lista formasEncontradas_selr = criaLista();
+    if (!formasEncontradas_selr) {
         fprintf(pathTxtOut, "(handle_selr) Erro: Falha ao alocar memoria para lista de selecao.\n");
         return;
     }
@@ -265,7 +321,7 @@ void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
     double reg_y2 = sel_y + sel_h;
 
     // Adiciona as formas dentro da lista.
-    getInfosDentroRegiaoSmuT(tree, reg_x1, reg_y1, reg_x2, reg_y2, formaTotalmenteContidaCallback, lista_formas_encontradas);
+    getInfosDentroRegiaoSmuT(tree, reg_x1, reg_y1, reg_x2, reg_y2, formaTotalmenteContidaCallback, formasEncontradas_selr);
 
     // Adiciona a lista no array de selecoes.
     if (n_id_selecao >= 0 && n_id_selecao < 100){
@@ -275,15 +331,15 @@ void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
             destroiLista(array_selecoes[n_id_selecao], NULL);
         }
 
-        array_selecoes[n_id_selecao] = lista_formas_encontradas;
+        array_selecoes[n_id_selecao] = formasEncontradas_selr;
     } else {
         fprintf(pathTxtOut, "(handle_selr) Erro: Numero de identificacao de selecao 'n' (%d) invalido. Deve ser entre 0 e 99.\n", n_id_selecao);
-        destroiLista(lista_formas_encontradas, NULL);
+        destroiLista(formasEncontradas_selr, NULL);
         return;
     }
 
     // 5. Gerar a saída TXT e preparar anotações SVG para as formas selecionadas
-    if (listaEstaVazia(lista_formas_encontradas)) {
+    if (listaEstaVazia(formasEncontradas_selr)) {
         fprintf(pathTxtOut, "Nenhuma forma inteiramente contida na regiao especificada.\n");
     } else {
         InfoSelrData data;
@@ -292,7 +348,7 @@ void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
         data.lista_anotacoes_svg = lista_anotacoes_svg;
 
         // Percorre a lista de nós selecionados para gerar saída TXT e anotações SVG
-        percorreLista(lista_formas_encontradas, processaNoParaSaida, &data);
+        percorreLista(formasEncontradas_selr, processaNoParaSaidaSelr, &data);
     }
 
     // Adiciona anotação SVG para o retângulo de seleção
@@ -301,12 +357,12 @@ void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
         fprintf(stderr, "(handle_selr) Erro: falha ao alocar memoria.");
         return;
     } else{
-        sprintf(anota_selec_r, "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"red\" fill=\"none\" stroke-dasharray=\"5,5\" />",
+        sprintf(anota_selec_r, "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"red\" fill=\"none\" stroke-dasharray=\"5.5\" />",
                 sel_x, sel_y, sel_w, sel_h);
 
         insereNaLista(lista_anotacoes_svg, (Item)anota_selec_r);
     }
-    // Nota: A lista 'lista_formas_encontradas' agora é de responsabilidade do 'array_selecoes[n_id_selecao]'.
+    // Nota: A lista 'formasEncontradas_selr' agora é de responsabilidade do 'array_selecoes[n_id_selecao]'.
     // Não a destrua aqui se 'n_id_selecao' for válido.
 
 
@@ -321,105 +377,90 @@ void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x
 // Definições dos tipos de formas (assumindo que já existem em algum lugar acessível)
 
 void handle_seli(SmuTreap t, FILE *pathTxtOut, int n_id_selecao, double sel_x, double sel_y, Lista *array_selecoes, Lista lista_anotacoes_svg){
+    if(!t || !pathTxtOut || !array_selecoes || !lista_anotacoes_svg){
+        fprintf(stderr, "(handle_seli) Erro: parametros invalidos.");
+        return;
+    }
+
     // Escreve o comando original no arquivo TXT
     fprintf(pathTxtOut, "[*] seli %d %.2f %.2f\n", n_id_selecao, sel_x, sel_y);
     printf("Processando comando seli: n=%d, x=%.2f, y=%.2f\n", n_id_selecao, sel_x, sel_y);
 
-    // 1. Buscar o nó na SmuTreap usando as coordenadas (sel_x, sel_y)
-    // A função getNodeSmuT já considera a tolerância epsilon.
-    // Ela também pode promover o nó se o hitCount for atingido.
-    Node no_encontrado = getNodeSmuT(t, sel_x, sel_y);
-
-    // 2. Validar o número de seleção 'n_id_selecao' e preparar a lista de seleção
-    Lista lista_para_esta_selecao = NULL;
-    if (n_id_selecao >= 0 && n_id_selecao < 100) { // Assumindo que o array_selecoes tem tamanho 100
-        // Se já existe uma seleção com este 'n_id_selecao', ela deve ser substituída.
-        if (array_selecoes[n_id_selecao] != NULL) {
-            destroiLista(array_selecoes[n_id_selecao], NULL); // Libera a estrutura da lista anterior
-        }
-        lista_para_esta_selecao = criaLista();
-        if (!lista_para_esta_selecao) {
-            fprintf(pathTxtOut, "Erro critico: Falha ao alocar memoria para lista da selecao %d.\n", n_id_selecao);
-            // Mesmo com falha de lista, se o nó foi encontrado, o efeito de getNodeSmuT (promoção) já ocorreu.
-            // Podemos tentar reportar a forma encontrada se n_id_selecao fosse válido, mas sem armazenar.
-            // Por simplicidade aqui, se a lista não pode ser criada, não prosseguimos com o armazenamento.
-            return;
-        }
-        array_selecoes[n_id_selecao] = lista_para_esta_selecao;
-    } else {
-        fprintf(pathTxtOut, "Erro: Numero de identificacao de selecao 'n' (%d) invalido. Deve ser entre 0 e 99.\n", n_id_selecao);
-        // Se 'n' é inválido, não armazenaremos a seleção.
-        // No entanto, a busca com getNodeSmuT já foi feita e pode ter tido efeitos (hit count).
-        // A especificação do projeto não detalha o comportamento do TXT/SVG se 'n' é inválido mas uma forma é achada.
-        // Vamos reportar a forma se encontrada, mas sem associá-la à seleção 'n'.
-        if (no_encontrado == NULL) {
-            fprintf(pathTxtOut, "Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
-        } else {
-            // Lógica para reportar a forma encontrada (sem armazenar na seleção inválida 'n')
-            Info info_forma = getInfoSmuT(t, no_encontrado);
-            DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, no_encontrado);
-            int id_forma_report = -1;
-            char* nome_tipo_report = "Desconhecido";
-
-            if (tipo_forma == TIPO_CIRCULO) { id_forma_report = get_idC((CIRCLE)info_forma); nome_tipo_report = "circulo"; }
-            else if (tipo_forma == TIPO_RETANGULO) { id_forma_report = get_idR((RECTANGLE)info_forma); nome_tipo_report = "retangulo"; }
-            else if (tipo_forma == TIPO_LINHA) { id_forma_report = get_idL((LINHA)info_forma); nome_tipo_report = "linha"; }
-            else if (tipo_forma == TIPO_TEXTO) { id_forma_report = get_idT((TEXTO)info_forma); nome_tipo_report = "texto"; }
-
-            fprintf(pathTxtOut, "%d: %s (aviso: 'n' de selecao invalido, forma nao armazenada na selecao)\n", id_forma_report, nome_tipo_report);
-
-            // Adicionar anotação SVG mesmo com 'n' inválido, pois a forma foi "vista"
-            char* anot_svg_circ_ancora_report = (char*)malloc(200 * sizeof(char));
-            if (anot_svg_circ_ancora_report) {
-                sprintf(anot_svg_circ_ancora_report, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", sel_x, sel_y);
-                insereNaLista(lista_anotacoes_svg, (Item)anot_svg_circ_ancora_report);
-            }
-        }
-        return; // Interrompe o processamento normal para este comando seli
+    Lista formasEncontradas_seli = criaLista();
+    if (!formasEncontradas_seli) {
+    fprintf(pathTxtOut, "(handle_seli) Erro: Falha ao alocar memoria para lista de selecao.\n");
+    return;
     }
 
-    // 3. Processar o resultado da busca
-    if (no_encontrado == NULL) {
-        fprintf(pathTxtOut, "Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
-        // A lista em array_selecoes[n_id_selecao] permanecerá vazia.
-    } else {
-        // Adicionar o nó encontrado à lista de seleção (que já está em array_selecoes[n_id_selecao])
-        insereNaLista(lista_para_esta_selecao, (Item)no_encontrado);
+//-------------------------------------------------------------DEBUG SVG----------------------------------------------------------------------------//
 
-        // Obter informações da forma para saída TXT e anotação SVG
+    char *nome_svg_debug = "/home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/00-vaso-simples/TESTE_SELI_DEBUG.svg";
+    FILE *debug_svg = fopen(nome_svg_debug, "w");
+    if(!debug_svg){
+        fprintf(stderr, "(handle_seli) Erro: falha ao criar arquivo para debug do svd");
+        return;
+    }
+
+    fprintf(debug_svg, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(debug_svg, "<svg width=\"2000\" height=\"2000\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+
+    visitaProfundidadeSmuT(t, escreverFormaSvg1, debug_svg);
+
+    fprintf(debug_svg, "</svg>\n");
+    fclose(debug_svg);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------//
+
+    Node no_encontrado = getNodeSmuT(t, sel_x, sel_y); // Como getNode tem impacto sobre a prioridade, optei por faze-lo apenas se tudo estiver valido.
+    if(!no_encontrado){
+        fprintf(pathTxtOut, "Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
+        return;  // A mensagem já aparece de getNode.  
+    } 
+    insereNaLista(formasEncontradas_seli, (Item)no_encontrado);
+
+
+
+    // Adiciona a lista no array de selecoes se o id selecionado for valido.
+    if (n_id_selecao >= 0 && n_id_selecao < 100){
+    
+        // Se selecao n ja' existe, apaga-se a existente, e a substitui.
+        if (array_selecoes[n_id_selecao] != NULL){
+            destroiLista(array_selecoes[n_id_selecao], NULL);
+        }
+        array_selecoes[n_id_selecao] = formasEncontradas_seli;
+
+    } else {
+        fprintf(pathTxtOut, "(handle_seli) Erro: Numero de identificacao de selecao 'n' (%d) invalido. Deve ser entre 0 e 99.\n", n_id_selecao);
+        // Lógica para reportar a forma encontrada (sem armazenar na seleção inválida 'n')
         Info info_forma = getInfoSmuT(t, no_encontrado);
         DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, no_encontrado);
-        int id_forma = -1;
-        char* nome_forma = "Desconhecido";
+        int id_forma_report = -1;
+        char* nome_tipo_report = NULL;
 
-        // Determinar ID e tipo para o relatório TXT
-        if (tipo_forma == TIPO_CIRCULO) {
-            id_forma = get_idC((CIRCLE)info_forma);
-            nome_forma = "circulo";
-        } else if (tipo_forma == TIPO_RETANGULO) {
-            RECTANGLE r_info = (RECTANGLE)info_forma;
-            id_forma = get_idR(r_info);
-            nome_forma = "retangulo";
-        } else if (tipo_forma == TIPO_LINHA) {
-            LINHA l_info = (LINHA)info_forma;
-            id_forma = get_idL(l_info);
-            nome_forma = "linha";
-        } else if (tipo_forma == TIPO_TEXTO) {
-            TEXTO t_info = (TEXTO)info_forma;
-            id_forma = get_idT(t_info);
-            nome_forma = "texto";
+        if (tipo_forma == TIPO_CIRCULO) { id_forma_report = get_idC((CIRCLE)info_forma); nome_tipo_report = "circulo"; }
+        else if (tipo_forma == TIPO_RETANGULO) { id_forma_report = get_idR((RECTANGLE)info_forma); nome_tipo_report = "retangulo"; }
+        else if (tipo_forma == TIPO_LINHA) { id_forma_report = get_idL((LINHA)info_forma); nome_tipo_report = "linha"; }
+        else if (tipo_forma == TIPO_TEXTO) { id_forma_report = get_idT((TEXTO)info_forma); nome_tipo_report = "texto"; }
+
+        fprintf(pathTxtOut, "seli: forma %d (%s) selecionada. (aviso: 'n' de selecao invalido, forma nao armazenada na selecao)\n", id_forma_report, nome_tipo_report);
+
+        // Adicionar anotação SVG mesmo com 'n' inválido, pois a forma foi buscada e encontrada.
+        char* anot_svg_circ_ancora_report = (char*)malloc(200 * sizeof(char));
+        if (anot_svg_circ_ancora_report) {
+            sprintf(anot_svg_circ_ancora_report, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", sel_x, sel_y);
+            insereNaLista(lista_anotacoes_svg, (Item)anot_svg_circ_ancora_report);
         }
-
-        // Escrever no arquivo TXT
-        fprintf(pathTxtOut, "selr: forma %d (%s) selecionada \n", id_forma, nome_forma);
-
-        // Adicionar anotação SVG: pequena circunferência vermelha na âncora da forma (sel_x, sel_y)
-        char* anot_svg_circ_ancora = (char*)malloc(200 * sizeof(char));
-        if (anot_svg_circ_ancora) {
-            sprintf(anot_svg_circ_ancora, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", sel_x, sel_y);
-            insereNaLista(lista_anotacoes_svg, (Item)anot_svg_circ_ancora);
-        }
+        return;
     }
+
+    InfoSelrData data;
+    data.pathTxt = pathTxtOut;
+    data.smutreap_tree = t;
+    data.lista_anotacoes_svg = lista_anotacoes_svg;
+
+
+    percorreLista(formasEncontradas_seli, processaNoParaSaidaSeli, &data);
+    return;
 }
 
 //------------------------------------------------------------------------------------------------------------------------//
@@ -987,13 +1028,16 @@ void handle_blow(SmuTreap tree, FILE* pathTxtOut, int id_ogiva_a_explodir, Lista
 void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, FCalculaBoundingBox fCalcBb){
 
     char *str = (char*)malloc(sizeof(char)*1024);
+    
     char *comm = (char*)malloc(sizeof(char)*7);
 
-    while (fgets(str, sizeof(str), arqQry)) {
+    while (fgets(str, 1024, arqQry)) {
+        printf("tamanho str = %ld\n", strlen(str));
         // Remover nova linha do final, se houver
         str[strcspn(str, "\n")] = 0;
         str[strcspn(str, "\r")] = 0; // Para compatibilidade Windows/Linux
-
+        
+        printf("str ANTES = %s\n\n", str);
         sscanf(str, "%7s", comm);
 
 
@@ -1011,7 +1055,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             int n;
             double x, y;
             if (sscanf(str, "seli %d %lf %lf", &n, &x, &y) == 3) {
-                //handle_seli(t, pathTxt, n, x, y, array_selecoes, lista_anotacoes_svg);
+                handle_seli(t, pathTxt, n, x, y, array_selecoes, lista_anotacoes_svg);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para seli\n", str);
             }
@@ -1071,10 +1115,12 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
 
 SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, 
                         Lista lista_anotacoes_svg /*int idUltimaForma?*/){
-    if(!pathQry || !pathSaida || !nomeQry || array_anotacoes || !lista_anotacoes_svg){
+    printf("SmuTreap = %p\npathQry = %s\npathSaida = %s\nnomeQry = %s\narray_anotacoes = %p\nlista_anotacoes_svg = %p\n", t, pathQry, pathSaida, nomeQry, array_anotacoes, lista_anotacoes_svg);
+    if(!pathQry || !pathSaida || !nomeQry || !array_anotacoes || !lista_anotacoes_svg){
         fprintf(stderr, "(processa_qry) Erro: parametros invalidos.");
         return NULL;
     }
+
 
     FILE *arqQry = fopen(pathQry, "r");
     if (!arqQry){
@@ -1107,7 +1153,7 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
 
     FILE* saidaSvg2 = fopen(nome_saidasvg2, "w");
     if (saidaSvg2 == NULL) {
-        fprintf(stderr, "Erro na criação do arquivo SVG: %s\n", nome_saidasvg2);
+        fprintf(stderr, "(processa_qry) Erro na criação do arquivo SVG: %s\n", nome_saidasvg2);
         fclose(arqQry);
         exit(1);
     }

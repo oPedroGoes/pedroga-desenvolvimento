@@ -8,8 +8,10 @@
  #include <time.h> // Para srand()
  
  #include "processaGeo.h"
+ #include "processaQry.h"
  #include "leituraTerminal.h"
  #include "Lista.h"
+ #include "SmuTreap.h"
 
 #define EPSILON_CONFIG 0.001 //AJUSTAVEL.
 
@@ -159,7 +161,7 @@
     printf("promoRate = (nao definido ou falha)\n");
   }
 
-  processa_geo(fullNomeGeo, dirSaida, nomeGeo, prioMax, hc, promoRate, EPSILON_CONFIG);
+  SmuTreap t = processa_geo(fullNomeGeo, dirSaida, nomeGeo, prioMax, hc, promoRate, EPSILON_CONFIG);
 
   Lista array_selecoes[100];
   for (int i = 0; i < 100; i++){
@@ -167,6 +169,8 @@
   }
 
   Lista lista_svg_qry = criaLista();
+
+  processa_qry((ARVORE) t, fullNomeQry, dirSaida, nomeQry, &array_selecoes[0], lista_svg_qry);
 
 frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória

@@ -155,6 +155,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
 
     //FORMASGEO f1;
     while (fgets(str, 500, arqGeo)) {
+        printf("str no geo = %s\n", str);
 
         // Remove newline characters
         str[strcspn(str, "\n")] = 0;
@@ -165,7 +166,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
 
         if (strcmp(tipo, "ts") == 0) {
             if (sscanf(str + 2, "%s %s %s", fam, wei, size) == 3){  //+2 pula "ts"
-                printf("\n\n Ts lido!\nlinha lida: %s %s %s %s", tipo, fam, wei, size);
+                printf("\n\n Ts lido!\nlinha lida: %s %s %s %s\n", tipo, fam, wei, size);
             } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para ts.");
         }else
 
@@ -181,7 +182,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
                 CIRCLE c = create_circle(i, x, y, r, cb, cp);
                 insertSmuT(t, x, y, (CIRCLE)c, TIPO_CIRCULO, funcCalcBb);
                 
-                printf("\n\n Circulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, r, cb, cp);
+                printf("\n\n Circulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %s %s\n", tipo, i, x, y, r, cb, cp);
             } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para c.");
 
         } else
@@ -198,7 +199,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
                 RECTANGLE r = create_rectangle(i, x, y, w, h, cb, cp);
                 insertSmuT(t, x, y, (RECTANGLE)r, TIPO_RETANGULO, funcCalcBb);
     
-                printf("\n\n Retangulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s %s", tipo, i, x, y, w, h, cb, cp);
+                printf("\n\n Retangulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s %s\n", tipo, i, x, y, w, h, cb, cp);
             } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para r.");
         } else
 
@@ -222,7 +223,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
     
                 insertSmuT(t, anc_x, anc_y, (LINHA) l, TIPO_LINHA, funcCalcBb);
     
-                printf("\n\n Linha criada!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s", tipo, i, x1, y1, x2, y2, c_cor);
+                printf("\n\n Linha criada!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s\n", tipo, i, x1, y1, x2, y2, c_cor);
             } else fprintf(stderr, "(leitura_geo) Erro: parametros invalidos para l.");
         } else
 
@@ -240,7 +241,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
                 TEXTO tx = cria_texto(i, x, y, cb, cp, a, txt, fam, wei, size);
                 insertSmuT(t, x, y, (TEXTO)tx, TIPO_TEXTO, funcCalcBb);
     
-                printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c %s", tipo, i, x, y, cb, cp, a, txt);
+                printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c %s\n", tipo, i, x, y, cb, cp, a, txt);
     
                 free(cb);
                 free(cp);

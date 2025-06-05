@@ -3,3 +3,28 @@ comando para rodar: ./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pe
 
 ./bin/teste -e home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/src/entradas -f arqGeo.geo -o home/pedro/estrutur
 a_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/src/saidas/ -q arqQry.qry -p 1000 -hc 10 -pr 1.20
+
+
+
+
+//-------------------------------------------------------------DEBUG SVG----------------------------------------------------------------------------//
+
+    char *nome_svg_debug = "/home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/00-vaso-simples/TESTE_SELI_DEBUG.svg";
+    FILE *debug_svg = fopen(nome_svg_debug, "w");
+    if(!debug_svg){
+        fprintf(stderr, "(handle_seli) Erro: falha ao criar arquivo para debug do svd");
+        return;
+    }
+
+    fprintf(debug_svg, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(debug_svg, "<svg width=\"2000\" height=\"2000\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+
+    visitaProfundidadeSmuT(t, escreverFormaSvg1, debug_svg);
+
+    fprintf(debug_svg, "</svg>\n");
+    fclose(debug_svg);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------//
+
+!!!!!!!!!!!!!!!!!!!!!!ARRUMAR SELR!!!!!!!!!!!!!!!!!!!!!!
+!!!!!!!!!!!!!!!!!!!!!!ARRUMAR PRINT DE ANCORAS NAS LINHAS PARA SELR E SELI!!!!!!!!!!!!!!!!!!!!!!

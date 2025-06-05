@@ -16,7 +16,7 @@ typedef struct {
 Lista criaLista() {
     Lista_internal *l = (Lista_internal*)malloc(sizeof(Lista_internal));
     if (!l){
-        perror("Erro ao alocar memoria para a lista");
+        perror("Erro ao alocar memoria para a lista\n");
         return NULL;
     }
     l->primeiro = NULL;
@@ -27,7 +27,7 @@ Lista criaLista() {
 
 void destroiLista(Lista l, void (*liberaItemNaoNulo)(Item item)) {
     if (!l){
-        perror("(destroiLista) Erro: parametro para lista invalido.");
+        perror("(destroiLista) Erro: parametro para lista invalido.\n");
         return;
     }
     Lista_internal *li = (Lista_internal*)l;
@@ -48,7 +48,7 @@ void destroiLista(Lista l, void (*liberaItemNaoNulo)(Item item)) {
 
 bool insereNaLista(Lista l, Item item) {
     if (!l || !item){
-        perror("(insereNaLista) Erro: parametros invalidos");
+        perror("(insereNaLista) Erro: parametros invalidos\n");
         return false; // Lista inválida
     }
 
@@ -56,7 +56,7 @@ bool insereNaLista(Lista l, Item item) {
 
     NoLista *novoNo = (NoLista *)malloc(sizeof(NoLista));
     if (novoNo == NULL) {
-        perror("Erro ao alocar memoria para novo no da lista");
+        perror("Erro ao alocar memoria para novo no da lista\n");
         return false;
     }
     novoNo->item = item;
@@ -75,13 +75,13 @@ bool insereNaLista(Lista l, Item item) {
 
 Item removePrimeiroDaLista(Lista l) {
     if (!l){
-        perror("(insereNaLista) Erro: parametros invalidos");
+        perror("(insereNaLista) Erro: parametros invalidos\n");
         return NULL; // Lista inválida
     }
     Lista_internal *li = (Lista_internal*)l;
 
     if (li->primeiro == NULL){
-        perror("(removePrimeiroDaLista) Erro: lista vazia");
+        perror("(removePrimeiroDaLista) Erro: lista vazia\n");
         return NULL;
     }
 
@@ -100,7 +100,7 @@ Item removePrimeiroDaLista(Lista l) {
 
 bool listaEstaVazia(Lista l) {
     if (l == NULL) {
-        perror("(listaEstaVazia) Erro: lista invalida.");
+        perror("(listaEstaVazia) Erro: lista invalida.\n");
         return true; // Considera NULL como vazia para evitar erros
     }
 
@@ -111,7 +111,7 @@ bool listaEstaVazia(Lista l) {
 
 int getTamanhoLista(Lista l) {
     if (l == NULL) {
-        perror("(getTamanhoLista) Erro: lista invalida.");
+        perror("(getTamanhoLista) Erro: lista invalida.\n");
         return 0; // Lista inválida
     }
     Lista_internal *li = (Lista_internal*)l;
@@ -120,11 +120,14 @@ int getTamanhoLista(Lista l) {
 
 void percorreLista(Lista l, void (*visita)(Item item, void *aux), void *aux) {
     if (l == NULL || visita == NULL){
-        perror("(percorreLista) Erro: parametros invalidos");
+        perror("(percorreLista) Erro: parametros invalidos\n");
         return;
     }
 
     Lista_internal *li = (Lista_internal*)l;
+    printf("Lista_internal li = %p\n", li);
+
+    if (listaEstaVazia(l)) printf("Lista esta vazia\n");
 
     NoLista *atual = li->primeiro;
     while (atual != NULL) {

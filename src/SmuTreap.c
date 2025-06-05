@@ -434,14 +434,48 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
 //aux
 node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_internal **resultRef, double x, double y){
     if(root == NULL){
-        fprintf(stderr, "(fetNodeSmuT_aux) Erro: no' nao encontrado.");
+        fprintf(stderr, "(getNodeSmuT_aux) Erro: no' nao encontrado. Encerrando programa...\n");
         exit (1); // Se retornasse NULL, a arvore seria destruida.
     }
 
     bool xDentroDeEpsulon = fabs(x - root->x) < t->epsilon;
     bool yDentroDeEpsulon = fabs(y - root->y) < t->epsilon;
-    bool podeIrDireita = (x > root->x + t->epsilon) || (fabs(x - root->x) < t->epsilon && (y > root->y + t->epsilon));
+    bool podeIrDireita = (x > (root->x + t->epsilon)) || (fabs(x - root->x) < t->epsilon && (y > (root->y + t->epsilon)));
+    DescritorTipoInfo d = root->descritor;
+    Info forma = root->info;
 
+    if(d == TIPO_LINHA){ 
+        double x1l = get_X1L((LINHA)forma);
+        double y1l = get_Y1L((LINHA)forma);
+        double x2l = get_X2L((LINHA)forma);
+        double y2l = get_Y2L((LINHA)forma);
+
+        bool x1lDentroDeEpsulon = fabs(x1l - root->x) < t->epsilon;
+        bool y1lDentroDeEpsulon = fabs(y1l - root->y) < t->epsilon;
+        bool x2lDentroDeEpsulon = fabs(x2l - root->x) < t->epsilon;
+        bool y2lDentroDeEpsulon = fabs(y2l - root->y) < t->epsilon;
+
+        if((x1lDentroDeEpsulon && y1lDentroDeEpsulon) || (x2lDentroDeEpsulon && y2lDentroDeEpsulon)){ //Encontrou, e e' linha"
+            root->hitCountCounter++;
+
+            if(root->hitCountCounter >= t->hitCountConfig){
+                promoteNodeSmuT(t, (Node)root, t->promoRateConfig);
+            }
+            *resultRef = root;
+            return root;
+        }
+    }else {
+
+        if (xDentroDeEpsulon && yDentroDeEpsulon){ // Encontrou!
+            root->hitCountCounter++;
+
+            if(root->hitCountCounter >= t->hitCountConfig){
+                promoteNodeSmuT(t, (Node)root, t->promoRateConfig);
+            }
+            *resultRef = root;
+            return root;
+        }
+    }
 
     if (xDentroDeEpsulon && yDentroDeEpsulon){ // Encontrou!
         root->hitCountCounter++;
@@ -458,6 +492,8 @@ node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_i
     } else{
         root->left = getNodeSmuT_aux(t, root->left, resultRef, x, y);
     }
+
+    return root;
 }
 
 Node getNodeSmuT(SmuTreap t, double x, double y){
@@ -966,7 +1002,7 @@ void visitaLarguraSmuT(SmuTreap t, FvisitaNo f, void *aux){
 
 //aux
 node_internal *procuraNoSmuT_aux(SmuTreap t, node_internal *root, FsearchNo f, void *aux, bool *flag_encontrado){
-    if(root == NULL || !f || *flag_encontrado) return NULL;
+    if(root == NULL || !f || !flag_encontrado) return NULL;
 
     // Verifica o no atual
     if(f(t, (Node)root, root->info, root->x, root->y, aux)){
@@ -976,11 +1012,15 @@ node_internal *procuraNoSmuT_aux(SmuTreap t, node_internal *root, FsearchNo f, v
 
     // Busca na subarvore direita
     node_internal *encontrado_dir = procuraNoSmuT_aux(t, root->right, f, aux, flag_encontrado);
-    if(*flag_encontrado) return encontrado_dir;
+    if(*flag_encontrado){
+        return encontrado_dir;
+    } else{
+        // Busca na subarvore esquerda
+        node_internal *encontrado_esq = procuraNoSmuT_aux(t, root->left, f, aux, flag_encontrado);
+        if(*flag_encontrado) return encontrado_esq;
+    }
 
-    // Busca na subarvore esquerda
-    node_internal *encontrado_esq = procuraNoSmuT_aux(t, root->left, f, aux, flag_encontrado);
-    if(*flag_encontrado) return encontrado_esq;
+    return NULL;
 
 }
 
@@ -988,7 +1028,12 @@ Node procuraNoSmuT(SmuTreap t, FsearchNo f, void *aux){
     if (!t || !f) return NULL;
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
     bool encontrado_flag = false;
-    return (Node) procuraNoSmuT_aux(t, t_i->root, f, aux, &encontrado_flag);
+
+    node_internal *encontrado = procuraNoSmuT_aux(t, t_i->root, f, aux, &encontrado_flag); 
+    if(!encontrado){
+        fprintf(stderr, "(procuraNoSmuT) Erro: no' nao encontrado.");
+        return NULL;
+    } else return (Node) encontrado;
 }
 
 /**
