@@ -15,6 +15,10 @@
 */
 
 void trataPath(char **pathDir, char* arg){ // arg é argv[i]
+  if(!arg || !pathDir){
+    fprintf(stderr, "(trataPath) Erro: parametros invalidos.\n");
+    return;
+  }
   int argLen = strlen(arg);
 
   *pathDir = (char*) malloc(sizeof(char)*(argLen + 1)); // +1 para o '\0'
@@ -33,6 +37,10 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
  }
 
  void trataNomeArquivo(char **pathArq, char* arg){ // arg é argv[i]
+  if(!arg || !pathArq){
+    fprintf(stderr, "(trataNomeArquivo) Erro: parametros invalidos.\n");
+    return;
+  }
   int argLen = strlen(arg);
 
   *pathArq = (char*) malloc(sizeof(char)*(argLen+1)); // +1 para '\0'
@@ -51,6 +59,10 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
  }
 
 void trataParamNumericoInt(int **num_ptr_addr, const char *param_str){ // param_str apenas leitura
+  if(!num_ptr_addr || !param_str){
+    fprintf(stderr, "(trataParamNumericoInt) Erro: parametros invalidos.\n");
+    return;
+  }
   *num_ptr_addr = NULL; // Falha/não processado por padrão
 
   if (param_str == NULL) {
@@ -85,6 +97,10 @@ void trataParamNumericoInt(int **num_ptr_addr, const char *param_str){ // param_
  }
 
 void trataParamNumericoFloat(float **num_ptr_addr, const char* param_str){ // param_str apenas leitura
+  if(!num_ptr_addr || !param_str){
+    fprintf(stderr, "(trataParamNumericoFloat) Erro: parametros invalidos.\n");
+    return;
+  }
   *num_ptr_addr = NULL; // Falha/não processado por padrão
 
   if (param_str == NULL) {
@@ -118,7 +134,11 @@ void trataParamNumericoFloat(float **num_ptr_addr, const char* param_str){ // pa
   **num_ptr_addr = val;
  }
 
-void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str) {
+void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str){
+  if(!num_ptr_addr || !param_str){
+    fprintf(stderr, "(trataParamNumericoDouble) Erro: parametros invalidos.\n");
+    return;
+  }
     *num_ptr_addr = NULL; // Falha/não processado por padrão
 
     if (param_str == NULL) {
@@ -156,6 +176,10 @@ void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str) {
 }
 
 void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
+  if(!pathDir || !nomeArq || !fullNomeArq){
+    fprintf(stderr, "(completaNomeArquivo) Erro: parametros invalidos. \n");
+    return;
+  }
     int fullNomeLen = strlen(pathDir) + 1 + strlen(nomeArq);
     
     *fullNomeArq = (char*)malloc(sizeof(char)*(fullNomeLen+1));
@@ -175,6 +199,10 @@ void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
 *
 */
 char *removeIndicadorArq(char *dest, const char *src){
+  if(!dest || !src){
+    fprintf(stderr, "(removeIndicadorArq) Erro: parametros invalidos.\n");
+    return;
+  }
   int lenSrc = strlen(src);
 
     if (lenSrc > 4){
@@ -190,6 +218,10 @@ char *removeIndicadorArq(char *dest, const char *src){
 
 // Pode ser modularizada para .dot, .svg e o outro la kk
 void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
+  if(*pathOut || *nomeGeo || *nomeQry || **arqTxt){
+    fprintf(stderr, "(trataArqTxt) Erro: parametros invalidos.\n");
+    return;
+  }
     char nomeBaseGeo[512], nomeBaseQry[512]; // Buffers para os nomes base
 
     // char *nomeBGeoAdequado = nomeBaseGeo[0]; // Esta linha era problemática e não utilizada, removida.

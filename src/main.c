@@ -29,7 +29,6 @@
        *nomeQry = NULL, *fullNomeQry = NULL; char *fullNomeTxt = NULL;
 
   srand(time(NULL));
-
   int *prioMax = NULL, *hc = NULL;
   double *promoRate = NULL;
   
