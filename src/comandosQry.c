@@ -5,10 +5,11 @@
 #include "comandosQry.h"
 #include "formas.h"
 #include "geometria.h"
+#include "boundingBox.h"
 
 typedef struct{
 
-    // Para selr e seli.
+    // Para todos.
     FILE* arqTxt;
     SmuTreap tree;
     Lista lista_anotacoes_svg;
@@ -18,9 +19,29 @@ typedef struct{
 
 } qryContext;
 
+void killAnotacaoCallback(char *anotacao){
+    if(!anotacao){
+        fprintf(stderr, "(killAnotacaoCallback) Erro: parametros invalidos.");
+    } else free(anotacao);
+}
+
+CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes){
+    qryContext *ctxt = (qryContext*)malloc(sizeof(qryContext));
+    if(!ctxt){
+        fprintf(stderr, "(iniciaContext) Erro: falha ao alocar memoria para struct.\n");
+        return NULL;
+    }
+
+    ctxt->arqTxt = arqTxt;
+    ctxt->tree = t;
+    ctxt->lista_anotacoes_svg = lista_anotacoes_svg;
+    ctxt->array_selecoes = array_selecoes;
+
+    return ctxt;
+}
+
 //------------------------------------------------------------HANDLE_SELR----------------------------------------------------------------//
 
-// Função de callback para percorreLista (para processar nós selecionados)
 void processaNoParaSaidaSelr(Item item_node, void *aux_context){
     if(!item_node || !aux_context){
         fprintf(stderr, "(processaNoParaSaidaSelr) Erro: parametros invalidos.");
@@ -46,7 +67,7 @@ void processaNoParaSaidaSelr(Item item_node, void *aux_context){
     // Adicionar anotação para SVG: pequena circunferência vermelha na âncora da forma
     char* anota_ancora_svg = (char*)malloc(200 * sizeof(char));
     if(!anota_ancora_svg){
-        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: falha ao alocar memoria.");
+        fprintf(stderr, "(processaNoParaSaidaSelr) Erro: falha ao alocar memoria.");
         return;
     } 
 
@@ -59,25 +80,6 @@ void processaNoParaSaidaSelr(Item item_node, void *aux_context){
     } else return;
 
     return;
-}
-
-//ADICIONAR NO TAD FORMAS!!!!!!!!!!!!
-// Função de callback para getInfosDentroRegiaoSmuT: verifica se uma forma está totalmente contida na região
-bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2) {
-    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n_node);
-
-    if (tipo_forma == TIPO_CIRCULO || tipo_forma == TIPO_RETANGULO || tipo_forma == TIPO_TEXTO || tipo_forma == TIPO_LINHA ){
-        double ndx;
-    double ndy;
-    double ndw;
-    double ndh;
-    getBoundingBoxSmuT(t, n_node, &ndx, &ndy, &ndw, &ndh);
-
-    double ndxMax = ndx + ndw;
-    double ndyMax = ndy + ndh;
-
-    return (retanguloInternoRetangulo(ndy, ndx, ndxMax, ndyMax, reg_x1, reg_y1, reg_x2, reg_y2));
-    } else return false; // Tipo desconhecido.
 }
 
 void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double sel_w, double sel_h) {
@@ -154,6 +156,132 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
 //---------------------------------------------------------------------------------------------------------------------------------------//
 
 
+//------------------------------------------------------------HANDLE_SELI----------------------------------------------------------------//
+
+void processaNoParaSaidaSeli(Item item_node, void *aux_context){
+    if(!item_node || !aux_context){
+        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: parametros invalidos.");
+        return;
+    }
+
+    qryContext* context = (qryContext*)aux_context;
+    Node nd = (Node)item_node; // O Item da lista é o Node da SmuTreap
+    Info forma = getInfoSmuT(context->tree, nd);
+    DescritorTipoInfo tipo = getTypeInfoSmuT(context->tree, nd);
+
+    double xa, ya; // Âncora da FORMA para o círculo SVG
+    double xl, yl; // Equivalentes para x2 e y2 para linhas.
+
+    int id_forma = get_idF(forma, tipo);
+    const char *nome_forma = get_NameStrF(tipo);
+
+    int ancoraCount = get_anchorF(forma, tipo, &xa, &ya, &xl, &yl);
+
+    // Escrever no arquivo TXT
+    fprintf(context->arqTxt, "seli: forma %d (%s) selecionada.\n", id_forma, nome_forma);
+
+    // Adicionar anotação para SVG: pequena circunferência vermelha na âncora da forma
+    char* anota_ancora_svg = (char*)malloc(200 * sizeof(char));
+    if(!anota_ancora_svg){
+        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: falha ao alocar memoria.");
+        return;
+    } 
+
+    if(ancoraCount == 2){
+        sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />\n<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya, xl, yl);
+        insereNaLista(context->lista_anotacoes_svg, (Item)anota_ancora_svg);
+    } else if(ancoraCount == 1){
+        sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya);
+        insereNaLista(context->lista_anotacoes_svg, (Item)anota_ancora_svg); 
+    } else return;
+
+    return;
+}
+
+void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
+    if(!ctxt){
+        fprintf(stderr, "(hanfle_selr) Erro: parametro invalido.\n");
+        return;
+    }
+
+    qryContext *contexto = (qryContext*)ctxt;
+
+    // Escreve o comando original no arquivo TXT
+    fprintf(contexto->arqTxt, "[*] seli %d %.2f %.2f\n", n_id_selecao, sel_x, sel_y);
+    printf("Processando comando seli: n=%d, x=%.2f, y=%.2f\n", n_id_selecao, sel_x, sel_y);
+
+    Lista formasEncontradas_seli = criaLista();
+    if (!formasEncontradas_seli) {
+    fprintf(contexto->arqTxt, "(handle_seli) Erro: Falha ao alocar memoria para lista de selecao.\n");
+    return;
+    }
+
+/*-------------------------------------------------------------DEBUG SVG----------------------------------------------------------------------------//
+
+    char *nome_svg_debug = "/home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/00-vaso-simples/TESTE_SELI_DEBUG.svg";
+    FILE *debug_svg = fopen(nome_svg_debug, "w");
+    if(!debug_svg){
+        fprintf(stderr, "(handle_seli) Erro: falha ao criar arquivo para debug do svd");
+        return;
+    }
+
+    fprintf(debug_svg, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
+    fprintf(debug_svg, "<svg width=\"2000\" height=\"2000\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
+
+    visitaProfundidadeSmuT(t, escreverFormaSvg1, debug_svg);
+
+    fprintf(debug_svg, "</svg>\n");
+    fclose(debug_svg);
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------*/
+
+    Node no_encontrado = getNodeSmuT(contexto->tree, sel_x, sel_y); // Como getNode tem impacto sobre a prioridade, optei por faze-lo apenas se tudo estiver valido.
+    if(!no_encontrado){
+        fprintf(contexto->arqTxt, "Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
+        return;  // A mensagem já aparece de getNode.  
+    } 
+    insereNaLista(formasEncontradas_seli, (Item)no_encontrado);
+
+
+
+    // Adiciona a lista no array de selecoes se o id selecionado for valido.
+    if (n_id_selecao >= 0 && n_id_selecao < 100){
+    
+        // Se selecao n ja' existe, apaga-se a existente, e a substitui.
+        if (contexto->array_selecoes[n_id_selecao] != NULL){
+            destroiLista(contexto->array_selecoes[n_id_selecao], NULL);
+        }
+        contexto->array_selecoes[n_id_selecao] = formasEncontradas_seli;
+
+    } else {
+        fprintf(contexto->arqTxt, "(handle_seli) Erro: Numero de identificacao de selecao 'n' (%d) invalido. Deve ser entre 0 e 99.\n", n_id_selecao);
+        // Lógica para reportar a forma encontrada (sem armazenar na seleção inválida 'n')
+        Info info_forma = getInfoSmuT(contexto->tree, no_encontrado);
+        DescritorTipoInfo tipo_forma = getTypeInfoSmuT(contexto->tree, no_encontrado);
+        int id_forma_report = -1;
+        char* nome_tipo_report = NULL;
+
+        if (tipo_forma == TIPO_CIRCULO) { id_forma_report = get_idC((CIRCLE)info_forma); nome_tipo_report = "circulo"; }
+        else if (tipo_forma == TIPO_RETANGULO) { id_forma_report = get_idR((RECTANGLE)info_forma); nome_tipo_report = "retangulo"; }
+        else if (tipo_forma == TIPO_LINHA) { id_forma_report = get_idL((LINHA)info_forma); nome_tipo_report = "linha"; }
+        else if (tipo_forma == TIPO_TEXTO) { id_forma_report = get_idT((TEXTO)info_forma); nome_tipo_report = "texto"; }
+
+        fprintf(contexto->arqTxt, "seli: forma %d (%s) selecionada. (aviso: 'n' de selecao invalido, forma nao armazenada na selecao)\n", id_forma_report, nome_tipo_report);
+
+        // Adicionar anotação SVG mesmo com 'n' inválido, pois a forma foi buscada e encontrada.
+        char* anot_svg_circ_ancora_report = (char*)malloc(200 * sizeof(char));
+        if (anot_svg_circ_ancora_report) {
+            sprintf(anot_svg_circ_ancora_report, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", sel_x, sel_y);
+            insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_svg_circ_ancora_report);
+        }
+        return;
+    }
+
+    percorreLista(formasEncontradas_seli, processaNoParaSaidaSeli, contexto);
+    return;
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------//
 
 
 

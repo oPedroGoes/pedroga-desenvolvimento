@@ -1,10 +1,10 @@
 #ifndef processaQry_h
 #define processaQry_h
 
-typedef void* ARVORE;
-typedef void* LISTA;
+#include "SmuTreap.h"
+#include "Lista.h"
 
-ARVORE processa_qry(ARVORE t, const char *pathQry, const char *pathSaida, const char *nomeQry, LISTA *array_anotacoes, 
-                        LISTA lista_anotacoes_svg /*int idUltimaForma?*/);
+SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, 
+                        Lista lista_anotacoes_svg /*int idUltimaForma?*/);
 
 #endif // PROCESSA_QRY_H

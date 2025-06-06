@@ -5,15 +5,11 @@
 #include "linha.h"
 #include "Lista.h"
 #include "geometria.h"
+#include "formas.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-
-#define TIPO_CIRCULO 1
-#define TIPO_RETANGULO 2
-#define TIPO_TEXTO 3
-#define TIPO_LINHA 4
 
 typedef struct{
     double x, y, w, h;
@@ -852,7 +848,7 @@ void getInfosAtingidoPontoSmuT_aux(SmuTreap_internal *t, node_internal *root, do
 
     //Se o ponto (px, py) não está dentro do BBsubTree (que contém âncoras),
     // e' certo de que ele nao esta' dentro de alguma Info da subárvore.
-    if(!(x, y, bb_rx_min, bb_ry_min, bb_rx_max, bb_ry_max, t->epsilon)){ // Se P nao e' interno 'a BB do no' atual, volta um passo.
+    if(!ponto_interno_retangulo(x, y, bb_rx_min, bb_ry_min, bb_rx_max, bb_ry_max, t->epsilon)){ // Se P nao e' interno 'a BB do no' atual, volta um passo.
         return;
     }
 

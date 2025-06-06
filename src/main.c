@@ -170,7 +170,7 @@
 
   Lista lista_svg_qry = criaLista();
 
-  processa_qry((ARVORE) t, fullNomeQry, dirSaida, nomeQry, &array_selecoes[0], lista_svg_qry);
+  processa_qry(t, fullNomeQry, dirSaida, nomeQry, &array_selecoes[0], lista_svg_qry);
 
 frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória

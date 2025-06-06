@@ -3,7 +3,7 @@
     /*
     Esse cabeçalho header abre o arquivo .geo e insere em um árvore binária de busca todas as formas presentes no arquivo geo. Ele também retorna a estrutura da Arvore para ser utilizada em outras partes do codigo
     */
-    typedef void* ARVORE;
+    #include "SmuTreap.h"
     
     /**
      * 
@@ -20,5 +20,5 @@
      * 
      * @return void
      */
-    ARVORE processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *prioMax, int *hc, double *promoRate, double epsilonConfig);
+    SmuTreap processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *prioMax, int *hc, double *promoRate, double epsilonConfig);
 #endif

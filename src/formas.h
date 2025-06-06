@@ -2,6 +2,11 @@
 #define formas_h
 
 #include "SmuTreap.h"
+#include "formas.h"
+#include "circulo.h"
+#include "retangulo.h"
+#include "texto.h"
+#include "linha.h"
 
 typedef enum{
     TIPO_DESCONHECIDO = 0, 
@@ -27,5 +32,7 @@ double get_areaF(Info forma_info, DescritorTipoInfo tipo);
  * @return int Retorna o número de âncoras preenchidas (1 para formas com uma âncora, 2 para linhas, 0 para erro).
  */
 int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, double *x2, double *y2);
+
+bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2);
 
 #endif

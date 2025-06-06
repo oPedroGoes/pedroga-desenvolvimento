@@ -10,14 +10,8 @@
 #include "texto.h"
 #include "linha.h"
 #include "Lista.h"
-
-#ifndef TIPO_FORMAS_DEFINED
-#define TIPO_FORMAS_DEFINED
-#define TIPO_CIRCULO 1
-#define TIPO_RETANGULO 2
-#define TIPO_TEXTO 3
-#define TIPO_LINHA 4
-#endif
+#include "formas.h"
+#include "comandosQry.h"
 
 //----------------------------HANDLE_SELR---------------------------------------------------------------------//
 // Estrutura auxiliar para passar dados para a função de callback de percorreLista
@@ -143,112 +137,14 @@ void visitaListaSvg(Item anotacao, void *aux){
     fprintf(arqSvg2, "%s/n", buff);
 }
 
-//aux
-bool retanguloInternoRetangulo1(double Dx1, double Dy1, double Dx2, double Dy2, double Fx1, double Fy1, double Fx2, double Fy2){
-    if(Dx1 < 0 || Dy1 < 0 || Dx2 < 0 || Dy2 < 0 || Fx1 < 0 || Fy1 < 0 || Fx2 < 0 || Fy2 < 0){
-        fprintf(stderr, "(retanguloInternoRetangulo1) Erro: parametros invalidos");
-        return false;
-    }
 
-    double x_dentro_min = fmin(Dx1, Dx2);
-    double x_dentro_max = fmax(Dx1, Dx2);
-    double y_dentro_min = fmin(Dy1, Dy2);
-    double y_dentro_max = fmax(Dy1, Dy2);
+//------------------------------------------------------------------------------------------------------------//
 
-    double x_fora_min = fmin(Fx1, Fx2);
-    double x_fora_max = fmax(Fx1, Fx2);
-    double y_fora_min = fmin(Fy1, Fy2);
-    double y_fora_max = fmax(Fy1, Fy2);
 
-    if (x_dentro_min >= x_fora_min && x_dentro_max <= x_fora_max && // X e' valido
-        y_dentro_min >= y_fora_min && y_dentro_max <= y_fora_max){  // y e' valido
-            return true;
-    }
+//--------------------------------------HANDLE_SELI-----------------------------------------------------------//
+// Definições dos tipos de formas (assumindo que já existem em algum lugar acessível)
 
-    return false;
-}
-
-void killAnotacaoCallback(char *anotacao){
-    if(!anotacao){
-        fprintf(stderr, "(killAnotacaoCallback) Erro: parametros invalidos.");
-    } else free(anotacao);
-}
-
-// Função de callback para getInfosDentroRegiaoSmuT: verifica se uma forma está totalmente contida na região
-bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2) {
-    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n_node);
-
-    if (tipo_forma == TIPO_CIRCULO || tipo_forma == TIPO_RETANGULO || tipo_forma == TIPO_TEXTO || tipo_forma == TIPO_LINHA ){
-        double ndx;
-    double ndy;
-    double ndw;
-    double ndh;
-    getBoundingBoxSmuT(t, n_node, &ndx, &ndy, &ndw, &ndh);
-
-    double ndxMax = ndx + ndw;
-    double ndyMax = ndy + ndh;
-
-    return (retanguloInternoRetangulo1(ndy, ndx, ndxMax, ndyMax, reg_x1, reg_y1, reg_x2, reg_y2));
-    } else return false; // Tipo desconhecido.
-}
-
-// Função de callback para percorreLista (para processar nós selecionados)
-void processaNoParaSaidaSelr(Item item_node, void *aux_data){
-    if(!item_node || !aux_data){
-        fprintf(stderr, "(processaNoParaSaidaSelr) Erro: parametros invalidos.");
-        return;
-    }
-
-    InfoSelrData* data = (InfoSelrData*)aux_data;
-    Node nd = (Node)item_node; // O Item da lista é o Node da SmuTreap
-    Info info_forma = getInfoSmuT(data->smutreap_tree, nd);
-    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(data->smutreap_tree, nd);
-
-    int id_forma = -1;
-    char* nome_forma = "Desconhecido";
-    double xa, ya; // Âncora da FORMA para o círculo SVG
-
-    if (tipo_forma == TIPO_CIRCULO) {
-        CIRCLE c = (CIRCLE)info_forma;
-        id_forma = get_idC(c);
-        nome_forma = "circulo";
-        xa = get_XC(c); // Centro do círculo é sua âncora
-        ya = get_YC(c);
-    } else if (tipo_forma == TIPO_RETANGULO) {
-        RECTANGLE r = (RECTANGLE)info_forma;
-        id_forma = get_idR(r);
-        nome_forma = "retangulo";
-        xa = get_XR(r); // Âncora do retângulo (canto superior esquerdo na tela)
-        ya = get_YR(r);
-    } else if (tipo_forma == TIPO_LINHA) {
-        LINHA l = (LINHA)info_forma;
-        id_forma = get_idL(l);
-        nome_forma = "linha";
-        xa = get_X1L(l);
-        ya = get_Y1L(l);
-    } else if (tipo_forma == TIPO_TEXTO) {
-        TEXTO t = (TEXTO)info_forma;
-        id_forma = get_idT(t);
-        nome_forma = "texto";
-        xa = get_XT(t); // Âncora original do texto
-        ya = get_YT(t);
-    }
-
-    // Escrever no arquivo TXT
-    fprintf(data->pathTxt, "selr: forma %d (%s) selecionada.\n", id_forma, nome_forma);
-
-    // Adicionar anotação para SVG: pequena circunferência vermelha na âncora da forma
-    char* anota_ancora_svg = (char*)malloc(200 * sizeof(char));
-    if(!anota_ancora_svg){
-        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: falha ao alocar memoria.");
-        return;
-    } else{
-        sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya);
-        insereNaLista(data->lista_anotacoes_svg, (Item)anota_ancora_svg);
-    }
-}
-
-void processaNoParaSaidaSeli(Item item_node, void *aux_data){
+void processaNoParaSaidaSeli1(Item item_node, void *aux_data){
     if(!item_node || !aux_data){
         fprintf(stderr, "(processaNoParaSaidaSeli) Erro: parametros invalidos.");
         return;
@@ -302,81 +198,7 @@ void processaNoParaSaidaSeli(Item item_node, void *aux_data){
     }
 }
 
-void handle_selr(SmuTreap tree, FILE* pathTxtOut, int n_id_selecao, double sel_x, double sel_y, double sel_w, double sel_h, Lista* array_selecoes, Lista lista_anotacoes_svg) {
-    // Escreve o comando original no arquivo TXT
-    fprintf(pathTxtOut, "[*] selr %d %.2f %.2f %.2f %.2f\n", n_id_selecao, sel_x, sel_y, sel_w, sel_h);
-    printf("Processando comando selr: n=%d, x=%.2f, y=%.2f, w=%.2f, h=%.2f\n", n_id_selecao, sel_x, sel_y, sel_w, sel_h);
-
-    // Cria uma lista para armazenar os nós (formas) selecionados nesta operação
-    Lista formasEncontradas_selr = criaLista();
-    if (!formasEncontradas_selr) {
-        fprintf(pathTxtOut, "(handle_selr) Erro: Falha ao alocar memoria para lista de selecao.\n");
-        return;
-    }
-
-    // Define (x1, y1) e (x2, y2) como pontos opostos.
-    double reg_x1 = sel_x;
-    double reg_y1 = sel_y;
-    double reg_x2 = sel_x + sel_w;
-    double reg_y2 = sel_y + sel_h;
-
-    // Adiciona as formas dentro da lista.
-    getInfosDentroRegiaoSmuT(tree, reg_x1, reg_y1, reg_x2, reg_y2, formaTotalmenteContidaCallback, formasEncontradas_selr);
-
-    // Adiciona a lista no array de selecoes.
-    if (n_id_selecao >= 0 && n_id_selecao < 100){
-
-        // Se selecao n ja' existe, apaga-se a existente, e a substitui.
-        if (array_selecoes[n_id_selecao] != NULL){
-            destroiLista(array_selecoes[n_id_selecao], NULL);
-        }
-
-        array_selecoes[n_id_selecao] = formasEncontradas_selr;
-    } else {
-        fprintf(pathTxtOut, "(handle_selr) Erro: Numero de identificacao de selecao 'n' (%d) invalido. Deve ser entre 0 e 99.\n", n_id_selecao);
-        destroiLista(formasEncontradas_selr, NULL);
-        return;
-    }
-
-    // 5. Gerar a saída TXT e preparar anotações SVG para as formas selecionadas
-    if (listaEstaVazia(formasEncontradas_selr)) {
-        fprintf(pathTxtOut, "Nenhuma forma inteiramente contida na regiao especificada.\n");
-    } else {
-        InfoSelrData data;
-        data.pathTxt = pathTxtOut;
-        data.smutreap_tree = tree;
-        data.lista_anotacoes_svg = lista_anotacoes_svg;
-
-        // Percorre a lista de nós selecionados para gerar saída TXT e anotações SVG
-        percorreLista(formasEncontradas_selr, processaNoParaSaidaSelr, &data);
-    }
-
-    // Adiciona anotação SVG para o retângulo de seleção
-    char* anota_selec_r = (char*)malloc(256 * sizeof(char));
-    if(!anota_selec_r){
-        fprintf(stderr, "(handle_selr) Erro: falha ao alocar memoria.");
-        return;
-    } else{
-        sprintf(anota_selec_r, "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"red\" fill=\"none\" stroke-dasharray=\"5.5\" />",
-                sel_x, sel_y, sel_w, sel_h);
-
-        insereNaLista(lista_anotacoes_svg, (Item)anota_selec_r);
-    }
-    // Nota: A lista 'formasEncontradas_selr' agora é de responsabilidade do 'array_selecoes[n_id_selecao]'.
-    // Não a destrua aqui se 'n_id_selecao' for válido.
-
-
-    //1. Colocar array de selecoes na MAIN
-    //2. Inicializar uma lista de anotacoes para svg na MAIN
-    //3. LEMBRAR DE DAR KILL NAS ANOTACOES!!!!!!!!
-}
-//------------------------------------------------------------------------------------------------------------//
-
-
-//--------------------------------------HANDLE_SELI-----------------------------------------------------------//
-// Definições dos tipos de formas (assumindo que já existem em algum lugar acessível)
-
-void handle_seli(SmuTreap t, FILE *pathTxtOut, int n_id_selecao, double sel_x, double sel_y, Lista *array_selecoes, Lista lista_anotacoes_svg){
+void handle_seli1(SmuTreap t, FILE *pathTxtOut, int n_id_selecao, double sel_x, double sel_y, Lista *array_selecoes, Lista lista_anotacoes_svg){
     if(!t || !pathTxtOut || !array_selecoes || !lista_anotacoes_svg){
         fprintf(stderr, "(handle_seli) Erro: parametros invalidos.");
         return;
@@ -459,9 +281,11 @@ void handle_seli(SmuTreap t, FILE *pathTxtOut, int n_id_selecao, double sel_x, d
     data.lista_anotacoes_svg = lista_anotacoes_svg;
 
 
-    percorreLista(formasEncontradas_seli, processaNoParaSaidaSeli, &data);
+    percorreLista(formasEncontradas_seli, processaNoParaSaidaSeli1, &data);
     return;
 }
+
+
 
 //------------------------------------------------------------------------------------------------------------------------//
 
@@ -1027,6 +851,8 @@ void handle_blow(SmuTreap tree, FILE* pathTxtOut, int id_ogiva_a_explodir, Lista
 
 void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, FCalculaBoundingBox fCalcBb){
 
+    CONTEXTO con = iniciaContext(pathTxt, t, lista_anotacoes_svg, array_selecoes);
+
     char *str = (char*)malloc(sizeof(char)*1024);
     
     char *comm = (char*)malloc(sizeof(char)*7);
@@ -1043,19 +869,19 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
 
         // Processar com base no comando
         if (strcmp(comm, "selr") == 0) {
-            int n;
+            int id;
             double x, y, w, h;
             // sscanf é uma boa forma de parsear o restante da str_original
-            if (sscanf(str, "selr %d %lf %lf %lf %lf", &n, &x, &y, &w, &h) == 5) {
-                handle_selr(t, pathTxt, n, x, y, w, h, array_selecoes, lista_anotacoes_svg);
+            if (sscanf(str, "selr %d %lf %lf %lf %lf", &id, &x, &y, &w, &h) == 5) {
+                handle_selr(con, id, x, y, w, h);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para selr\n", str);
             }
         } else if (strcmp(comm, "seli") == 0) {
-            int n;
+            int id;
             double x, y;
-            if (sscanf(str, "seli %d %lf %lf", &n, &x, &y) == 3) {
-                handle_seli(t, pathTxt, n, x, y, array_selecoes, lista_anotacoes_svg);
+            if (sscanf(str, "seli %d %lf %lf", &id, &x, &y) == 3) {
+                //handle_seli(t, pathTxt, id, x, y, array_selecoes, lista_anotacoes_svg);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para seli\n", str);
             }

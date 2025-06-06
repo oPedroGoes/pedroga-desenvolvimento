@@ -10,6 +10,8 @@
 typedef void* CONTEXTO;
 
 void handle_selr(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y, double sel_w, double sel_h);
+void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y);
 
+CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes);
 
 #endif

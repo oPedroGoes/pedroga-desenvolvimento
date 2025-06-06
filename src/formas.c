@@ -7,6 +7,8 @@
 #include "retangulo.h"
 #include "texto.h"
 #include "linha.h"
+#include "boundingBox.h"
+#include "geometria.h"
 
 
 int get_idF(Info forma, DescritorTipoInfo tipo){
@@ -37,7 +39,7 @@ const char* get_NameStrF(DescritorTipoInfo tipo){
 int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, double *x2, double *y2){
     if(!forma || !tipo || !x1 || !y1 || !x2 || !y2){
         fprintf(stderr, "(get_anchorF) Erro: parametros invalidos.\n");
-        return;
+        return 0;
     }
 
     switch(tipo){
@@ -67,5 +69,29 @@ int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, doub
             fprintf(stderr, "(forma_get_ancoras) Erro: tipo de forma desconhecido.\n");
             return 0;
     }
-    return;
 }
+
+// Função de callback para getInfosDentroRegiaoSmuT: verifica se uma forma está totalmente contida na região
+bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2){
+    DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n_node);
+
+    if (tipo_forma == TIPO_CIRCULO || tipo_forma == TIPO_RETANGULO || tipo_forma == TIPO_TEXTO || tipo_forma == TIPO_LINHA ){
+    double fx;
+    double fy;
+    double fw;
+    double fh;
+    fCalcBB_individual(tipo_forma, forma_info, &fx, &fy, &fw, &fh);
+
+    double fxMax = fx + fw;
+    double fyMax = fy + fh;
+
+    return (retanguloInternoRetangulo(fy, fx, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2));
+    } else return false; // Tipo desconhecido.
+}
+
+
+
+
+
+
+
