@@ -202,32 +202,6 @@ void atualizaBB_subtree(node_internal *n){
     }
 }
 
-//aux
-bool retangulos_interceptam(const BB *bb1, const BB *bb2){
-    if(!bb1 || bb1->w < 0 || !bb2 || bb2->w < 0){
-        fprintf(stderr, "(retangulos_interceptam) Erro: parametros invalidos");
-        return false;
-    }
-
-    double bb1_x_min = bb1->x;
-    double bb1_x_max = bb1->x + bb1->w;
-    double bb1_y_min = bb1->y;
-    double bb1_y_max = bb1->y + bb1->h;
-
-    double bb2_x_min = bb2->x;
-    double bb2_x_max = bb2->x + bb2->w;
-    double bb2_y_min = bb2->y;
-    double bb2_y_max = bb2->y + bb2->h;
-
-    // Verifica intersecao
-    if(bb1_x_max < bb2_x_min || bb1_x_min > bb2_x_max || // Nao intercepta em x
-       bb1_y_max < bb2_y_min || bb1_y_min > bb2_y_max){ // Nao intercepta em y
-        return false;
-    }
-
-    return true;
-}
-
 //------------------------------------------------------------------------------------------------------------------//
 
 /* "Eu" viro filho direito do meu filho esquerdo, 
@@ -764,40 +738,30 @@ Info getBoundingBoxSmuT(SmuTreap t, Node n, double *x, double *y, double *w, dou
 }
 
 //aux
-bool ponto_interno_retangulo(double px, double py, double rx, double ry, double rw, double rh, double epsilon){
-    if (rw < 0 || rh < 0) {
-        fprintf(stderr, "(ponto_interno_retangulo) Erro: Tentativa de verificar ponto em retângulo com dimensões inválidas (w=%.2f, h=%.2f).\n", rw, rh);
-        return false;
-    }
-
-    double rx_min = rx;
-    double rx_max = rx + rw;
-    double ry_min = ry;
-    double ry_max = ry + rh;
-
-    bool px_esta_dentro = (px >= rx_min - epsilon) && (px <= rx_max + epsilon);
-    bool py_esta_dentro = (py >= ry_min - epsilon) && (py <= ry_max + epsilon);
-
-    return px_esta_dentro && py_esta_dentro;
-}
-
-//aux
-void getNodesDentroRegiaoSmuT_aux(node_internal *root, double epsilon, Lista L, BB *bbRegiao){
+void getNodesDentroRegiaoSmuT_aux(SmuTreap t, node_internal *root, double epsilon, Lista L, double rx1, double ry1, double rx2, double ry2){
     if (!root){
         return;
     }
 
+    double root_x_min;
+    double root_y_min;
+    double root_w;
+    double root_h;
+    getBoundingBoxSmuT(t, root, &root_x_min, &root_y_min, &root_w, &root_h);
+
+    double root_x_max = root_x_min + root_w;
+    double root_y_max = root_y_min + root_h;
     
-    if (!retangulos_interceptam(&(root->BBsubTree), bbRegiao)){
+    if (!retangulos_interceptam(root_x_min, root_y_min, root_x_max, root_y_max, rx1, ry1, rx2, ry2)){
         return;
     }
 
-    if(ponto_interno_retangulo(root->x, root->y, bbRegiao->x, bbRegiao->y, bbRegiao->w, bbRegiao->h, epsilon)){
+    if(ponto_interno_retangulo(root->x, root->y, rx1, ry1, rx2, ry2, epsilon)){
         insereNaLista(L, (Item)root);
     }
 
-    if (root->right) getNodesDentroRegiaoSmuT_aux(root->right, epsilon, L, bbRegiao);
-    if (root->left) getNodesDentroRegiaoSmuT_aux(root->left, epsilon, L, bbRegiao);
+    if (root->right) getNodesDentroRegiaoSmuT_aux(t, root->right, epsilon, L, rx1, ry1, rx2, ry2);
+    if (root->left) getNodesDentroRegiaoSmuT_aux(t, root->left, epsilon, L, rx1, ry1, rx2, ry2);
 
     return;
 }
@@ -813,15 +777,9 @@ bool getNodesDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, doubl
         fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
     }
 
-    BB bbRegiao;
-    bbRegiao.x = fmin(x1, x2);
-    bbRegiao.y = fmin(y1, y2);
-    bbRegiao.w = fabs(x1 - x2);
-    bbRegiao.h = fabs(y1 - y2);
-
     int tamanhoAntes = getTamanhoLista(L);
 
-    getNodesDentroRegiaoSmuT_aux(t_i->root, t_i->epsilon, L, &bbRegiao);
+    getNodesDentroRegiaoSmuT_aux(t, t_i->root, t_i->epsilon, L, x1, y1, x2, y2);
 
     int tamanhoDepois = getTamanhoLista(L);
 
@@ -830,19 +788,27 @@ bool getNodesDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, doubl
 }
 
 //aux
-void getInfosDentroRegiaoSmuT_aux(SmuTreap t, node_internal *root, BB *bbRegiao,
-				 FdentroDeRegiao f, Lista L){
+void getInfosDentroRegiaoSmuT_aux(SmuTreap t, node_internal *root, double rx1, double ry1, double rx2, double ry2, FdentroDeRegiao f, Lista L){
     if(!root || !f) return; // Verifica validade
 
-    if (!retangulos_interceptam(&(root->BBsubTree), bbRegiao)) { // Poda quando se deve, para otimizar a busca
+    double root_x_min;
+    double root_y_min;
+    double root_w;
+    double root_h;
+    getBoundingBoxSmuT(t, root, &root_x_min, &root_y_min, &root_w, &root_h);
+
+    double root_x_max = root_x_min + root_w;
+    double root_y_max = root_y_min + root_h;
+
+    if (!retangulos_interceptam(root_x_min, root_y_min, root_x_max, root_y_max, rx1, ry1, rx2, ry2)) { // Poda quando se deve, para otimizar a busca
         return;
     }
 
-    if(f(t, (Node)root, root->info, bbRegiao->x, bbRegiao->y, bbRegiao->w, bbRegiao->h)) insereNaLista(L, (Item)root);
+    if(f(t, (Node)root, root->info, rx1, ry1, rx2, ry2)) insereNaLista(L, (Item)root);
 
     // Se nao e' no' folha, anda na arvore.
-    if (root->right) getInfosDentroRegiaoSmuT_aux(t, root->right, bbRegiao, f, L);
-    if (root->left) getInfosDentroRegiaoSmuT_aux(t, root->left, bbRegiao, f, L);
+    if (root->right) getInfosDentroRegiaoSmuT_aux(t, root->right, rx1, ry1, rx2, ry2, f, L);
+    if (root->left) getInfosDentroRegiaoSmuT_aux(t, root->left, rx1, ry1, rx2, ry2, f, L);
     return; // Volta um no'.
 }
 
@@ -865,7 +831,7 @@ bool getInfosDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, doubl
     bbRegiao.h = fabs(y1 - y2);
 
     int tamanhoAntes = getTamanhoLista(L);
-    getInfosDentroRegiaoSmuT_aux(t, t_i->root, &bbRegiao, f, L);
+    getInfosDentroRegiaoSmuT_aux(t, t_i->root, x1, y1, x2, y2, f, L);
     int tamanhoDepois = getTamanhoLista(L);
 
     return tamanhoDepois > tamanhoAntes;
@@ -877,14 +843,16 @@ void getInfosAtingidoPontoSmuT_aux(SmuTreap_internal *t, node_internal *root, do
     if (!root || !f) return;
 
     // Informacoes do BB que sera usado na busca. Atualiza a cada chamada recursiva.
-    double bb_rx = root->BBsubTree.x;
-    double bb_ry = root->BBsubTree.y;
+    double bb_rx_min = root->BBsubTree.x;
+    double bb_ry_min = root->BBsubTree.y;
     double bb_rw = root->BBsubTree.w;
     double bb_rh = root->BBsubTree.h;
+    double bb_rx_max = bb_rx_min + bb_rw;
+    double bb_ry_max = bb_ry_min + bb_rh;
 
     //Se o ponto (px, py) não está dentro do BBsubTree (que contém âncoras),
     // e' certo de que ele nao esta' dentro de alguma Info da subárvore.
-    if(!ponto_interno_retangulo(x, y, bb_rx, bb_ry, bb_rw, bb_rh, t->epsilon)){ // Se P nao e' interno 'a BB do no' atual, volta um passo.
+    if(!(x, y, bb_rx_min, bb_ry_min, bb_rx_max, bb_ry_max, t->epsilon)){ // Se P nao e' interno 'a BB do no' atual, volta um passo.
         return;
     }
 
