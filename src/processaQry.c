@@ -881,7 +881,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             int id;
             double x, y;
             if (sscanf(str, "seli %d %lf %lf", &id, &x, &y) == 3) {
-                //handle_seli(t, pathTxt, id, x, y, array_selecoes, lista_anotacoes_svg);
+                handle_seli(con, id, x, y);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para seli\n", str);
             }

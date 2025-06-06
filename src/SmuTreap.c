@@ -820,11 +820,6 @@ bool getInfosDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, doubl
         fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
     }
 
-    BB bbRegiao;
-    bbRegiao.x = fmin(x1, x2);
-    bbRegiao.y = fmin(y1, y2);
-    bbRegiao.w = fabs(x1 - x2);
-    bbRegiao.h = fabs(y1 - y2);
 
     int tamanhoAntes = getTamanhoLista(L);
     getInfosDentroRegiaoSmuT_aux(t, t_i->root, x1, y1, x2, y2, f, L);
