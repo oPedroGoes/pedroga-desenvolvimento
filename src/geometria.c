@@ -29,3 +29,27 @@ bool retanguloInternoRetangulo(double Dx1, double Dy1, double Dx2, double Dy2, d
 
     return false;
 }
+
+bool retangulos_interceptam_geometria(double R1x1, double R1y1, double R1x2, double R1y2, double R2x1, double R2y1, double R2x2, double R2y2){
+    if(R1x1 < 0 || R1y1 < 0 || R1x2 < 0 || R1y2 < 0 || R2x1 < 0 || R2y1 < 0 || R2x2 < 0 || R2y2 < 0){
+        fprintf(stderr, "(retangulos_interceptam) Erro: parametros invalidos");
+        return false;
+    }
+
+    double x_R1_min = fmin(R1x1, R1x2);
+    double x_R1_max = fmax(R1x1, R1x2);
+    double y_R1_min = fmin(R1y1, R1y2);
+    double y_R1_max = fmax(R1y1, R1y2);
+
+    double x_R2_min = fmin(R2x1, R2x2);
+    double x_R2_max = fmax(R2x1, R2x2);
+    double y_R2_min = fmin(R2y1, R2y2);
+    double y_R2_max = fmax(R2y1, R2y2);
+
+    if(x_R1_max < x_R2_min || x_R1_min > x_R2_max || // Nao intercepta em x
+       y_R1_max < y_R2_min || y_R1_min > y_R2_max){ // Nao intercepta em y
+        return false;
+    }
+
+    return true;
+}

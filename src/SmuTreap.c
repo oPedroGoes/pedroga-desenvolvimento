@@ -787,7 +787,7 @@ void getNodesDentroRegiaoSmuT_aux(node_internal *root, double epsilon, Lista L, 
         return;
     }
 
-    // 
+    
     if (!retangulos_interceptam(&(root->BBsubTree), bbRegiao)){
         return;
     }
