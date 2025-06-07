@@ -9,16 +9,7 @@
 #include "SmuTreap.h"
 #include "boundingBox.h"
 //#include "arvorebin.h"
-//#include "formas.h"
-
-
-#ifndef TIPO_FORMAS_DEFINED
-#define TIPO_FORMAS_DEFINED
-#define TIPO_CIRCULO 1
-#define TIPO_RETANGULO 2
-#define TIPO_TEXTO 3
-#define TIPO_LINHA 4
-#endif
+#include "formas.h"
 
 #define DEFAULT_PRIOMAX 10000
 #define DEFAULT_HITCOUNT 3
