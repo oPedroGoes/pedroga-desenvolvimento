@@ -1,15 +1,17 @@
 comando para rodar: ./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q 00-vaso-simples/selrTest.qry -p 1000 -hc 10 -pr 1.20
  
 
-./bin/teste -e home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/src/entradas -f arqGeo.geo -o home/pedro/estrutur
-a_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/src/saidas/ -q arqQry.qry -p 1000 -hc 10 -pr 1.20
-
-comando para rodar selrTest: 
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-selrTest.qry -p 1000 -hc 10 -pr 1.20
+comando para rodar selrTest na bandeira:
 
 
-comando para rodar seliTest: 
+comando para rodar selrTest no vaso: 
+./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-selrTest.qry -p 1000 -hc 10 -pr 1.20
+
+
+comando para rodar seliTest no vaso: 
 ./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-seliTest.qry -p 1000 -hc 10 -pr 1.20
+
+
 
 
 //-------------------------------------------------------------DEBUG SVG----------------------------------------------------------------------------//
