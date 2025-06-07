@@ -335,13 +335,15 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
             root->right->dad = root;
         }
     } else{
+        // Caso as coordenadas forem iguais:
+        
         int id_new = get_idF(new->info, new->descritor);
         int id_root = get_idF(root->info, root->descritor);
 
         // Usa o id da forma como critério de desempate.
         if (id_new < id_root) {
             root->left = insertSmuT_aux(root->left, new, t);
-            
+
             // Após a inserção recursiva, a propriedade do heap deve ser verificada.
             if (root->left && root->left->priority > root->priority){
                 rotacionaDir(&root);
@@ -349,6 +351,7 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
             }
         } else {
             root->right = insertSmuT_aux(root->right, new, t);
+
             // Após a inserção recursiva, a propriedade do heap deve ser verificada.
             if (root->right && root->right->priority > root->priority){
                 rotacionaEsq(&root);
