@@ -15,6 +15,7 @@ typedef struct{
     double x, y, w, h;
 }BB;
 
+
 typedef struct node_internal{
     //ancoras do nó
     double x;
@@ -377,7 +378,7 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
 }
 
 //aux
-node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_internal **resultRef, double x, double y){
+node_internal *getNodeSmuT_aux_original(SmuTreap_internal *t, node_internal* root, node_internal **resultRef, double x, double y){
     if(root == NULL){
         fprintf(stderr, "(getNodeSmuT_aux) Erro: no' nao encontrado. Encerrando programa...\n");
         exit (1); // Se retornasse NULL, a arvore seria destruida.
@@ -427,16 +428,16 @@ node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_i
     }
 
     if(podeIrDireita){
-        root->right = getNodeSmuT_aux(t, root->right, resultRef, x, y);
+        root->right = getNodeSmuT_aux_original(t, root->right, resultRef, x, y);
     } else{
-        root->left = getNodeSmuT_aux(t, root->left, resultRef, x, y);
+        root->left = getNodeSmuT_aux_original(t, root->left, resultRef, x, y);
     }
 
     printf("(getNodeSmuT_aux) No NAO FOI encontrado!\n");
     return root;
 }
 
-Node getNodeSmuT(SmuTreap t, double x, double y){
+Node getNodeSmuT_original(SmuTreap t, double x, double y){
     if(!t){
         fprintf(stderr, "(getNodeSmuT) Erro: ponteiro para arvore invalido.");
         return NULL;
@@ -445,10 +446,52 @@ Node getNodeSmuT(SmuTreap t, double x, double y){
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
     node_internal *result = NULL;
 
-    t_i->root = getNodeSmuT_aux(t_i, t_i->root, &result, x, y);
+    t_i->root = getNodeSmuT_aux_original(t_i, t_i->root, &result, x, y);
     //ENCONTRADO O ERRO: COORDENADA DO NO ENCONTRADO MUDA EM getNodeSmuT_aux;
     //printf("\nDEBUG (getNodeSmuT) coord_x = %lf, coord_y = %lf\n", result->x, result->y);
     return result;
+}
+
+Node getNodeSmuT(SmuTreap t, double x, double y) {
+    if (!t) {
+        fprintf(stderr, "(getNodeSmuT) Erro: ponteiro para arvore invalido.\n");
+        return NULL;
+    }
+
+    SmuTreap_internal *t_i = (SmuTreap_internal *)t;
+    node_internal *current = t_i->root;
+    node_internal *found_node = NULL;
+
+
+    while (current != NULL) {
+        bool xDentroDeEpsilon = fabs(x - current->x) < t_i->epsilon;
+        bool yDentroDeEpsilon = fabs(y - current->y) < t_i->epsilon;
+
+        if (xDentroDeEpsilon && yDentroDeEpsilon) {
+            found_node = current;
+            break; // Nó encontrado, sai do laço.
+        }
+
+        bool podeIrDireita = (x > (current->x + t_i->epsilon)) || (xDentroDeEpsilon && (y > (current->y + t_i->epsilon)));
+        current = podeIrDireita ? current->right : current->left;
+    }
+
+    if (found_node){
+        found_node->hitCountCounter++;
+
+        if (found_node->hitCountCounter >= t_i->hitCountConfig) {
+            promoteNodeSmuT(t, (Node)found_node, t_i->promoRateConfig);
+
+            // IMPORTANTE: A promoção recria o nó, invalidando o ponteiro 'found_node'.
+            // Chamamos a função novamente para buscar o novo ponteiro válido,
+            // garantindo que o chamador receba um ponteiro seguro.
+            return getNodeSmuT(t, x, y);
+        }
+        return (Node)found_node; // Retorna o nó encontrado.
+    }
+
+    fprintf(stderr, "(getNodeSmuT) Erro: no' nao encontrado.");
+    return NULL;
 }
 
 //aux
