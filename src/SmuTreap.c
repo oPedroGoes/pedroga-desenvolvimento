@@ -335,9 +335,26 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
             root->right->dad = root;
         }
     } else{
-        fprintf(stderr, "\n\n\n(insertSmuT_aux) Erro: no' ja' existente.\n\n\n");
-        if (new) free(new);
-        return root;
+        int id_new = get_idF(new->info, new->descritor);
+        int id_root = get_idF(root->info, root->descritor);
+
+        // Usa o id da forma como critério de desempate.
+        if (id_new < id_root) {
+            root->left = insertSmuT_aux(root->left, new, t);
+            
+            // Após a inserção recursiva, a propriedade do heap deve ser verificada.
+            if (root->left && root->left->priority > root->priority){
+                rotacionaDir(&root);
+                if(root->right) root->right->dad = root; // Atualiza o pai do nó que desceu
+            }
+        } else {
+            root->right = insertSmuT_aux(root->right, new, t);
+            // Após a inserção recursiva, a propriedade do heap deve ser verificada.
+            if (root->right && root->right->priority > root->priority){
+                rotacionaEsq(&root);
+                if(root->left) root->left->dad = root; // Atualiza o pai do nó que desceu
+            }
+        }
     }
 
     if(root) atualizaBB_subtree(root);
