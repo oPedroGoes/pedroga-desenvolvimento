@@ -31,21 +31,14 @@
   srand(time(NULL));
   int *prioMax = NULL, *hc = NULL;
   double *promoRate = NULL;
-  
-  /* MOSTRA OS PARAMETROS */
-  printf("Numero de argumentos: %d\n", argc);
-  for(int k= 0; k< argc; k++){ // Usei k para não conflitar com i abaixo
-    printf("argv[%d] = %s\n",k,argv[k]);
-  }
-  printf("\n");
 
   int i = 1;
   while (i < argc){
     if (strcmp(argv[i], "-e") == 0){
-        printf("\n lendo parametro -e... ");
+        printf("lendo parametro -e...\n");
         i++;
         if (i >= argc){
-          printf("\nERRO: falta parametro para -e."); 
+          printf("\nERRO: falta parametro para -e.\n"); 
           goto frees_and_exit;
         }
         trataPath(&dirEntrada, argv[i]);
@@ -55,10 +48,10 @@
         }
     }
     else if (strcmp(argv[i], "-f") == 0){
-        printf("\n lendo parametro -f... ");
+        printf("lendo parametro -f...\n");
         i++;
         if (i >= argc){
-          printf("\nERRO: falta parametro para -f.");
+          printf("\nERRO: falta parametro para -f.\n");
           goto frees_and_exit;
         }
         trataNomeArquivo(&nomeGeo, argv[i]);
@@ -67,10 +60,10 @@
           goto frees_and_exit;
         }
     } else if (strcmp(argv[i], "-q") == 0){
-        printf("\n lendo parametro -q... ");
+        printf("lendo parametro -q...\n");
         i++;
         if (i >= argc){
-          printf("\nERRO: falta parametro para -q.");
+          printf("\nERRO: falta parametro para -q.\n");
           goto frees_and_exit;
         }
         trataNomeArquivo(&nomeQry, argv[i]);
@@ -79,10 +72,10 @@
           goto frees_and_exit;
         }
     } else if (strcmp(argv[i], "-o") == 0){
-        printf("\n lendo parametro -o... ");
+        printf("lendo parametro -o...\n");
         i++;
         if (i >= argc){
-          printf("\nERRO: falta parametro para -o.");
+          printf("\nERRO: falta parametro para -o.\n");
           goto frees_and_exit;
         }
         trataPath(&dirSaida, argv[i]);
@@ -91,10 +84,10 @@
           goto frees_and_exit;
         }
     } else if (strcmp(argv[i], "-p") == 0){ // prioMax (int)
-        printf("\n lendo parametro -p (prioMax)... ");
+        printf("lendo parametro -p (prioMax)...\n");
         i++;
         if (i >= argc){
-          printf("\nERRO: falta parametro para -p.");
+          printf("\nERRO: falta parametro para -p.\n");
           goto frees_and_exit;
         }
         trataParamNumericoInt(&prioMax, argv[i]);
@@ -103,10 +96,10 @@
           /* Pode decidir sair ou continuar com prioMax=NULL */
         }
       } else if (strcmp(argv[i], "-hc") == 0){ // hc (int)
-        printf("\n lendo parametro -hc... ");
+        printf("lendo parametro -hc...\n");
         i++;
         if (i >= argc){
-          printf("\nERRO: falta parametro para -hc.");
+          printf("\nERRO: falta parametro para -hc.\n");
           goto frees_and_exit;
         }
         trataParamNumericoInt(&hc, argv[i]);
@@ -114,10 +107,10 @@
           fprintf(stderr, "\nFalha ao processar -hc.\n");
         }
       } else if (strcmp(argv[i], "-pr") == 0){ // promoRate (float)
-        printf("\n lendo parametro -pr (promoRate)... ");
+        printf("lendo parametro -pr (promoRate)...\n");
         i++;
         if (i >= argc){
-          printf("\nERRO: falta parametro para -pr.");
+          printf("\nERRO: falta parametro para -pr.\n");
           goto frees_and_exit;
         }
         trataParamNumericoDouble(&promoRate, argv[i]);
@@ -145,7 +138,7 @@
   printf("fullNomeGeo    = %s\n", fullNomeGeo   ? fullNomeGeo    : "(null ou falha)");
   printf("fullNomeTxt    = %s\n", fullNomeTxt   ? fullNomeTxt    : "(null ou falha)");
   if (prioMax != NULL) {
-    printf("\nprioMax = %d\n", *prioMax);
+    printf("prioMax = %d\n", *prioMax);
   } else {
     printf("prioMax = (nao definido ou falha)\n");
   }

@@ -135,6 +135,7 @@ void visitaListaSvg(Item anotacao, void *aux){
 
     const char *buff = (const char*)anotacao;
     fprintf(arqSvg2, "%s/n", buff);
+    return;
 }
 
 
@@ -858,12 +859,12 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
     char *comm = (char*)malloc(sizeof(char)*7);
 
     while (fgets(str, 1024, arqQry)) {
-        printf("tamanho str = %ld\n", strlen(str));
+        //printf("tamanho str = %ld\n", strlen(str));
         // Remover nova linha do final, se houver
         str[strcspn(str, "\n")] = 0;
         str[strcspn(str, "\r")] = 0; // Para compatibilidade Windows/Linux
         
-        printf("str ANTES = %s\n\n", str);
+        //printf("str ANTES = %s\n\n", str);
         sscanf(str, "%7s", comm);
 
 
@@ -941,16 +942,16 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
 
 SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, 
                         Lista lista_anotacoes_svg /*int idUltimaForma?*/){
-    printf("SmuTreap = %p\npathQry = %s\npathSaida = %s\nnomeQry = %s\narray_anotacoes = %p\nlista_anotacoes_svg = %p\n", t, pathQry, pathSaida, nomeQry, array_anotacoes, lista_anotacoes_svg);
+    //printf("SmuTreap = %p\npathQry = %s\npathSaida = %s\nnomeQry = %s\narray_anotacoes = %p\nlista_anotacoes_svg = %p\n", t, pathQry, pathSaida, nomeQry, array_anotacoes, lista_anotacoes_svg);
     if(!pathQry || !pathSaida || !nomeQry || !array_anotacoes || !lista_anotacoes_svg){
-        fprintf(stderr, "(processa_qry) Erro: parametros invalidos.");
+        fprintf(stderr, "\n(processa_qry) Erro: parametros invalidos.\n");
         return NULL;
     }
 
 
     FILE *arqQry = fopen(pathQry, "r");
     if (!arqQry){
-        fprintf(stderr, "(processa_qry) Erro: falha ao abrir arquivo qry.");
+        fprintf(stderr, "\n(processa_qry) Erro: falha ao abrir arquivo qry.\n");
         exit (1);
     }
 
@@ -963,7 +964,7 @@ SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, co
         strncpy(nomeBaseQry, nomeQry, lenNomeQry - 4); // Copia a parte antes de ".geo"
         nomeBaseQry[lenNomeQry - 4] = '\0';
     } else {
-        fprintf(stderr, "(processa_qry) Erro: erro ao tratar nomeQry.");
+        fprintf(stderr, "\n(processa_qry) Erro: erro ao tratar nomeQry.\n");
         fclose(arqQry);
         exit(1);
     }
@@ -972,14 +973,14 @@ SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, co
     int chars_escritos_svg2 = snprintf(nome_saidasvg2, sizeof(nome_saidasvg2), "%s/%s.svg", pathSaida, nomeBaseQry);
 
 if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
-    fprintf(stderr, "Alerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
+    fprintf(stderr, "\nAlerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
     exit(1);
 }
-    printf("Diretório do arquivo svg2: %s\n", nome_saidasvg2);
+    printf("\nDiretório do arquivo svg2: %s\n", nome_saidasvg2);
 
     FILE* saidaSvg2 = fopen(nome_saidasvg2, "w");
     if (saidaSvg2 == NULL) {
-        fprintf(stderr, "(processa_qry) Erro na criação do arquivo SVG: %s\n", nome_saidasvg2);
+        fprintf(stderr, "\n(processa_qry) Erro na criação do arquivo SVG: %s\n", nome_saidasvg2);
         fclose(arqQry);
         exit(1);
     }
@@ -993,14 +994,14 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
     int chars_escritos_Txt = snprintf(nome_saidaTxt, sizeof(nome_saidaTxt), "%s/%s.txt", pathSaida, nomeBaseQry);
 
     if(chars_escritos_Txt >= (int)sizeof(nome_saidaTxt)){
-        fprintf(stderr, "Alerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
+        fprintf(stderr, "\nAlerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
         exit(1);
     }
     printf("Diretório do arquivo stxt: %s\n", nome_saidaTxt);
 
     FILE* saidaTxt = fopen(nome_saidaTxt, "w");
     if (saidaTxt == NULL) {
-        fprintf(stderr, "Erro na criação do arquivo txt: %s\n", nome_saidaTxt);
+        fprintf(stderr, "\nErro na criação do arquivo txt: %s\n", nome_saidaTxt);
         fclose(arqQry);
         fclose(saidaSvg2);
         exit(1);
@@ -1014,6 +1015,7 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
     visitaProfundidadeSmuT(t, escreverFormaSvg1, (void *)saidaSvg2);
 
     // Escreve as anotacoes no svg 2.
+    printf("(processa_qry)\n");
     percorreLista(lista_anotacoes_svg, visitaListaSvg, (void*)saidaSvg2);
 
     fprintf(saidaSvg2, "</svg>\n");

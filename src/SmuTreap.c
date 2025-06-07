@@ -364,7 +364,7 @@ Node insertSmuT(SmuTreap t, double x, double y, Info i, DescritorTipoInfo d, FCa
     
 
     int prioridade = rand() % (t_i->prioMax + 1);
-    printf("prioridade = %d\n", prioridade);
+    //printf("prioridade = %d\n", prioridade);
 
     node_internal *new = (node_internal*)newNode(x, y, prioridade, i, d, fCalcBb);
     if (!new) return NULL;
@@ -406,6 +406,8 @@ node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_i
             if(root->hitCountCounter >= t->hitCountConfig){
                 promoteNodeSmuT(t, (Node)root, t->promoRateConfig);
             }
+            printf("(getNodeSmuT_aux) No LINHA encontrado!\n");
+            printf("\nDEBUG DEPOIS (getNodeSmuT) coord_x = %lf, coord_y = %lf\n", root->x, root->y);
             *resultRef = root;
             return root;
         }
@@ -417,20 +419,12 @@ node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_i
             if(root->hitCountCounter >= t->hitCountConfig){
                 promoteNodeSmuT(t, (Node)root, t->promoRateConfig);
             }
+            printf("(getNodeSmuT_aux) No qualquer encontrado!\n");
             *resultRef = root;
+            printf("\nDEBUG DEPOIS (getNodeSmuT) coord_x = %lf, coord_y = %lf\n", (*resultRef)->x, (*resultRef)->y);
             return root;
         }
     }
-
-    if (xDentroDeEpsulon && yDentroDeEpsulon){ // Encontrou!
-        root->hitCountCounter++;
-
-        if(root->hitCountCounter >= t->hitCountConfig){
-            promoteNodeSmuT(t, (Node)root, t->promoRateConfig);
-        }
-        *resultRef = root;
-        return root;
-    } else 
 
     if(podeIrDireita){
         root->right = getNodeSmuT_aux(t, root->right, resultRef, x, y);
@@ -438,6 +432,7 @@ node_internal *getNodeSmuT_aux(SmuTreap_internal *t, node_internal* root, node_i
         root->left = getNodeSmuT_aux(t, root->left, resultRef, x, y);
     }
 
+    printf("(getNodeSmuT_aux) No NAO FOI encontrado!\n");
     return root;
 }
 
@@ -448,10 +443,11 @@ Node getNodeSmuT(SmuTreap t, double x, double y){
     }
 
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
-    node_internal *result;
+    node_internal *result = NULL;
 
     t_i->root = getNodeSmuT_aux(t_i, t_i->root, &result, x, y);
-
+    //ENCONTRADO O ERRO: COORDENADA DO NO ENCONTRADO MUDA EM getNodeSmuT_aux;
+    //printf("\nDEBUG (getNodeSmuT) coord_x = %lf, coord_y = %lf\n", result->x, result->y);
     return result;
 }
 
@@ -799,7 +795,6 @@ void getInfosDentroRegiaoSmuT_aux(SmuTreap t, node_internal *root, double rx1, d
     if (!retangulos_interceptam(root_x_min, root_y_min, root_x_max, root_y_max, rx1, ry1, rx2, ry2)) { // Poda quando se deve, para otimizar a busca
         return;
     }
-
     if(f(t, (Node)root, root->info, rx1, ry1, rx2, ry2)) insereNaLista(L, (Item)root);
 
     // Se nao e' no' folha, anda na arvore.

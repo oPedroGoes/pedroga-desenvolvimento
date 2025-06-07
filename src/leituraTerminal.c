@@ -201,7 +201,7 @@ void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
 char *removeIndicadorArq(char *dest, const char *src){
   if(!dest || !src){
     fprintf(stderr, "(removeIndicadorArq) Erro: parametros invalidos.\n");
-    return;
+    return NULL;
   }
   int lenSrc = strlen(src);
 
@@ -218,8 +218,8 @@ char *removeIndicadorArq(char *dest, const char *src){
 
 // Pode ser modularizada para .dot, .svg e o outro la kk
 void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
-  if(*pathOut || *nomeGeo || *nomeQry || **arqTxt){
-    fprintf(stderr, "(trataArqTxt) Erro: parametros invalidos.\n");
+  if(!pathOut || !nomeGeo || !nomeQry || !arqTxt){
+    fprintf(stderr, "\n(trataArqTxt) Erro: parametros invalidos.\n");
     return;
   }
     char nomeBaseGeo[512], nomeBaseQry[512]; // Buffers para os nomes base

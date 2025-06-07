@@ -1,10 +1,15 @@
-comando para rodar: ./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q blow.qry -p 1000 -hc 10 -pr 1.20
+comando para rodar: ./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q 00-vaso-simples/selrTest.qry -p 1000 -hc 10 -pr 1.20
  
 
 ./bin/teste -e home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/src/entradas -f arqGeo.geo -o home/pedro/estrutur
 a_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/src/saidas/ -q arqQry.qry -p 1000 -hc 10 -pr 1.20
 
+comando para rodar selrTest: 
+./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-selrTest.qry -p 1000 -hc 10 -pr 1.20
 
+
+comando para rodar seliTest: 
+./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-seliTest.qry -p 1000 -hc 10 -pr 1.20
 
 
 //-------------------------------------------------------------DEBUG SVG----------------------------------------------------------------------------//
@@ -28,3 +33,11 @@ a_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/src/saidas/ -q arqQry.qry -
 
 !!!!!!!!!!!!!!!!!!!!!!ARRUMAR SELR!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!ARRUMAR PRINT DE ANCORAS NAS LINHAS PARA SELR E SELI!!!!!!!!!!!!!!!!!!!!!!
+
+
+printfs para debug:
+
+SmuTreap.c 367 - printa prioridade
+processaGeo a partir do while - multiplos prints de str lida.
+processaQry 944 - printa os parametros recebidos na funcao processa_qry.
+processaQry a partir do while - um printa tamanho da linha lida; um printa linha lida.

@@ -160,19 +160,26 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
 
 void processaNoParaSaidaSeli(Item item_node, void *aux_context){
     if(!item_node || !aux_context){
-        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: parametros invalidos.");
+        fprintf(stderr, "\n(processaNoParaSaidaSeli) Erro: parametros invalidos.\n");
         return;
     }
+    printf("DEBUG (processaNoParaSaidaSeli) item = %p\n", item_node);
 
     qryContext* context = (qryContext*)aux_context;
     Node nd = (Node)item_node; // O Item da lista é o Node da SmuTreap
     Info forma = getInfoSmuT(context->tree, nd);
     DescritorTipoInfo tipo = getTypeInfoSmuT(context->tree, nd);
+    printf("DEBUG (processaNoParaSaidaSeli) tipo = %d\n", tipo);
+
+    double x1_DEBUG, y1_DEBUG, x2_DEBUG, y2_DEBUG;
+    int contaAncora = get_anchorF(forma, tipo, &x1_DEBUG, &y1_DEBUG, &x2_DEBUG, &y2_DEBUG);
+    printf("DEBUG (processaNoParaSaidaSeli) contaAncora = %d x1 = %lf, y1 = %lf, x2 = %lf, y2 = %lf\n", contaAncora, x1_DEBUG, y1_DEBUG, x2_DEBUG, y2_DEBUG);
 
     double xa, ya; // Âncora da FORMA para o círculo SVG
     double xl, yl; // Equivalentes para x2 e y2 para linhas.
 
     int id_forma = get_idF(forma, tipo);
+    printf("\nDEBUG (processaNoParaSaidaSeli) id_forma = %d", id_forma);
     const char *nome_forma = get_NameStrF(tipo);
 
     int ancoraCount = get_anchorF(forma, tipo, &xa, &ya, &xl, &yl);
@@ -183,14 +190,16 @@ void processaNoParaSaidaSeli(Item item_node, void *aux_context){
     // Adicionar anotação para SVG: pequena circunferência vermelha na âncora da forma
     char* anota_ancora_svg = (char*)malloc(200 * sizeof(char));
     if(!anota_ancora_svg){
-        fprintf(stderr, "(processaNoParaSaidaSeli) Erro: falha ao alocar memoria.");
+        fprintf(stderr, "\n(processaNoParaSaidaSeli) Erro: falha ao alocar memoria.\n");
         return;
     } 
 
     if(ancoraCount == 2){
         sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />\n<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya, xl, yl);
+        printf("\nInserindo anotacao na lista_anotacoes_svg para seli...\n");
         insereNaLista(context->lista_anotacoes_svg, (Item)anota_ancora_svg);
     } else if(ancoraCount == 1){
+        printf("\nInserindo anotacao na lista_anotacoes_svg para seli...\n");
         sprintf(anota_ancora_svg, "<circle cx=\"%.2f\" cy=\"%.2f\" r=\"2\" fill=\"red\" />", xa, ya);
         insereNaLista(context->lista_anotacoes_svg, (Item)anota_ancora_svg); 
     } else return;
@@ -199,16 +208,19 @@ void processaNoParaSaidaSeli(Item item_node, void *aux_context){
 }
 
 void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
+    
     if(!ctxt){
-        fprintf(stderr, "(hanfle_selr) Erro: parametro invalido.\n");
+        fprintf(stderr, "\n(hanfle_selr) Erro: parametro invalido.\n");
         return;
     }
+
+    printf("\nProcessando comando seli: n=%d, x=%.2f, y=%.2f\n", n_id_selecao, sel_x, sel_y);
 
     qryContext *contexto = (qryContext*)ctxt;
 
     // Escreve o comando original no arquivo TXT
     fprintf(contexto->arqTxt, "[*] seli %d %.2f %.2f\n", n_id_selecao, sel_x, sel_y);
-    printf("Processando comando seli: n=%d, x=%.2f, y=%.2f\n", n_id_selecao, sel_x, sel_y);
+
 
     Lista formasEncontradas_seli = criaLista();
     if (!formasEncontradas_seli) {
@@ -234,14 +246,13 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
     fclose(debug_svg);
 
 //--------------------------------------------------------------------------------------------------------------------------------------------------*/
-
+    printf("DEBUG ANTES (handle_seli) sel_x = %lf, sel_y = %lf\n", sel_x, sel_y);
     Node no_encontrado = getNodeSmuT(contexto->tree, sel_x, sel_y); // Como getNode tem impacto sobre a prioridade, optei por faze-lo apenas se tudo estiver valido.
     if(!no_encontrado){
-        fprintf(contexto->arqTxt, "Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
+        fprintf(contexto->arqTxt, "(seli) Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
         return;  // A mensagem já aparece de getNode.  
-    } 
+    }
     insereNaLista(formasEncontradas_seli, (Item)no_encontrado);
-
 
 
     // Adiciona a lista no array de selecoes se o id selecionado for valido.
@@ -277,6 +288,8 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
         return;
     }
 
+
+    printf("Processando saida para seli.\n");
     percorreLista(formasEncontradas_seli, processaNoParaSaidaSeli, contexto);
     return;
 }
