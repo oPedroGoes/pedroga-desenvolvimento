@@ -335,7 +335,7 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
             root->right->dad = root;
         }
     } else{
-        fprintf(stderr, "(insertSmuT_aux) Erro: no' ja' existente.");
+        fprintf(stderr, "\n\n\n(insertSmuT_aux) Erro: no' ja' existente.\n\n\n");
         if (new) free(new);
         return root;
     }
