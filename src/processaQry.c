@@ -1015,7 +1015,6 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
     visitaProfundidadeSmuT(t, escreverFormaSvg1, (void *)saidaSvg2);
 
     // Escreve as anotacoes no svg 2.
-    printf("(processa_qry)\n");
     percorreLista(lista_anotacoes_svg, visitaListaSvg, (void*)saidaSvg2);
 
     fprintf(saidaSvg2, "</svg>\n");

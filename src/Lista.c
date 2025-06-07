@@ -61,7 +61,6 @@ bool insereNaLista(Lista l, Item item) {
         return false;
     }
     novoNo->item = item;
-    printf("DEBUG    (insereNaLista) novoNo->item = %p\n", novoNo->item);
     novoNo->prox = NULL;
 
     if (li->primeiro == NULL) { // Lista estava vazia

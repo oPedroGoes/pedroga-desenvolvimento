@@ -43,6 +43,7 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
 //------------------------------------------------------------HANDLE_SELR----------------------------------------------------------------//
 
 void processaNoParaSaidaSelr(Item item_node, void *aux_context){
+    printf("\n\n Entrando em processaNoParaSaidaSelr...\n");
     if(!item_node || !aux_context){
         fprintf(stderr, "(processaNoParaSaidaSelr) Erro: parametros invalidos.");
         return;
@@ -130,7 +131,7 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
         fprintf(contexto->arqTxt, "Nenhuma forma inteiramente contida na regiao especificada.\n");
     } else {
         // Percorre a lista de nós selecionados para gerar saída TXT e anotações SVG
-        percorreLista(formasEncontradas_selr, processaNoParaSaidaSelr, &contexto);
+        percorreLista(formasEncontradas_selr, processaNoParaSaidaSelr, contexto);
     }
 
     // Adiciona anotação SVG para o retângulo de seleção
@@ -159,6 +160,7 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
 //------------------------------------------------------------HANDLE_SELI----------------------------------------------------------------//
 
 void processaNoParaSaidaSeli(Item item_node, void *aux_context){
+    printf("\n\n Entrando em processaNoParaSaidaSeli...\n");
     if(!item_node || !aux_context){
         fprintf(stderr, "\n(processaNoParaSaidaSeli) Erro: parametros invalidos.\n");
         return;

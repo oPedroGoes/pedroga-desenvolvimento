@@ -73,6 +73,7 @@ int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, doub
 
 // Função de callback para getInfosDentroRegiaoSmuT: verifica se uma forma está totalmente contida na região
 bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2){
+    printf("\n\n Entrando em formaTotalmenteContidaCallback...\n");
     DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n_node);
 
     if (tipo_forma == TIPO_CIRCULO || tipo_forma == TIPO_RETANGULO || tipo_forma == TIPO_TEXTO || tipo_forma == TIPO_LINHA ){
@@ -84,6 +85,11 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
 
     double fxMax = fx + fw;
     double fyMax = fy + fh;
+
+        if(retanguloInternoRetangulo(fy, fx, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2)){
+            const char *nomeForma_DEBUG = get_NameStrF(tipo_forma);
+            printf("DEBUG (formaTotalmenteContidaCallback) Forma contida = %s\n", nomeForma_DEBUG);
+        }
 
     return (retanguloInternoRetangulo(fy, fx, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2));
     } else return false; // Tipo desconhecido.
