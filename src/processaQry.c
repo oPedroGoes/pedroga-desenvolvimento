@@ -770,7 +770,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             char cb[50], cp[50];
             // Formato: cmflg id corBorda corPreenchimento larguraPx
             if (sscanf(str, "cmflg %d %s %s %d", &id, cb, cp, &w_px) == 4) {
-                //handle_cmflg(t, pathTxt, id, cb, cp, w_px);
+                handle_cmflg(con, id, cb, cp, w_px);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para cmflg\n", str);
             }
