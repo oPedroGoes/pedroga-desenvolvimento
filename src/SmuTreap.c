@@ -297,6 +297,34 @@ void rotacionaEsq(node_internal **rootRef){
 }
 
 //aux
+void killInfo(Info info, DescritorTipoInfo descritor){
+    if (!info || !descritor){
+        fprintf(stderr, "(killInfo) Erro: parametros invalidos.");
+        return ;
+    }
+
+    switch (descritor)
+    {
+    case TIPO_CIRCULO:
+        kill_circ((CIRCLE) info);
+        break;
+    
+    case TIPO_RETANGULO:
+        kill_rectangle((RECTANGLE) info);
+        break;
+
+    case TIPO_TEXTO:
+        kill_texto((TEXTO) info);
+        break;
+
+    default:
+        kill_linha((LINHA) info);
+        break;
+    }
+}
+
+
+//aux
 node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_internal *t){
     double epsilon_i = t->epsilon;
     if(!root){
@@ -348,21 +376,31 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
 
         // Usa o id da forma como critério de desempate.
         if (id_new < id_root) {
-            root->left = insertSmuT_aux(root->left, new, t);
+            if (root->left) root->left = insertSmuT_aux(root->left, new, t);
 
             // Após a inserção recursiva, a propriedade do heap deve ser verificada.
             if (root->left && root->left->priority > root->priority){
                 rotacionaDir(&root);
                 if(root->right) root->right->dad = root; // Atualiza o pai do nó que desceu
             }
-        } else {
+        } else if(id_new > id_root){
             root->right = insertSmuT_aux(root->right, new, t);
+            if (root->right) root->right->dad = root;
 
             // Após a inserção recursiva, a propriedade do heap deve ser verificada.
             if (root->right && root->right->priority > root->priority){
                 rotacionaEsq(&root);
                 if(root->left) root->left->dad = root; // Atualiza o pai do nó que desceu
             }
+        } else{
+            // Um nó com a mesma âncora E o mesmo ID já existe
+            fprintf(stderr, "ERRO (insertSmuT): Tentativa de inserir no com ID %d e ancora (%.2f, %.2f) duplicados.\n", id_new, new->x, new->y);
+            
+            killInfo(new->info, new->descritor);
+            free(new);
+            
+            exit(1);
+            return root;
         }
     }
 
@@ -594,33 +632,6 @@ DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n){
     }
     node_internal *ni = (node_internal*)n;
     return ni->descritor;
-}
-
-//aux
-void killInfo(Info info, DescritorTipoInfo descritor){
-    if (!info || !descritor){
-        fprintf(stderr, "(killInfo) Erro: parametros invalidos.");
-        return ;
-    }
-
-    switch (descritor)
-    {
-    case TIPO_CIRCULO:
-        kill_circ((CIRCLE) info);
-        break;
-    
-    case TIPO_RETANGULO:
-        kill_rectangle((RECTANGLE) info);
-        break;
-
-    case TIPO_TEXTO:
-        kill_texto((TEXTO) info);
-        break;
-
-    default:
-        kill_linha((LINHA) info);
-        break;
-    }
 }
 
 void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
