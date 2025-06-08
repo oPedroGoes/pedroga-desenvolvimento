@@ -99,6 +99,20 @@
     char* get_ancoraT(TEXTO t);
 
     /**
+    * @brief Pega por meio de um TAD a largura da borda do texto.
+    * @param t Estrutura do texto para pegar a informação.
+    * @return Retorna um double com a largura da borda.
+    */
+    double get_strkWT(TEXTO t);
+
+    /**
+    * @brief Muda a largura da borda do texto.
+    * @param t Estrutura do texto que vai ter a largura da borda mudada.
+    * @param sw Nova largura da borda.
+     */
+    void set_strkWT(TEXTO t, double sw);
+
+    /**
      * 
      * @brief Pegar por meio de um TAD o texto em si da estrutura texto
      * 

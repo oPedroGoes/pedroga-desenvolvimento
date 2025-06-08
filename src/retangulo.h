@@ -22,6 +22,20 @@
     char* get_cpR(RECTANGLE r);
     void set_cpR(RECTANGLE r, char* cp);
 
+    /**
+    * @brief Pega por meio de um TAD a largura da borda do retangulo.
+    * @param r Estrutura do retangulo para pegar a informação.
+    * @return Retorna um double com a largura da borda.
+    */
+    double get_strkWR(RECTANGLE r);
+
+    /**
+    * @brief Muda a largura da borda do retangulo.
+    * @param r Estrutura do retangulo que vai ter a largura da borda mudada.
+    * @param sw Nova largura da borda.
+    */
+    void set_strkWR(RECTANGLE r, double sw);
+
     double get_wR(RECTANGLE r);
 
     double get_hR(RECTANGLE r);

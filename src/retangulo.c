@@ -8,6 +8,8 @@ typedef struct{
     double x, y;
     double w, h;
     char *corb, *corp;
+    double strokeWidth;
+
 }rectangle;
 
 RECTANGLE create_rectangle(int id, double x, double y, double w, double h, char* cb, char* cp){
@@ -37,6 +39,8 @@ RECTANGLE create_rectangle(int id, double x, double y, double w, double h, char*
         exit(1);
     }
     strcpy(r->corp, cp);
+
+    r->strokeWidth = 1.0;
 
 
     return r;
@@ -75,6 +79,24 @@ char* get_cbR(RECTANGLE r){
 char* get_cpR(RECTANGLE r){
     rectangle *r1=((rectangle*)r);
     return r1->corp;
+}
+
+double get_strkWT(RECTANGLE r) {
+    if(!r){
+        fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
+        return -1;
+    }
+    rectangle* r1 = (rectangle*)r;
+    return r1->strokeWidth;
+}
+
+void set_strkWT(RECTANGLE r, double sw) {
+    if(!r || sw < 0){
+        fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
+        return;
+    }
+    rectangle* r1 = (rectangle*)r;
+    if (r1) r1->strokeWidth = sw;
 }
 
 double get_areaR(RECTANGLE r){

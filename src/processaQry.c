@@ -32,8 +32,9 @@ void escreverFormaSvg1(SmuTreap t, Node n, Info i, double x_ancora_no, double y_
             double r_circ = get_rC(c);
             char *corb = get_cbC(c);
             char *corp = get_cpC(c);
+            double strokeWidth = get_strkWC(c);
 
-            fprintf(arq_svg, "\t<circle id=\"%d\" cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", id, xc, yc, r_circ, corb, corp);
+            fprintf(arq_svg, "\t<circle id=\"%d\" cx=\"%lf\" cy=\"%lf\" r=\"%lf\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%.2f\" fill-opacity=\"0.5\" />\n", id, xc, yc, r_circ, corb, corp, strokeWidth);
             break;
         }
         case TIPO_RETANGULO: {
@@ -45,8 +46,9 @@ void escreverFormaSvg1(SmuTreap t, Node n, Info i, double x_ancora_no, double y_
             double h = get_hR(r_fig); 
             char *corb = get_cbR(r_fig); 
             char *corp = get_cpR(r_fig); 
+            double strokeWidth = get_strkWR(r_fig);
 
-            fprintf(arq_svg, "\t<rect id=\"%d\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" fill-opacity=\"0.5\" />\n", id, xr, yr, w, h, corb, corp);
+            fprintf(arq_svg, "\t<rect id=\"%d\" x=\"%lf\" y=\"%lf\" width=\"%lf\" height=\"%lf\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%.2f\" fill-opacity=\"0.5\" />\n", id, xr, yr, w, h, corb, corp, strokeWidth);
             // Posicionar ID no centro da âncora original do projeto (canto inferior esquerdo) pode ser uma opção, ou no centro visual.
             // Para centro visual:
             break;
@@ -59,8 +61,9 @@ void escreverFormaSvg1(SmuTreap t, Node n, Info i, double x_ancora_no, double y_
             double x2 = get_X2L(l);
             double y2 = get_Y2L(l);
             char *cor = get_cL(l);
+            double strokeWidth = get_strkWL(l);
 
-            fprintf(arq_svg, "\t<line id=\"%d\" x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" stroke=\"%s\" stroke-width=\"1\" />\n",id, x1, y1, x2, y2, cor);
+            fprintf(arq_svg, "\t<line id=\"%d\" x1=\"%.2f\" y1=\"%.2f\" x2=\"%.2f\" y2=\"%.2f\" stroke=\"%s\" stroke-width=\"%.2f\" />\n",id, x1, y1, x2, y2, cor, strokeWidth);
             // O ID da linha será desenhado na âncora da árvore para esta linha (x_ancora_no, y_ancora_no)
             break;
         }
@@ -71,6 +74,7 @@ void escreverFormaSvg1(SmuTreap t, Node n, Info i, double x_ancora_no, double y_
             double yt = get_YT(txt_fig);
             char *corb = get_cbT(txt_fig);
             char *corp = get_cpT(txt_fig);
+            double strokeWidth = get_strkWT(txt_fig);
             char *ancora_svg = get_ancoraT(txt_fig); // Retorna "start", "middle", ou "end"
             char *conteudo_txt = get_txtT(txt_fig);
             char *ff = get_ffT(txt_fig);
@@ -79,8 +83,8 @@ void escreverFormaSvg1(SmuTreap t, Node n, Info i, double x_ancora_no, double y_
 
             // A cor da borda do texto em SVG é controlada por 'stroke', não 'fill' da borda.
             // O preenchimento do texto é 'fill'.
-            fprintf(arq_svg, "\t<text id=\"%d\" x=\"%.2f\" y=\"%.2f\" stroke=\"%s\" fill=\"%s\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%s\" text-anchor=\"%s\" dominant-baseline=\"middle\">",
-                    id, xt, yt, corb, corp, ff, fw, fs, ancora_svg);
+            fprintf(arq_svg, "\t<text id=\"%d\" x=\"%.2f\" y=\"%.2f\" stroke=\"%s\" fill=\"%s\" stroke-width=\"%.2f\" font-family=\"%s\" font-weight=\"%s\" font-size=\"%s\" text-anchor=\"%s\" dominant-baseline=\"middle\">",
+                    id, xt, yt, corb, corp, strokeWidth, ff, fw, fs, ancora_svg);
 
             // Itera pelo conteudo_txt e escapa os caracteres especiais
             if (conteudo_txt) {

@@ -8,6 +8,7 @@ typedef struct{
     double x, y;
     double r;
     char *corb, *corp;
+    double strokeWidth;
 }circle;
 
 CIRCLE create_circle(int id, double x, double y, double r, char* cb, char* cp){
@@ -28,6 +29,7 @@ CIRCLE create_circle(int id, double x, double y, double r, char* cb, char* cp){
     if(c->corp == NULL){printf("(create_circle) Erro: falha ao alocar memoria para corp."); exit(1);}
     strcpy(c->corp, cp);
 
+    c->strokeWidth = 1.0;
 
     return c;
 }
@@ -60,6 +62,24 @@ char* get_cbC(CIRCLE c){
 char* get_cpC(CIRCLE c){
     circle *c1=((circle*)c);
     return c1->corp;
+}
+
+double get_strkWC(CIRCLE c) {
+    if(!c){
+        fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
+        return -1;
+    }
+    circle* c1 = (circle*)c;
+    return c1->strokeWidth;
+}
+
+void set_strkWC(CIRCLE c, double sw) {
+    if(!c || sw < 0){
+        fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
+        return;
+    }
+    circle* c1 = (circle*)c;
+    if (c1) c1->strokeWidth = sw;
 }
 
 double get_areaC(CIRCLE c){

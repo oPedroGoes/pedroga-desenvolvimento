@@ -20,6 +20,20 @@ void set_cbC(CIRCLE c, char* cb);
 char* get_cpC(CIRCLE c);
 void set_cpC(CIRCLE c, char* cp);
 
+/**
+ * @brief Pega por meio de um TAD a largura da borda do circulo.
+ * @param c Estrutura do circulo para pegar a informação.
+ * @return Retorna um double com a largura da borda.
+ */
+double get_strkWC(CIRCLE c);
+
+/**
+ * @brief Muda a largura da borda do circulo.
+ * @param c Estrutura do circulo que vai ter a largura da borda mudada.
+ * @param sw Nova largura da borda.
+ */
+void set_strkWC(CIRCLE c, double sw);
+
 double get_areaC(CIRCLE c);
 
 double get_rC(CIRCLE c);

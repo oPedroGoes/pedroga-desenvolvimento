@@ -11,6 +11,7 @@ typedef struct{
     int id;
     double x, y;
     char *corb, *corp;
+    double strokeWidth;
     char a; //ancora do texto (inicio, meio e fim)
     char *texto;
     tipotxt ttxt;
@@ -38,6 +39,7 @@ TEXTO cria_texto(int id, double x, double y, char* cb, char* cp, char a, char* t
     }
     strcpy(t->corp, cp);
 
+    t->strokeWidth = 1.0;
     t->a=a;
     
     t->texto =(char*)malloc(sizeof(char)*(strlen(txt)+1));
@@ -92,6 +94,24 @@ char* get_cbT(TEXTO t){
 char* get_cpT(TEXTO t){
     texto *t1=((texto*)t);
     return t1->corp;
+}
+
+double get_strkWT(TEXTO t) {
+    if(!t){
+        fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
+        return -1;
+    }
+    texto* t1 = (texto*)t;
+    return t1->strokeWidth;
+}
+
+void set_strkWT(TEXTO t, double sw) {
+    if(!t || sw < 0){
+        fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
+        return;
+    }
+    texto* t1 = (texto*)t;
+    if (t1) t1->strokeWidth = sw;
 }
 
 char* get_ancoraT(TEXTO t){

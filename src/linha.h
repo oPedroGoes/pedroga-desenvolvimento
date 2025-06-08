@@ -81,6 +81,20 @@
     char* get_cL(LINHA l);
 
     /**
+    * @brief Pega por meio de um TAD a largura da linha.
+    * @param l Estrutura da linha para pegar a informação.
+    * @return Retorna um double com a largura da linha.
+    */
+    double get_strkWL(LINHA l);
+
+    /**
+    * @brief Muda a largura da linha.
+    * @param l Estrutura da linha que vai ter a largura mudada.
+    * @param sw Nova largura.
+    */
+    void set_strkWL(LINHA l, double sw);
+
+    /**
      * 
      * @brief Pegar por meio de um TAD a area da linha
      * 

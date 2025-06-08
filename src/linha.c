@@ -8,6 +8,7 @@ typedef struct{
     int id;
     double x1, y1, x2, y2;
     char *cor;
+    double strokeWidth;
 }linha;
 
 LINHA cria_linha(int id, double x1, double y1, double x2, double y2, char* c){
@@ -27,6 +28,7 @@ LINHA cria_linha(int id, double x1, double y1, double x2, double y2, char* c){
         exit(1);
     }
     strcpy(l->cor, c);
+    l->strokeWidth = 1.0;
     return l;
 }
 
@@ -58,6 +60,25 @@ double get_Y2L(LINHA l){
 char* get_cL(LINHA l){
     linha *l1=((linha*)l);
     return l1->cor;
+}
+
+double get_strkWL(LINHA l){
+    if(!l){
+        fprintf(stderr, "(get_strkWL) Erro: parametro invalido");
+        return -1;
+    }
+
+    linha *l1 = (linha*)l;
+    return l1->strokeWidth;
+}
+
+void ser_strkWL(LINHA l, double sw){
+    if(!l || sw < 0){
+        fprintf(stderr, "(ser_strkWL) Erro: parametro invalido");
+        return ;
+    }
+    linha *l1 = (linha*)l;
+    l1->strokeWidth = sw;
 }
 
 double get_areaL(LINHA l){
