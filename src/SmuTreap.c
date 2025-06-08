@@ -376,7 +376,9 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
 
         // Usa o id da forma como critério de desempate.
         if (id_new < id_root) {
-            if (root->left) root->left = insertSmuT_aux(root->left, new, t);
+            root->left = insertSmuT_aux(root->left, new, t);
+
+            if (root->left) root->left->dad = root;
 
             // Após a inserção recursiva, a propriedade do heap deve ser verificada.
             if (root->left && root->left->priority > root->priority){
@@ -385,6 +387,7 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
             }
         } else if(id_new > id_root){
             root->right = insertSmuT_aux(root->right, new, t);
+             
             if (root->right) root->right->dad = root;
 
             // Após a inserção recursiva, a propriedade do heap deve ser verificada.
