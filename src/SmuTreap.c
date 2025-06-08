@@ -546,6 +546,74 @@ Node recoverNodePostPromotion(SmuTreap t, double x, double y){ // Recovery do no
     return NULL;
 }
 
+//aux
+node_internal* removeNoSmuT_SemLiberarInfo_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
+    if (!root){
+        printf("(removeNoSmuT_aux) Erro: no nao encontrado.");
+        return NULL;
+    }
+    double epsilon_i = t->epsilon;
+
+    bool podeIrDireita = (n->x > root->x + epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y > root->y + epsilon_i));
+    bool podeIrEsquerda = (n->x < root->x - epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y < root->y - epsilon_i));
+
+    if (podeIrDireita){
+        root->right = removeNoSmuT_SemLiberarInfo_aux(t, root->right, n);
+    } else if(podeIrEsquerda){
+        root->left = removeNoSmuT_SemLiberarInfo_aux(t, root->left, n);
+    } else{ // Encontra o no' que se quer remover
+        // Aqui, ao que parece, a recomendacao é que se use uma flag bool que retorna true se o no'foi achado.
+
+        // Caso 1: no' folha.
+        if (!root->right && !root->left){
+            free(root);
+            return NULL;
+        }
+
+        // Caso 2: no' com apenas um filho.
+        else if(root->right == NULL){
+            node_internal *aux = root->left;
+            free(root);
+            return aux;
+        } else if(root->left == NULL){
+            node_internal *aux = root->right;
+            free(root);
+            return aux;
+        }
+
+        // Caso 3: no' com dois filhos
+        // Rotaciona o nó para baixo até que se torne uma folha ou tenha um filho,
+        // mantendo a propriedade de heap.
+        else{
+            if(root->right->priority > root->left->priority){
+                rotacionaEsq(&root);
+                root->right = removeNoSmuT_SemLiberarInfo_aux(t, root->right, n);
+            } else{
+                rotacionaDir(&root);
+                root->left = removeNoSmuT_SemLiberarInfo_aux(t, root->left, n);
+            }
+        }
+    }
+
+    if(root){
+        atualizaBB_subtree(root);
+    }
+
+    return root;
+}
+void removeNoSmuT_SemLiberarInfo(SmuTreap t, Node n){
+    if (!t || !n){
+        fprintf(stderr, "(removeNoSmuT) Erro: parametros invalidos.\n");
+        return;
+    }
+    
+    SmuTreap_internal *ti = (SmuTreap_internal*)t;
+    node_internal *ni = (node_internal*)n;
+
+    ti->root = removeNoSmuT_SemLiberarInfo_aux(ti, ti->root, ni);
+}
+
+
 void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
 
     if (!t || !n || promotionRate <= 0){
@@ -634,73 +702,6 @@ Node getNodeSmuT(SmuTreap t, double x, double y) {
     return NULL;
 }
 
-//aux
-node_internal* removeNoSmuT_SemLiberarInfo_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
-    if (!root){
-        printf("(removeNoSmuT_aux) Erro: no nao encontrado.");
-        return NULL;
-    }
-    double epsilon_i = t->epsilon;
-
-    bool podeIrDireita = (n->x > root->x + epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y > root->y + epsilon_i));
-    bool podeIrEsquerda = (n->x < root->x - epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y < root->y - epsilon_i));
-
-    if (podeIrDireita){
-        root->right = removeNoSmuT_SemLiberarInfo_aux(t, root->right, n);
-    } else if(podeIrEsquerda){
-        root->left = removeNoSmuT_SemLiberarInfo_aux(t, root->left, n);
-    } else{ // Encontra o no' que se quer remover
-        // Aqui, ao que parece, a recomendacao é que se use uma flag bool que retorna true se o no'foi achado.
-
-        // Caso 1: no' folha.
-        if (!root->right && !root->left){
-            free(root);
-            return NULL;
-        }
-
-        // Caso 2: no' com apenas um filho.
-        else if(root->right == NULL){
-            node_internal *aux = root->left;
-            free(root);
-            return aux;
-        } else if(root->left == NULL){
-            node_internal *aux = root->right;
-            free(root);
-            return aux;
-        }
-
-        // Caso 3: no' com dois filhos
-        // Rotaciona o nó para baixo até que se torne uma folha ou tenha um filho,
-        // mantendo a propriedade de heap.
-        else{
-            if(root->right->priority > root->left->priority){
-                rotacionaEsq(&root);
-                root->right = removeNoSmuT_SemLiberarInfo_aux(t, root->right, n);
-            } else{
-                rotacionaDir(&root);
-                root->left = removeNoSmuT_SemLiberarInfo_aux(t, root->left, n);
-            }
-        }
-    }
-
-    if(root){
-        atualizaBB_subtree(root);
-    }
-
-    return root;
-}
-void removeNoSmuT_SemLiberarInfo(SmuTreap t, Node n){
-    if (!t || !n){
-        fprintf(stderr, "(removeNoSmuT) Erro: parametros invalidos.\n");
-        return;
-    }
-    
-    SmuTreap_internal *ti = (SmuTreap_internal*)t;
-    node_internal *ni = (node_internal*)n;
-
-    ti->root = removeNoSmuT_SemLiberarInfo_aux(ti, ti->root, ni);
-}
-
 DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n){
     if (!n){
         fprintf(stderr, "(getTypeInfoSmuT) Erro: parametros invalidos");
@@ -717,28 +718,8 @@ void  killNode(node_internal *n){
         return ;
     }
 
-    switch (n->descritor)
-    {
-    case TIPO_CIRCULO:
-        kill_circ((CIRCLE) n->info);
-        free(n);
-        break;
-    
-    case TIPO_RETANGULO:
-        kill_rectangle((RECTANGLE) n->info);
-        free(n);
-        break;
-
-    case TIPO_TEXTO:
-        kill_texto((TEXTO) n->info);
-        free(n);
-        break;
-
-    default:
-        kill_linha((LINHA) n->info);
-        free(n);
-        break;
-    }
+    killF(n->info, n->descritor);
+    free(n);
 }
 
 //aux
@@ -1037,7 +1018,7 @@ bool getInfosAtingidoPontoSmuT(SmuTreap t, double x, double y, FpontoInternoAInf
 
             promoteNodeSmuT(t, (Node)n, t_i->promoRateConfig);
 
-            Node n_new = getNodeSmuT_aux(t, old_x, old_y); // Usa a função auxiliar
+            Node n_new = recoverNodePostPromotion(t, old_x, old_y); // Usa a função auxiliar
             if (n_new) {
                 insereNaLista(L, n_new);
             }
