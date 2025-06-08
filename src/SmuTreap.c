@@ -322,6 +322,9 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
         // Vai para a direita.
         root->right = insertSmuT_aux(root->right, new, t);
 
+        // Define o pai do novo nó.
+        if (root->right) root->right->dad = root;
+
         if(root->right->priority > root->priority){
             rotacionaEsq(&root);
             root->left->dad = root;
@@ -329,6 +332,9 @@ node_internal *insertSmuT_aux(node_internal *root, node_internal *new, SmuTreap_
     } else if (podeIrEsquerda){
         // Vai para a esquerda.
         root->left = insertSmuT_aux(root->left, new, t);
+
+        // Define o pai do novo nó.
+        if (root->left) root->left->dad = root;
                 
         if (root->left->priority > root->priority){
             rotacionaDir(&root);
