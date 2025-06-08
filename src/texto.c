@@ -136,7 +136,7 @@ int tamanho_dotextoT(TEXTO t){
 
 int comprimento_da_linhaT(TEXTO t){
     texto *t1=((texto*)t);
-    return 10*tamanho_dotextoT(t1);
+    return 12*tamanho_dotextoT(t1);
 }
 
 double get_eixoX1T(TEXTO t){
