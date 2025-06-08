@@ -310,7 +310,8 @@ if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
 
     // Popula a arvore t.
     leitura_geo(arqGeo, t, fCalcBB_individual, idMax);
-    *idMax++;
+    (*idMax)++;
+    printf("DEBUG (processa_geo) id_clone = %d\n", *idMax);
     printf("\nSucesso na populacao da arvore!\n");
 
     // Gera o SVG inicial percorrendo a SmuTreap

@@ -41,6 +41,7 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
     ctxt->lista_anotacoes_svg = lista_anotacoes_svg;
     ctxt->array_selecoes = array_selecoes;
     ctxt->idMax = idMax;
+    printf("DEBUG (iniciaContext) id_clone = %d\n", *idMax);
     ctxt->fCalcBB = fCalcBB;
 
     ctxt->dx = 0;
@@ -99,6 +100,7 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
     }
 
     qryContext *contexto = (qryContext*)ctxt;
+    printf("DEBUG (handle_selr) id_clone = %d\n", *(contexto->idMax));
 
     // Escreve o comando original no arquivo TXT
     fprintf(contexto->arqTxt, "[*] selr %d %.2f %.2f %.2f %.2f\n", selId, sel_x, sel_y, sel_w, sel_h);
@@ -151,7 +153,6 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
     } else{
         sprintf(anota_selec_r, "<rect x=\"%.2f\" y=\"%.2f\" width=\"%.2f\" height=\"%.2f\" stroke=\"red\" fill=\"none\" stroke-dasharray=\"5.5\" />",
                 sel_x, sel_y, sel_w, sel_h);
-
         insereNaLista(contexto->lista_anotacoes_svg, (Item)anota_selec_r);
     }
     // Nota: A lista 'formasEncontradas_selr' agora é de responsabilidade do 'array_selecoes[selId]'.
@@ -311,6 +312,7 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
 //------------------------------------------------------------HANDLE_CLN-----------------------------------------------------------------//
 
 void clonaEInsereCallback(Item item_origiNode, void *aux_context){
+    printf("Entrando em clonaEInsereCallback\n");
     if (!item_origiNode || !aux_context){
         fprintf(stderr, "(clonaEInsereCallback) Erro: parametros invalidos.\n");
         return;
@@ -323,6 +325,7 @@ void clonaEInsereCallback(Item item_origiNode, void *aux_context){
 
     int id_original = get_idF(info_original, tipo);
     int id_clone = *(context->idMax);
+    if(id_clone < 0) {printf("ide_clone eh menor que 1.\n"); exit(1);}
     Info info_clonada = NULL;
     double xAnch_clone, yAnch_clone;
 
@@ -391,7 +394,7 @@ void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy){
         return;
     }
 
-    printf("Processando comando cln: n=%d, dx=%.2lf, dy=%.2lf", n_id_selecao, dx, dy);
+    printf("Processando comando cln: n=%d, dx=%.2lf, dy=%.2lf\n", n_id_selecao, dx, dy);
 
     qryContext *contexto = (qryContext*)ctxt;
     fprintf(contexto->arqTxt, "[*] cln %d %.2f %.2f\n", n_id_selecao, dx, dy);
@@ -410,7 +413,7 @@ void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy){
 
     contexto->dx = dx;
     contexto->dy = dy;
-
+                        printf("DEBUGDEBUDEBUGDEBUG\n");
     percorreLista(cloneList, clonaEInsereCallback, contexto);
 }
 

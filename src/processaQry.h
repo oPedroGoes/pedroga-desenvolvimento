@@ -5,6 +5,6 @@
 #include "Lista.h"
 
 SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, 
-                        Lista lista_anotacoes_svg /*int idUltimaForma?*/);
+                        Lista lista_anotacoes_svg, int *idMax);
 
 #endif // PROCESSA_QRY_H
