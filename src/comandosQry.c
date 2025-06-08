@@ -12,7 +12,7 @@ typedef struct{
     // Para todos.
     FILE* arqTxt;
     SmuTreap tree;
-    int epsilon;
+    double epsilon;
     Lista lista_anotacoes_svg;
     Lista *array_selecoes;
     int *idMax;
@@ -35,7 +35,7 @@ void killAnotacaoCallback(char *anotacao){
     } else free(anotacao);
 }
 
-CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB, int epsilon){
+CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB, double epsilon){
     qryContext *ctxt = (qryContext*)malloc(sizeof(qryContext));
     if(!ctxt){
         fprintf(stderr, "(iniciaContext) Erro: falha ao alocar memoria para struct.\n");
@@ -114,7 +114,7 @@ bool buscaTipoSpy(Info info_forma, DescritorTipoInfo tipo_forma, Lista L, void *
 //------------------------------------------------------------HANDLE_SELR----------------------------------------------------------------//
 
 void processaNoParaSaidaSelr(Item item_node, void *aux_context){
-    printf("\n\n Entrando em processaNoParaSaidaSelr...\n");
+    printf("\n\n DEBUG Entrando em processaNoParaSaidaSelr...\n");
     if(!item_node || !aux_context){
         fprintf(stderr, "(processaNoParaSaidaSelr) Erro: parametros invalidos.");
         return;
@@ -231,7 +231,7 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
 //------------------------------------------------------------HANDLE_SELI----------------------------------------------------------------//
 
 void processaNoParaSaidaSeli(Item item_node, void *aux_context){
-    printf("\n\n Entrando em processaNoParaSaidaSeli...\n");
+    printf("\n\n DEBUG Entrando em processaNoParaSaidaSeli...\n");
     if(!item_node || !aux_context){
         fprintf(stderr, "\n(processaNoParaSaidaSeli) Erro: parametros invalidos.\n");
         return;
@@ -373,7 +373,7 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
 //------------------------------------------------------------HANDLE_CLN-----------------------------------------------------------------//
 
 void clonaEInsereCallback(Item item_origiNode, void *aux_context){
-    printf("Entrando em clonaEInsereCallback\n");
+    printf("DEBUG Entrando em clonaEInsereCallback\n");
     if (!item_origiNode || !aux_context){
         fprintf(stderr, "(clonaEInsereCallback) Erro: parametros invalidos.\n");
         return;
@@ -485,6 +485,11 @@ void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy){
 //------------------------------------------------------------HANDLE_CMFLG---------------------------------------------------------------//
 
 void modificaCorELarguraCallback(Item item_node, void *aux_context){
+    if(!item_node || !aux_context){
+        fprintf(stderr, "(modificaCorELarguraCallback) Erro: parametros invalidos.");
+        return;
+    }
+
     qryContext *contexto = (qryContext*)aux_context;
     Node node_alvo = (Node)item_node;
     Info info_alvo = getInfoSmuT(contexto->tree, node_alvo);
@@ -502,7 +507,7 @@ void handle_cmflg(CONTEXTO ctxt, int id_ref, char *cb, char* cp, double w){
         return; 
     }
 
-        printf("\nProcessando comando cmflg: id=%d, cb=%s, cp=%s, w=%.2f\n", id_ref, cb, cp, w);
+    printf("\nProcessando comando cmflg: id=%d, cb=%s, cp=%s, w=%.2f\n", id_ref, cb, cp, w);
 
     qryContext* contexto = (qryContext*)ctxt;
 
@@ -537,6 +542,77 @@ void handle_cmflg(CONTEXTO ctxt, int id_ref, char *cb, char* cp, double w){
     }
 
     destroiLista(alvos, NULL);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------//
+
+
+//------------------------------------------------------------HANDLE_SPY-----------------------------------------------------------------//
+
+void reportaSpyCallback(Item item_node, void *aux_context) {
+    if(!item_node || !aux_context){
+        fprintf(stderr, "(reportaSpyCallback) Erro: parametros invalidos.");
+        return;
+    }
+    
+    qryContext *contexto = (qryContext*)aux_context;
+    
+    // Extrai as informações do nó
+    Node no_alvo = (Node)item_node;
+    Info info_alvo = getInfoSmuT(contexto->tree, no_alvo);
+    DescritorTipoInfo tipo_alvo = getTypeInfoSmuT(contexto->tree, no_alvo);
+
+    // Obtém o ID e o nome do tipo da forma para o relatório
+    int id_alvo = get_idF(info_alvo, tipo_alvo);
+    const char* nome_tipo = get_NameStrF(tipo_alvo);
+
+    // Imprime no arquivo de texto
+    fprintf(contexto->arqTxt, "  Forma encontrada -> ID: %d, Tipo: %s\n", id_alvo, nome_tipo);
+}
+
+void handle_spy(CONTEXTO ctxt, int id_ref){
+    if(!ctxt){
+        fprintf(stderr, "(handle_cmflg) Erro: parametro invalido.\n");
+        return; 
+    }
+
+    printf("Processando comando spy: id=%d", id_ref);
+
+    qryContext* contexto = (qryContext*)ctxt;
+
+    fprintf(contexto->arqTxt, "[*] spy %d\n", id_ref);
+
+    // Encontra o no' por id.
+    Node node_ref = procuraNoSmuT(contexto->tree, findFormByIdCallback, &id_ref);
+    if (!node_ref) {
+        fprintf(contexto->arqTxt, "Erro: Forma de referencia com ID %d nao encontrada.\n", id_ref);
+        return;
+    }
+    Info info_ref = getInfoSmuT(contexto->tree, node_ref);
+    DescritorTipoInfo tipo_ref = getTypeInfoSmuT(contexto->tree, node_ref);
+
+    // Busca os alvos
+    Lista alvos = criaLista();
+    if(!buscaTipoSpy(info_ref, tipo_ref, alvos, contexto)){
+        fprintf(contexto->arqTxt, "(handle_spy) Erro: buscaTipoSpy falhou!\n");
+        destroiLista(alvos, NULL);
+        return;
+    }
+
+    // Relata os resultados
+    if(listaEstaVazia(alvos)){
+        fprintf(contexto->arqTxt, "Nenhuma forma encontrada na area de espionagem.\n");
+    } else {
+        fprintf(contexto->arqTxt, "spy: Relatorio de formas encontradas:\n");
+
+        // Usa o novo callback para apenas relatar, não modificar
+        percorreLista(alvos, reportaSpyCallback, contexto);
+    }
+
+    // 4. Libera a memória da lista de alvos
+    destroiLista(alvos, NULL);
+
+
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------//

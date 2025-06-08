@@ -699,7 +699,7 @@ void handle_blow(SmuTreap tree, FILE* pathTxtOut, int id_ogiva_a_explodir, Lista
 //---------------------------------------------------------------------------------------------------------------------//
 */
 
-void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, int *idMax, FCalculaBoundingBox fCalcBb, int epsilon){
+void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, int *idMax, FCalculaBoundingBox fCalcBb, double epsilon){
     printf("\nDEBUG entrando en leitura_qry...\n");
     //printf("DEBUG (leitura_qry) id_clone = %d\n", *idMax);
     CONTEXTO con = iniciaContext(pathTxt, t, lista_anotacoes_svg, array_selecoes, idMax, fCalcBb, epsilon);
@@ -769,7 +769,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
         } else if (strcmp(comm, "spy") == 0) {
             int id;
             if (sscanf(str, "spy %d", &id) == 1) {
-                //handle_spy(t, pathTxt, id);
+                handle_spy(con, id);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para spy\n", str);
             }
@@ -797,7 +797,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
     }
 }
 
-SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, Lista lista_anotacoes_svg, int *idMax, int epsilon){
+SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, Lista lista_anotacoes_svg, int *idMax, double epsilon){
     printf("\nDEBUG entrando em processa_qry...\n");
     //printf("DEBUG (processa_qry) id_clone = %d\n", *idMax);
     //printf("SmuTreap = %p\npathQry = %s\npathSaida = %s\nnomeQry = %s\narray_anotacoes = %p\nlista_anotacoes_svg = %p\n", t, pathQry, pathSaida, nomeQry, array_anotacoes, lista_anotacoes_svg);
