@@ -214,8 +214,13 @@ char get_charancoraT(TEXTO t){
 }
 
 void kill_texto(TEXTO t){
-    texto *t1=((texto*)t);
+    texto *t1 = (texto*)t;
     free(t1->corb);
     free(t1->corp);
+
+    free(t1->ttxt.fFamily);
+    free(t1->ttxt.fSize);
+    free(t1->ttxt.fWeight);
+
     free(t1);
 }

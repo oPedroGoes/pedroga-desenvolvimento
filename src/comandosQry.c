@@ -335,6 +335,7 @@ void clonaEInsereCallback(Item item_origiNode, void *aux_context){
             CIRCLE c_original = (CIRCLE)info_original;
             xAnch_clone = get_XC(c_original) + context->dx;
             yAnch_clone = get_YC(c_original) + context->dy;
+            printf("Clonando circulo ID %d. Original-> corp:[%s], corb:[%s]\n", get_idC(c_original), get_cpC(c_original), get_cbC(c_original));
             info_clonada = create_circle(id_clone, xAnch_clone, yAnch_clone, get_rC(c_original), get_cpC(c_original), get_cbC(c_original));
             (*(context->idMax))++;
             break;
