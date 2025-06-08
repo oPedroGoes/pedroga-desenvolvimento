@@ -1,416 +1,416 @@
 [*] selr 17 191.33 14.67 225.00 100.00
-selr: forma 243 (circulo) selecionada.
-selr: forma 266 (circulo) selecionada.
-selr: forma 358 (circulo) selecionada.
-selr: forma 289 (circulo) selecionada.
-selr: forma 312 (circulo) selecionada.
-selr: forma 335 (circulo) selecionada.
 selr: forma 197 (circulo) selecionada.
+selr: forma 312 (circulo) selecionada.
+selr: forma 358 (circulo) selecionada.
+selr: forma 335 (circulo) selecionada.
 selr: forma 220 (circulo) selecionada.
+selr: forma 289 (circulo) selecionada.
+selr: forma 266 (circulo) selecionada.
+selr: forma 243 (circulo) selecionada.
 selr: forma 174 (circulo) selecionada.
+selr: forma 196 (circulo) selecionada.
 selr: forma 334 (circulo) selecionada.
 selr: forma 357 (circulo) selecionada.
-selr: forma 311 (circulo) selecionada.
-selr: forma 173 (circulo) selecionada.
 selr: forma 265 (circulo) selecionada.
 selr: forma 288 (circulo) selecionada.
-selr: forma 196 (circulo) selecionada.
+selr: forma 311 (circulo) selecionada.
 selr: forma 219 (circulo) selecionada.
 selr: forma 242 (circulo) selecionada.
-selr: forma 287 (circulo) selecionada.
+selr: forma 173 (circulo) selecionada.
+selr: forma 239 (circulo) selecionada.
 selr: forma 310 (circulo) selecionada.
 selr: forma 356 (circulo) selecionada.
 selr: forma 333 (circulo) selecionada.
-selr: forma 216 (circulo) selecionada.
-selr: forma 355 (circulo) selecionada.
+selr: forma 287 (circulo) selecionada.
+selr: forma 264 (circulo) selecionada.
+selr: forma 195 (circulo) selecionada.
 selr: forma 218 (circulo) selecionada.
 selr: forma 241 (circulo) selecionada.
-selr: forma 264 (circulo) selecionada.
 selr: forma 172 (circulo) selecionada.
-selr: forma 195 (circulo) selecionada.
-selr: forma 331 (circulo) selecionada.
 selr: forma 286 (circulo) selecionada.
-selr: forma 309 (circulo) selecionada.
 selr: forma 332 (circulo) selecionada.
+selr: forma 355 (circulo) selecionada.
+selr: forma 309 (circulo) selecionada.
 selr: forma 194 (circulo) selecionada.
-selr: forma 263 (circulo) selecionada.
 selr: forma 217 (circulo) selecionada.
 selr: forma 240 (circulo) selecionada.
+selr: forma 263 (circulo) selecionada.
 selr: forma 171 (circulo) selecionada.
+selr: forma 331 (circulo) selecionada.
 selr: forma 354 (circulo) selecionada.
-selr: forma 239 (circulo) selecionada.
 selr: forma 308 (circulo) selecionada.
 selr: forma 262 (circulo) selecionada.
 selr: forma 285 (circulo) selecionada.
+selr: forma 238 (circulo) selecionada.
+selr: forma 261 (circulo) selecionada.
+selr: forma 216 (circulo) selecionada.
 selr: forma 170 (circulo) selecionada.
 selr: forma 193 (circulo) selecionada.
-selr: forma 238 (circulo) selecionada.
 selr: forma 330 (circulo) selecionada.
 selr: forma 353 (circulo) selecionada.
-selr: forma 261 (circulo) selecionada.
-selr: forma 307 (circulo) selecionada.
 selr: forma 284 (circulo) selecionada.
-selr: forma 215 (circulo) selecionada.
+selr: forma 307 (circulo) selecionada.
 selr: forma 192 (circulo) selecionada.
+selr: forma 215 (circulo) selecionada.
 selr: forma 169 (circulo) selecionada.
-selr: forma 283 (circulo) selecionada.
-selr: forma 306 (circulo) selecionada.
 selr: forma 352 (circulo) selecionada.
+selr: forma 214 (circulo) selecionada.
+selr: forma 306 (circulo) selecionada.
 selr: forma 329 (circulo) selecionada.
+selr: forma 283 (circulo) selecionada.
 selr: forma 260 (circulo) selecionada.
+selr: forma 237 (circulo) selecionada.
 selr: forma 168 (circulo) selecionada.
 selr: forma 191 (circulo) selecionada.
-selr: forma 214 (circulo) selecionada.
-selr: forma 237 (circulo) selecionada.
-selr: forma 212 (circulo) selecionada.
-selr: forma 236 (circulo) selecionada.
+selr: forma 351 (circulo) selecionada.
+selr: forma 167 (circulo) selecionada.
 selr: forma 305 (circulo) selecionada.
 selr: forma 328 (circulo) selecionada.
-selr: forma 351 (circulo) selecionada.
 selr: forma 259 (circulo) selecionada.
 selr: forma 282 (circulo) selecionada.
-selr: forma 213 (circulo) selecionada.
-selr: forma 167 (circulo) selecionada.
 selr: forma 190 (circulo) selecionada.
-selr: forma 350 (circulo) selecionada.
-selr: forma 258 (circulo) selecionada.
-selr: forma 281 (circulo) selecionada.
-selr: forma 304 (circulo) selecionada.
-selr: forma 327 (circulo) selecionada.
-selr: forma 235 (circulo) selecionada.
-selr: forma 166 (circulo) selecionada.
+selr: forma 236 (circulo) selecionada.
+selr: forma 213 (circulo) selecionada.
 selr: forma 189 (circulo) selecionada.
-selr: forma 279 (circulo) selecionada.
-selr: forma 165 (circulo) selecionada.
+selr: forma 258 (circulo) selecionada.
+selr: forma 304 (circulo) selecionada.
+selr: forma 350 (circulo) selecionada.
+selr: forma 327 (circulo) selecionada.
+selr: forma 281 (circulo) selecionada.
+selr: forma 235 (circulo) selecionada.
+selr: forma 212 (circulo) selecionada.
+selr: forma 166 (circulo) selecionada.
+selr: forma 234 (circulo) selecionada.
 selr: forma 349 (circulo) selecionada.
-selr: forma 211 (circulo) selecionada.
 selr: forma 326 (circulo) selecionada.
+selr: forma 303 (circulo) selecionada.
 selr: forma 257 (circulo) selecionada.
 selr: forma 280 (circulo) selecionada.
-selr: forma 303 (circulo) selecionada.
-selr: forma 234 (circulo) selecionada.
+selr: forma 211 (circulo) selecionada.
 selr: forma 188 (circulo) selecionada.
+selr: forma 165 (circulo) selecionada.
+selr: forma 164 (circulo) selecionada.
+selr: forma 256 (circulo) selecionada.
 selr: forma 302 (circulo) selecionada.
 selr: forma 348 (circulo) selecionada.
 selr: forma 325 (circulo) selecionada.
-selr: forma 300 (circulo) selecionada.
-selr: forma 164 (circulo) selecionada.
-selr: forma 233 (circulo) selecionada.
-selr: forma 256 (circulo) selecionada.
-selr: forma 210 (circulo) selecionada.
+selr: forma 279 (circulo) selecionada.
 selr: forma 187 (circulo) selecionada.
+selr: forma 233 (circulo) selecionada.
+selr: forma 210 (circulo) selecionada.
+selr: forma 155 (circulo) selecionada.
+selr: forma 163 (circulo) selecionada.
 selr: forma 186 (circulo) selecionada.
-selr: forma 255 (circulo) selecionada.
 selr: forma 278 (circulo) selecionada.
-selr: forma 324 (circulo) selecionada.
 selr: forma 347 (circulo) selecionada.
+selr: forma 324 (circulo) selecionada.
 selr: forma 301 (circulo) selecionada.
 selr: forma 209 (circulo) selecionada.
 selr: forma 232 (circulo) selecionada.
-selr: forma 163 (circulo) selecionada.
-selr: forma 323 (circulo) selecionada.
-selr: forma 346 (circulo) selecionada.
-selr: forma 162 (circulo) selecionada.
+selr: forma 255 (circulo) selecionada.
 selr: forma 254 (circulo) selecionada.
+selr: forma 300 (circulo) selecionada.
+selr: forma 346 (circulo) selecionada.
+selr: forma 323 (circulo) selecionada.
 selr: forma 277 (circulo) selecionada.
 selr: forma 185 (circulo) selecionada.
 selr: forma 208 (circulo) selecionada.
 selr: forma 231 (circulo) selecionada.
-selr: forma 253 (circulo) selecionada.
-selr: forma 276 (circulo) selecionada.
+selr: forma 162 (circulo) selecionada.
 selr: forma 322 (circulo) selecionada.
 selr: forma 345 (circulo) selecionada.
-selr: forma 299 (circulo) selecionada.
-selr: forma 207 (circulo) selecionada.
 selr: forma 230 (circulo) selecionada.
-selr: forma 161 (circulo) selecionada.
+selr: forma 276 (circulo) selecionada.
+selr: forma 299 (circulo) selecionada.
+selr: forma 253 (circulo) selecionada.
 selr: forma 184 (circulo) selecionada.
+selr: forma 207 (circulo) selecionada.
+selr: forma 161 (circulo) selecionada.
+selr: forma 274 (circulo) selecionada.
+selr: forma 343 (circulo) selecionada.
+selr: forma 160 (circulo) selecionada.
+selr: forma 229 (circulo) selecionada.
+selr: forma 275 (circulo) selecionada.
 selr: forma 298 (circulo) selecionada.
 selr: forma 344 (circulo) selecionada.
 selr: forma 321 (circulo) selecionada.
-selr: forma 183 (circulo) selecionada.
 selr: forma 252 (circulo) selecionada.
-selr: forma 275 (circulo) selecionada.
+selr: forma 183 (circulo) selecionada.
 selr: forma 206 (circulo) selecionada.
-selr: forma 229 (circulo) selecionada.
-selr: forma 160 (circulo) selecionada.
-selr: forma 228 (circulo) selecionada.
-selr: forma 343 (circulo) selecionada.
-selr: forma 274 (circulo) selecionada.
-selr: forma 297 (circulo) selecionada.
 selr: forma 320 (circulo) selecionada.
-selr: forma 251 (circulo) selecionada.
-selr: forma 182 (circulo) selecionada.
+selr: forma 297 (circulo) selecionada.
 selr: forma 205 (circulo) selecionada.
+selr: forma 251 (circulo) selecionada.
+selr: forma 228 (circulo) selecionada.
+selr: forma 182 (circulo) selecionada.
 selr: forma 159 (circulo) selecionada.
-selr: forma 269 (circulo) selecionada.
-selr: forma 204 (circulo) selecionada.
-selr: forma 273 (circulo) selecionada.
 selr: forma 296 (circulo) selecionada.
 selr: forma 319 (circulo) selecionada.
 selr: forma 342 (circulo) selecionada.
 selr: forma 250 (circulo) selecionada.
+selr: forma 273 (circulo) selecionada.
+selr: forma 204 (circulo) selecionada.
 selr: forma 227 (circulo) selecionada.
 selr: forma 158 (circulo) selecionada.
 selr: forma 181 (circulo) selecionada.
-selr: forma 226 (circulo) selecionada.
-selr: forma 272 (circulo) selecionada.
-selr: forma 295 (circulo) selecionada.
+selr: forma 157 (circulo) selecionada.
+selr: forma 203 (circulo) selecionada.
 selr: forma 318 (circulo) selecionada.
 selr: forma 341 (circulo) selecionada.
+selr: forma 295 (circulo) selecionada.
+selr: forma 226 (circulo) selecionada.
 selr: forma 249 (circulo) selecionada.
+selr: forma 272 (circulo) selecionada.
 selr: forma 180 (circulo) selecionada.
-selr: forma 203 (circulo) selecionada.
-selr: forma 157 (circulo) selecionada.
-selr: forma 293 (circulo) selecionada.
+selr: forma 270 (circulo) selecionada.
+selr: forma 179 (circulo) selecionada.
 selr: forma 317 (circulo) selecionada.
 selr: forma 340 (circulo) selecionada.
-selr: forma 294 (circulo) selecionada.
 selr: forma 225 (circulo) selecionada.
-selr: forma 248 (circulo) selecionada.
 selr: forma 271 (circulo) selecionada.
-selr: forma 179 (circulo) selecionada.
+selr: forma 294 (circulo) selecionada.
+selr: forma 248 (circulo) selecionada.
 selr: forma 202 (circulo) selecionada.
 selr: forma 156 (circulo) selecionada.
-selr: forma 316 (circulo) selecionada.
 selr: forma 339 (circulo) selecionada.
-selr: forma 270 (circulo) selecionada.
+selr: forma 293 (circulo) selecionada.
+selr: forma 316 (circulo) selecionada.
 selr: forma 201 (circulo) selecionada.
-selr: forma 224 (circulo) selecionada.
 selr: forma 247 (circulo) selecionada.
+selr: forma 224 (circulo) selecionada.
 selr: forma 178 (circulo) selecionada.
-selr: forma 155 (circulo) selecionada.
 selr: forma 338 (circulo) selecionada.
+selr: forma 177 (circulo) selecionada.
+selr: forma 200 (circulo) selecionada.
 selr: forma 292 (circulo) selecionada.
 selr: forma 315 (circulo) selecionada.
-selr: forma 337 (circulo) selecionada.
 selr: forma 246 (circulo) selecionada.
-selr: forma 200 (circulo) selecionada.
+selr: forma 269 (circulo) selecionada.
 selr: forma 223 (circulo) selecionada.
-selr: forma 177 (circulo) selecionada.
 selr: forma 154 (circulo) selecionada.
-selr: forma 837 (retangulo) selecionada.
-selr: forma 268 (circulo) selecionada.
-selr: forma 291 (circulo) selecionada.
+selr: forma 153 (circulo) selecionada.
 selr: forma 314 (circulo) selecionada.
+selr: forma 337 (circulo) selecionada.
+selr: forma 291 (circulo) selecionada.
+selr: forma 268 (circulo) selecionada.
 selr: forma 222 (circulo) selecionada.
 selr: forma 245 (circulo) selecionada.
 selr: forma 199 (circulo) selecionada.
-selr: forma 153 (circulo) selecionada.
 selr: forma 176 (circulo) selecionada.
-selr: forma 849 (retangulo) selecionada.
-selr: forma 861 (retangulo) selecionada.
-selr: forma 855 (retangulo) selecionada.
-selr: forma 843 (retangulo) selecionada.
-selr: forma 813 (retangulo) selecionada.
-selr: forma 831 (retangulo) selecionada.
 selr: forma 825 (retangulo) selecionada.
+selr: forma 855 (retangulo) selecionada.
+selr: forma 861 (retangulo) selecionada.
+selr: forma 837 (retangulo) selecionada.
+selr: forma 849 (retangulo) selecionada.
+selr: forma 843 (retangulo) selecionada.
+selr: forma 831 (retangulo) selecionada.
 selr: forma 819 (retangulo) selecionada.
+selr: forma 813 (retangulo) selecionada.
 [*] cln 17 225.00 100.00
-cln: Falha ao inserir clone da forma ID 243 na arvore.
-cln: Falha ao inserir clone da forma ID 266 na arvore.
-cln: Falha ao inserir clone da forma ID 358 na arvore.
-cln: Forma ID 289 clonada -> Novo clone ID -16777458.
-cln: Forma ID 312 clonada -> Novo clone ID -16777457.
-cln: Forma ID 335 clonada -> Novo clone ID -16777456.
-cln: Forma ID 197 clonada -> Novo clone ID -16777455.
-cln: Forma ID 220 clonada -> Novo clone ID -16777454.
-cln: Forma ID 174 clonada -> Novo clone ID -16777453.
-cln: Forma ID 334 clonada -> Novo clone ID -16777452.
-cln: Falha ao inserir clone da forma ID 357 na arvore.
-cln: Falha ao inserir clone da forma ID 311 na arvore.
-cln: Falha ao inserir clone da forma ID 173 na arvore.
-cln: Falha ao inserir clone da forma ID 265 na arvore.
-cln: Forma ID 288 clonada -> Novo clone ID -16777447.
-cln: Forma ID 196 clonada -> Novo clone ID -16777446.
-cln: Falha ao inserir clone da forma ID 219 na arvore.
-cln: Forma ID 242 clonada -> Novo clone ID -16777444.
-cln: Forma ID 287 clonada -> Novo clone ID -16777443.
-cln: Forma ID 310 clonada -> Novo clone ID -16777442.
-cln: Forma ID 356 clonada -> Novo clone ID -16777441.
-cln: Forma ID 333 clonada -> Novo clone ID -16777440.
-cln: Falha ao inserir clone da forma ID 216 na arvore.
-cln: Falha ao inserir clone da forma ID 355 na arvore.
-cln: Falha ao inserir clone da forma ID 218 na arvore.
-cln: Forma ID 241 clonada -> Novo clone ID -16777436.
-cln: Falha ao inserir clone da forma ID 264 na arvore.
-cln: Falha ao inserir clone da forma ID 172 na arvore.
-cln: Falha ao inserir clone da forma ID 195 na arvore.
-cln: Forma ID 331 clonada -> Novo clone ID -16777432.
-cln: Falha ao inserir clone da forma ID 286 na arvore.
-cln: Forma ID 309 clonada -> Novo clone ID -16777430.
-cln: Forma ID 332 clonada -> Novo clone ID -16777429.
-cln: Forma ID 194 clonada -> Novo clone ID -16777428.
-cln: Forma ID 263 clonada -> Novo clone ID -16777427.
-cln: Falha ao inserir clone da forma ID 217 na arvore.
-cln: Falha ao inserir clone da forma ID 240 na arvore.
-cln: Forma ID 171 clonada -> Novo clone ID -16777424.
-cln: Forma ID 354 clonada -> Novo clone ID -16777423.
-cln: Forma ID 239 clonada -> Novo clone ID -16777422.
-cln: Forma ID 308 clonada -> Novo clone ID -16777421.
-cln: Falha ao inserir clone da forma ID 262 na arvore.
-cln: Falha ao inserir clone da forma ID 285 na arvore.
-cln: Forma ID 170 clonada -> Novo clone ID -16777418.
-cln: Forma ID 193 clonada -> Novo clone ID -16777417.
-cln: Forma ID 238 clonada -> Novo clone ID -16777416.
-cln: Falha ao inserir clone da forma ID 330 na arvore.
-cln: Forma ID 353 clonada -> Novo clone ID -16777414.
-cln: Forma ID 261 clonada -> Novo clone ID -16777413.
-cln: Forma ID 307 clonada -> Novo clone ID -16777412.
-cln: Forma ID 284 clonada -> Novo clone ID -16777411.
-cln: Falha ao inserir clone da forma ID 215 na arvore.
-cln: Falha ao inserir clone da forma ID 192 na arvore.
-cln: Falha ao inserir clone da forma ID 169 na arvore.
-cln: Falha ao inserir clone da forma ID 283 na arvore.
-cln: Forma ID 306 clonada -> Novo clone ID -16777406.
-cln: Forma ID 352 clonada -> Novo clone ID -16777405.
-cln: Falha ao inserir clone da forma ID 329 na arvore.
-cln: Forma ID 260 clonada -> Novo clone ID -16777403.
-cln: Forma ID 168 clonada -> Novo clone ID -16777402.
-cln: Falha ao inserir clone da forma ID 191 na arvore.
-cln: Falha ao inserir clone da forma ID 214 na arvore.
-cln: Falha ao inserir clone da forma ID 237 na arvore.
-cln: Falha ao inserir clone da forma ID 212 na arvore.
-cln: Forma ID 236 clonada -> Novo clone ID -16777397.
-cln: Forma ID 305 clonada -> Novo clone ID -16777396.
-cln: Falha ao inserir clone da forma ID 328 na arvore.
-cln: Forma ID 351 clonada -> Novo clone ID -16777394.
-cln: Falha ao inserir clone da forma ID 259 na arvore.
-cln: Falha ao inserir clone da forma ID 282 na arvore.
-cln: Falha ao inserir clone da forma ID 213 na arvore.
-cln: Forma ID 167 clonada -> Novo clone ID -16777390.
-cln: Forma ID 190 clonada -> Novo clone ID -16777389.
-cln: Forma ID 350 clonada -> Novo clone ID -16777388.
-cln: Falha ao inserir clone da forma ID 258 na arvore.
-cln: Forma ID 281 clonada -> Novo clone ID -16777386.
-cln: Falha ao inserir clone da forma ID 304 na arvore.
-cln: Falha ao inserir clone da forma ID 327 na arvore.
-cln: Forma ID 235 clonada -> Novo clone ID -16777383.
-cln: Forma ID 166 clonada -> Novo clone ID -16777382.
-cln: Forma ID 189 clonada -> Novo clone ID -16777381.
-cln: Forma ID 279 clonada -> Novo clone ID -16777380.
-cln: Falha ao inserir clone da forma ID 165 na arvore.
-cln: Forma ID 349 clonada -> Novo clone ID -16777378.
-cln: Forma ID 211 clonada -> Novo clone ID -16777377.
-cln: Forma ID 326 clonada -> Novo clone ID -16777376.
-cln: Forma ID 257 clonada -> Novo clone ID -16777375.
-cln: Forma ID 280 clonada -> Novo clone ID -16777374.
-cln: Falha ao inserir clone da forma ID 303 na arvore.
-cln: Forma ID 234 clonada -> Novo clone ID -16777372.
-cln: Forma ID 188 clonada -> Novo clone ID -16777371.
-cln: Forma ID 302 clonada -> Novo clone ID -16777370.
-cln: Forma ID 348 clonada -> Novo clone ID -16777369.
-cln: Falha ao inserir clone da forma ID 325 na arvore.
-cln: Falha ao inserir clone da forma ID 300 na arvore.
-cln: Falha ao inserir clone da forma ID 164 na arvore.
-cln: Forma ID 233 clonada -> Novo clone ID -16777365.
-cln: Forma ID 256 clonada -> Novo clone ID -16777364.
-cln: Falha ao inserir clone da forma ID 210 na arvore.
-cln: Forma ID 187 clonada -> Novo clone ID -16777362.
-cln: Forma ID 186 clonada -> Novo clone ID -16777361.
-cln: Forma ID 255 clonada -> Novo clone ID -16777360.
-cln: Falha ao inserir clone da forma ID 278 na arvore.
-cln: Forma ID 324 clonada -> Novo clone ID -16777358.
-cln: Forma ID 347 clonada -> Novo clone ID -16777357.
-cln: Falha ao inserir clone da forma ID 301 na arvore.
-cln: Falha ao inserir clone da forma ID 209 na arvore.
-cln: Forma ID 232 clonada -> Novo clone ID -16777354.
-cln: Forma ID 163 clonada -> Novo clone ID -16777353.
-cln: Falha ao inserir clone da forma ID 323 na arvore.
-cln: Forma ID 346 clonada -> Novo clone ID -16777351.
-cln: Forma ID 162 clonada -> Novo clone ID -16777350.
-cln: Forma ID 254 clonada -> Novo clone ID -16777349.
-cln: Forma ID 277 clonada -> Novo clone ID -16777348.
-cln: Falha ao inserir clone da forma ID 185 na arvore.
-cln: Forma ID 208 clonada -> Novo clone ID -16777346.
-cln: Forma ID 231 clonada -> Novo clone ID -16777345.
-cln: Falha ao inserir clone da forma ID 253 na arvore.
-cln: Falha ao inserir clone da forma ID 276 na arvore.
-cln: Falha ao inserir clone da forma ID 322 na arvore.
-cln: Forma ID 345 clonada -> Novo clone ID -16777341.
-cln: Forma ID 299 clonada -> Novo clone ID -16777340.
-cln: Falha ao inserir clone da forma ID 207 na arvore.
-cln: Falha ao inserir clone da forma ID 230 na arvore.
-cln: Falha ao inserir clone da forma ID 161 na arvore.
-cln: Falha ao inserir clone da forma ID 184 na arvore.
-cln: Forma ID 298 clonada -> Novo clone ID -16777335.
-cln: Forma ID 344 clonada -> Novo clone ID -16777334.
-cln: Falha ao inserir clone da forma ID 321 na arvore.
-cln: Forma ID 183 clonada -> Novo clone ID -16777332.
-cln: Falha ao inserir clone da forma ID 252 na arvore.
-cln: Forma ID 275 clonada -> Novo clone ID -16777330.
-cln: Forma ID 206 clonada -> Novo clone ID -16777329.
-cln: Falha ao inserir clone da forma ID 229 na arvore.
-cln: Falha ao inserir clone da forma ID 160 na arvore.
-cln: Falha ao inserir clone da forma ID 228 na arvore.
-cln: Falha ao inserir clone da forma ID 343 na arvore.
-cln: Forma ID 274 clonada -> Novo clone ID -16777324.
-cln: Falha ao inserir clone da forma ID 297 na arvore.
-cln: Forma ID 320 clonada -> Novo clone ID -16777322.
-cln: Falha ao inserir clone da forma ID 251 na arvore.
-cln: Forma ID 182 clonada -> Novo clone ID -16777320.
-cln: Falha ao inserir clone da forma ID 205 na arvore.
-cln: Forma ID 159 clonada -> Novo clone ID -16777318.
-cln: Falha ao inserir clone da forma ID 269 na arvore.
-cln: Falha ao inserir clone da forma ID 204 na arvore.
-cln: Falha ao inserir clone da forma ID 273 na arvore.
-cln: Forma ID 296 clonada -> Novo clone ID -16777314.
-cln: Falha ao inserir clone da forma ID 319 na arvore.
-cln: Falha ao inserir clone da forma ID 342 na arvore.
-cln: Forma ID 250 clonada -> Novo clone ID -16777311.
-cln: Forma ID 227 clonada -> Novo clone ID -16777310.
-cln: Forma ID 158 clonada -> Novo clone ID -16777309.
-cln: Forma ID 181 clonada -> Novo clone ID -16777308.
-cln: Forma ID 226 clonada -> Novo clone ID -16777307.
-cln: Forma ID 272 clonada -> Novo clone ID -16777306.
-cln: Forma ID 295 clonada -> Novo clone ID -16777305.
-cln: Falha ao inserir clone da forma ID 318 na arvore.
-cln: Forma ID 341 clonada -> Novo clone ID -16777303.
-cln: Forma ID 249 clonada -> Novo clone ID -16777302.
-cln: Forma ID 180 clonada -> Novo clone ID -16777301.
-cln: Forma ID 203 clonada -> Novo clone ID -16777300.
-cln: Forma ID 157 clonada -> Novo clone ID -16777299.
-cln: Forma ID 293 clonada -> Novo clone ID -16777298.
-cln: Forma ID 317 clonada -> Novo clone ID -16777297.
-cln: Falha ao inserir clone da forma ID 340 na arvore.
-cln: Forma ID 294 clonada -> Novo clone ID -16777295.
-cln: Forma ID 225 clonada -> Novo clone ID -16777294.
-cln: Forma ID 248 clonada -> Novo clone ID -16777293.
-cln: Falha ao inserir clone da forma ID 271 na arvore.
-cln: Forma ID 179 clonada -> Novo clone ID -16777291.
-cln: Falha ao inserir clone da forma ID 202 na arvore.
-cln: Forma ID 156 clonada -> Novo clone ID -16777289.
-cln: Forma ID 316 clonada -> Novo clone ID -16777288.
-cln: Falha ao inserir clone da forma ID 339 na arvore.
-cln: Forma ID 270 clonada -> Novo clone ID -16777286.
-cln: Forma ID 201 clonada -> Novo clone ID -16777285.
-cln: Falha ao inserir clone da forma ID 224 na arvore.
-cln: Falha ao inserir clone da forma ID 247 na arvore.
-cln: Forma ID 178 clonada -> Novo clone ID -16777282.
-cln: Forma ID 155 clonada -> Novo clone ID -16777281.
-cln: Forma ID 338 clonada -> Novo clone ID -16777280.
-cln: Forma ID 292 clonada -> Novo clone ID -16777279.
-cln: Forma ID 315 clonada -> Novo clone ID -16777278.
-cln: Falha ao inserir clone da forma ID 337 na arvore.
-cln: Forma ID 246 clonada -> Novo clone ID -16777276.
-cln: Forma ID 200 clonada -> Novo clone ID -16777275.
-cln: Falha ao inserir clone da forma ID 223 na arvore.
-cln: Forma ID 177 clonada -> Novo clone ID -16777273.
-cln: Forma ID 154 clonada -> Novo clone ID -16777272.
-cln: Forma ID 837 clonada -> Novo clone ID -16777271.
-cln: Falha ao inserir clone da forma ID 268 na arvore.
-cln: Forma ID 291 clonada -> Novo clone ID -16777269.
-cln: Forma ID 314 clonada -> Novo clone ID -16777268.
-cln: Forma ID 222 clonada -> Novo clone ID -16777267.
-cln: Forma ID 245 clonada -> Novo clone ID -16777266.
-cln: Falha ao inserir clone da forma ID 199 na arvore.
-cln: Falha ao inserir clone da forma ID 153 na arvore.
-cln: Forma ID 176 clonada -> Novo clone ID -16777263.
-cln: Forma ID 849 clonada -> Novo clone ID -16777262.
-cln: Forma ID 861 clonada -> Novo clone ID -16777261.
-cln: Falha ao inserir clone da forma ID 855 na arvore.
-cln: Falha ao inserir clone da forma ID 843 na arvore.
-cln: Falha ao inserir clone da forma ID 813 na arvore.
-cln: Forma ID 831 clonada -> Novo clone ID -16777257.
-cln: Forma ID 825 clonada -> Novo clone ID -16777256.
-cln: Falha ao inserir clone da forma ID 819 na arvore.
+cln: Forma ID 197 clonada -> Novo clone ID 1204.
+cln: Forma ID 312 clonada -> Novo clone ID 1205.
+cln: Forma ID 358 clonada -> Novo clone ID 1206.
+cln: Forma ID 335 clonada -> Novo clone ID 1207.
+cln: Forma ID 220 clonada -> Novo clone ID 1208.
+cln: Forma ID 289 clonada -> Novo clone ID 1209.
+cln: Forma ID 266 clonada -> Novo clone ID 1210.
+cln: Forma ID 243 clonada -> Novo clone ID 1211.
+cln: Forma ID 174 clonada -> Novo clone ID 1212.
+cln: Forma ID 196 clonada -> Novo clone ID 1213.
+cln: Forma ID 334 clonada -> Novo clone ID 1214.
+cln: Forma ID 357 clonada -> Novo clone ID 1215.
+cln: Forma ID 265 clonada -> Novo clone ID 1216.
+cln: Forma ID 288 clonada -> Novo clone ID 1217.
+cln: Forma ID 311 clonada -> Novo clone ID 1218.
+cln: Forma ID 219 clonada -> Novo clone ID 1219.
+cln: Forma ID 242 clonada -> Novo clone ID 1220.
+cln: Forma ID 173 clonada -> Novo clone ID 1221.
+cln: Forma ID 239 clonada -> Novo clone ID 1222.
+cln: Forma ID 310 clonada -> Novo clone ID 1223.
+cln: Forma ID 356 clonada -> Novo clone ID 1224.
+cln: Forma ID 333 clonada -> Novo clone ID 1225.
+cln: Forma ID 287 clonada -> Novo clone ID 1226.
+cln: Forma ID 264 clonada -> Novo clone ID 1227.
+cln: Forma ID 195 clonada -> Novo clone ID 1228.
+cln: Forma ID 218 clonada -> Novo clone ID 1229.
+cln: Forma ID 241 clonada -> Novo clone ID 1230.
+cln: Forma ID 172 clonada -> Novo clone ID 1231.
+cln: Forma ID 286 clonada -> Novo clone ID 1232.
+cln: Forma ID 332 clonada -> Novo clone ID 1233.
+cln: Forma ID 355 clonada -> Novo clone ID 1234.
+cln: Forma ID 309 clonada -> Novo clone ID 1235.
+cln: Forma ID 194 clonada -> Novo clone ID 1236.
+cln: Forma ID 217 clonada -> Novo clone ID 1237.
+cln: Forma ID 240 clonada -> Novo clone ID 1238.
+cln: Forma ID 263 clonada -> Novo clone ID 1239.
+cln: Forma ID 171 clonada -> Novo clone ID 1240.
+cln: Forma ID 331 clonada -> Novo clone ID 1241.
+cln: Forma ID 354 clonada -> Novo clone ID 1242.
+cln: Forma ID 308 clonada -> Novo clone ID 1243.
+cln: Forma ID 262 clonada -> Novo clone ID 1244.
+cln: Forma ID 285 clonada -> Novo clone ID 1245.
+cln: Forma ID 238 clonada -> Novo clone ID 1246.
+cln: Forma ID 261 clonada -> Novo clone ID 1247.
+cln: Forma ID 216 clonada -> Novo clone ID 1248.
+cln: Forma ID 170 clonada -> Novo clone ID 1249.
+cln: Forma ID 193 clonada -> Novo clone ID 1250.
+cln: Forma ID 330 clonada -> Novo clone ID 1251.
+cln: Forma ID 353 clonada -> Novo clone ID 1252.
+cln: Forma ID 284 clonada -> Novo clone ID 1253.
+cln: Forma ID 307 clonada -> Novo clone ID 1254.
+cln: Forma ID 192 clonada -> Novo clone ID 1255.
+cln: Forma ID 215 clonada -> Novo clone ID 1256.
+cln: Forma ID 169 clonada -> Novo clone ID 1257.
+cln: Forma ID 352 clonada -> Novo clone ID 1258.
+cln: Forma ID 214 clonada -> Novo clone ID 1259.
+cln: Forma ID 306 clonada -> Novo clone ID 1260.
+cln: Forma ID 329 clonada -> Novo clone ID 1261.
+cln: Forma ID 283 clonada -> Novo clone ID 1262.
+cln: Forma ID 260 clonada -> Novo clone ID 1263.
+cln: Forma ID 237 clonada -> Novo clone ID 1264.
+cln: Forma ID 168 clonada -> Novo clone ID 1265.
+cln: Forma ID 191 clonada -> Novo clone ID 1266.
+cln: Forma ID 351 clonada -> Novo clone ID 1267.
+cln: Forma ID 167 clonada -> Novo clone ID 1268.
+cln: Forma ID 305 clonada -> Novo clone ID 1269.
+cln: Forma ID 328 clonada -> Novo clone ID 1270.
+cln: Forma ID 259 clonada -> Novo clone ID 1271.
+cln: Forma ID 282 clonada -> Novo clone ID 1272.
+cln: Forma ID 190 clonada -> Novo clone ID 1273.
+cln: Forma ID 236 clonada -> Novo clone ID 1274.
+cln: Forma ID 213 clonada -> Novo clone ID 1275.
+cln: Forma ID 189 clonada -> Novo clone ID 1276.
+cln: Forma ID 258 clonada -> Novo clone ID 1277.
+cln: Forma ID 304 clonada -> Novo clone ID 1278.
+cln: Forma ID 350 clonada -> Novo clone ID 1279.
+cln: Forma ID 327 clonada -> Novo clone ID 1280.
+cln: Forma ID 281 clonada -> Novo clone ID 1281.
+cln: Forma ID 235 clonada -> Novo clone ID 1282.
+cln: Forma ID 212 clonada -> Novo clone ID 1283.
+cln: Forma ID 166 clonada -> Novo clone ID 1284.
+cln: Forma ID 234 clonada -> Novo clone ID 1285.
+cln: Forma ID 349 clonada -> Novo clone ID 1286.
+cln: Forma ID 326 clonada -> Novo clone ID 1287.
+cln: Forma ID 303 clonada -> Novo clone ID 1288.
+cln: Forma ID 257 clonada -> Novo clone ID 1289.
+cln: Forma ID 280 clonada -> Novo clone ID 1290.
+cln: Forma ID 211 clonada -> Novo clone ID 1291.
+cln: Forma ID 188 clonada -> Novo clone ID 1292.
+cln: Forma ID 165 clonada -> Novo clone ID 1293.
+cln: Forma ID 164 clonada -> Novo clone ID 1294.
+cln: Forma ID 256 clonada -> Novo clone ID 1295.
+cln: Forma ID 302 clonada -> Novo clone ID 1296.
+cln: Forma ID 348 clonada -> Novo clone ID 1297.
+cln: Forma ID 325 clonada -> Novo clone ID 1298.
+cln: Forma ID 279 clonada -> Novo clone ID 1299.
+cln: Forma ID 187 clonada -> Novo clone ID 1300.
+cln: Forma ID 233 clonada -> Novo clone ID 1301.
+cln: Forma ID 210 clonada -> Novo clone ID 1302.
+cln: Forma ID 155 clonada -> Novo clone ID 1303.
+cln: Forma ID 163 clonada -> Novo clone ID 1304.
+cln: Forma ID 186 clonada -> Novo clone ID 1305.
+cln: Forma ID 278 clonada -> Novo clone ID 1306.
+cln: Forma ID 347 clonada -> Novo clone ID 1307.
+cln: Forma ID 324 clonada -> Novo clone ID 1308.
+cln: Forma ID 301 clonada -> Novo clone ID 1309.
+cln: Forma ID 209 clonada -> Novo clone ID 1310.
+cln: Forma ID 232 clonada -> Novo clone ID 1311.
+cln: Forma ID 255 clonada -> Novo clone ID 1312.
+cln: Forma ID 254 clonada -> Novo clone ID 1313.
+cln: Forma ID 300 clonada -> Novo clone ID 1314.
+cln: Forma ID 346 clonada -> Novo clone ID 1315.
+cln: Forma ID 323 clonada -> Novo clone ID 1316.
+cln: Forma ID 277 clonada -> Novo clone ID 1317.
+cln: Forma ID 185 clonada -> Novo clone ID 1318.
+cln: Forma ID 208 clonada -> Novo clone ID 1319.
+cln: Forma ID 231 clonada -> Novo clone ID 1320.
+cln: Forma ID 162 clonada -> Novo clone ID 1321.
+cln: Forma ID 322 clonada -> Novo clone ID 1322.
+cln: Forma ID 345 clonada -> Novo clone ID 1323.
+cln: Forma ID 230 clonada -> Novo clone ID 1324.
+cln: Forma ID 276 clonada -> Novo clone ID 1325.
+cln: Forma ID 299 clonada -> Novo clone ID 1326.
+cln: Forma ID 253 clonada -> Novo clone ID 1327.
+cln: Forma ID 184 clonada -> Novo clone ID 1328.
+cln: Forma ID 207 clonada -> Novo clone ID 1329.
+cln: Forma ID 161 clonada -> Novo clone ID 1330.
+cln: Forma ID 274 clonada -> Novo clone ID 1331.
+cln: Forma ID 343 clonada -> Novo clone ID 1332.
+cln: Forma ID 160 clonada -> Novo clone ID 1333.
+cln: Forma ID 229 clonada -> Novo clone ID 1334.
+cln: Forma ID 275 clonada -> Novo clone ID 1335.
+cln: Forma ID 298 clonada -> Novo clone ID 1336.
+cln: Forma ID 344 clonada -> Novo clone ID 1337.
+cln: Forma ID 321 clonada -> Novo clone ID 1338.
+cln: Forma ID 252 clonada -> Novo clone ID 1339.
+cln: Forma ID 183 clonada -> Novo clone ID 1340.
+cln: Forma ID 206 clonada -> Novo clone ID 1341.
+cln: Forma ID 320 clonada -> Novo clone ID 1342.
+cln: Forma ID 297 clonada -> Novo clone ID 1343.
+cln: Forma ID 205 clonada -> Novo clone ID 1344.
+cln: Forma ID 251 clonada -> Novo clone ID 1345.
+cln: Forma ID 228 clonada -> Novo clone ID 1346.
+cln: Forma ID 182 clonada -> Novo clone ID 1347.
+cln: Forma ID 159 clonada -> Novo clone ID 1348.
+cln: Forma ID 296 clonada -> Novo clone ID 1349.
+cln: Forma ID 319 clonada -> Novo clone ID 1350.
+cln: Forma ID 342 clonada -> Novo clone ID 1351.
+cln: Forma ID 250 clonada -> Novo clone ID 1352.
+cln: Forma ID 273 clonada -> Novo clone ID 1353.
+cln: Forma ID 204 clonada -> Novo clone ID 1354.
+cln: Forma ID 227 clonada -> Novo clone ID 1355.
+cln: Forma ID 158 clonada -> Novo clone ID 1356.
+cln: Forma ID 181 clonada -> Novo clone ID 1357.
+cln: Forma ID 157 clonada -> Novo clone ID 1358.
+cln: Forma ID 203 clonada -> Novo clone ID 1359.
+cln: Forma ID 318 clonada -> Novo clone ID 1360.
+cln: Forma ID 341 clonada -> Novo clone ID 1361.
+cln: Forma ID 295 clonada -> Novo clone ID 1362.
+cln: Forma ID 226 clonada -> Novo clone ID 1363.
+cln: Forma ID 249 clonada -> Novo clone ID 1364.
+cln: Forma ID 272 clonada -> Novo clone ID 1365.
+cln: Forma ID 180 clonada -> Novo clone ID 1366.
+cln: Forma ID 270 clonada -> Novo clone ID 1367.
+cln: Forma ID 179 clonada -> Novo clone ID 1368.
+cln: Forma ID 317 clonada -> Novo clone ID 1369.
+cln: Forma ID 340 clonada -> Novo clone ID 1370.
+cln: Forma ID 225 clonada -> Novo clone ID 1371.
+cln: Forma ID 271 clonada -> Novo clone ID 1372.
+cln: Forma ID 294 clonada -> Novo clone ID 1373.
+cln: Forma ID 248 clonada -> Novo clone ID 1374.
+cln: Forma ID 202 clonada -> Novo clone ID 1375.
+cln: Forma ID 156 clonada -> Novo clone ID 1376.
+cln: Forma ID 339 clonada -> Novo clone ID 1377.
+cln: Forma ID 293 clonada -> Novo clone ID 1378.
+cln: Forma ID 316 clonada -> Novo clone ID 1379.
+cln: Forma ID 201 clonada -> Novo clone ID 1380.
+cln: Forma ID 247 clonada -> Novo clone ID 1381.
+cln: Forma ID 224 clonada -> Novo clone ID 1382.
+cln: Forma ID 178 clonada -> Novo clone ID 1383.
+cln: Forma ID 338 clonada -> Novo clone ID 1384.
+cln: Forma ID 177 clonada -> Novo clone ID 1385.
+cln: Forma ID 200 clonada -> Novo clone ID 1386.
+cln: Forma ID 292 clonada -> Novo clone ID 1387.
+cln: Forma ID 315 clonada -> Novo clone ID 1388.
+cln: Forma ID 246 clonada -> Novo clone ID 1389.
+cln: Forma ID 269 clonada -> Novo clone ID 1390.
+cln: Forma ID 223 clonada -> Novo clone ID 1391.
+cln: Forma ID 154 clonada -> Novo clone ID 1392.
+cln: Forma ID 153 clonada -> Novo clone ID 1393.
+cln: Forma ID 314 clonada -> Novo clone ID 1394.
+cln: Forma ID 337 clonada -> Novo clone ID 1395.
+cln: Forma ID 291 clonada -> Novo clone ID 1396.
+cln: Forma ID 268 clonada -> Novo clone ID 1397.
+cln: Forma ID 222 clonada -> Novo clone ID 1398.
+cln: Forma ID 245 clonada -> Novo clone ID 1399.
+cln: Forma ID 199 clonada -> Novo clone ID 1400.
+cln: Forma ID 176 clonada -> Novo clone ID 1401.
+cln: Forma ID 825 clonada -> Novo clone ID 1402.
+cln: Forma ID 855 clonada -> Novo clone ID 1403.
+cln: Forma ID 861 clonada -> Novo clone ID 1404.
+cln: Forma ID 837 clonada -> Novo clone ID 1405.
+cln: Forma ID 849 clonada -> Novo clone ID 1406.
+cln: Forma ID 843 clonada -> Novo clone ID 1407.
+cln: Forma ID 831 clonada -> Novo clone ID 1408.
+cln: Forma ID 819 clonada -> Novo clone ID 1409.
+cln: Forma ID 813 clonada -> Novo clone ID 1410.
