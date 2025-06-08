@@ -104,7 +104,7 @@ bool buscaTipoSpy(Info info_forma, DescritorTipoInfo tipo_forma, Lista L, void *
         // Procura por TODAS as âncoras de nós dentro dessa pequena região, e as adiciona na lista.
         getNodesDentroRegiaoSmuT(contexto->tree, x1, y1, x2, y2, L);
     } else{
-        fprintf(contexto->arqTxt, "Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.\n");
+        fprintf(contexto->arqTxt, "Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.\n");
         return false;
     }
 
