@@ -14,6 +14,7 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y);
 void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy);
 void handle_cmflg(CONTEXTO ctxt, int id_ref, char *cb, char* cp, double w);
 void handle_spy(CONTEXTO ctxt, int id_ref);
+void handle_blow(CONTEXTO ctxt, int id_ogiva);
 
 CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB, double epsilon);
 

@@ -17,7 +17,7 @@ Lista criaLista() {
     Lista_internal *l = (Lista_internal*)malloc(sizeof(Lista_internal));
     if (!l){
         perror("Erro ao alocar memoria para a lista\n");
-        return NULL;
+        exit(1);
     }
     l->primeiro = NULL;
     l->ultimo = NULL;
@@ -73,6 +73,18 @@ bool insereNaLista(Lista l, Item item) {
     li->tamanho++;
     return true;
 }
+
+Item getPriomeiroNoLista(Lista l){
+    if(!l){
+        fprintf(stderr, "(getPriomeiroNoLista) Erro: parametros invalidos.\n");
+        return NULL;
+    }
+
+    Lista_internal *l1 = (Lista_internal*)l;
+    return l1->primeiro;
+}
+
+
 
 Item removePrimeiroDaLista(Lista l) {
     if (!l){

@@ -785,7 +785,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
         } else if (strcmp(comm, "blow") == 0) {
             int id;
             if (sscanf(str, "blow %d", &id) == 1) {
-                //handle_blow(t, pathTxt, id);
+                handle_blow(con, id);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para blow\n", str);
             }

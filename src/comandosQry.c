@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <math.h>
 
 #include "comandosQry.h"
 #include "formas.h"
@@ -62,6 +63,12 @@ bool findFormByIdCallback(SmuTreap t, Node n, Info i, double x, double y, void *
         fprintf(stderr, "(findFormByIdCallback) Erro: parametros invalidos.\n");
         return false;
     }
+
+    if(*((int*)aux) < 0 || *((int*)aux) >= 100){
+        fprintf(stderr, "(findFormByIdCallback) Erro: id que se busca e invalido.\n");
+        return false;
+    }
+
     int id_procurado = *((int*) aux);
     int id_atual = get_idF(i, getTypeInfoSmuT(t, n));
     if (id_atual == id_procurado) {
@@ -613,6 +620,122 @@ void handle_spy(CONTEXTO ctxt, int id_ref){
     destroiLista(alvos, NULL);
 
 
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------//
+
+
+//------------------------------------------------------------HANDLE_BLOW----------------------------------------------------------------//
+
+bool pontoInternoAFormaCallback(SmuTreap t, Node n, Info i, double px, double py){
+    if(!t || !n || !i || px < 0 || py < 0){
+        fprintf(stderr, "(pontoInternoAFormaCallback) Erro: parametros invalidos.\n");
+        return false;
+    }
+
+    DescritorTipoInfo tipo = getTypeInfoSmuT(t, n);
+
+    double bbx, bby, bbw, bbh;
+    fCalcBB_individual(tipo, i, &bbx, &bby, &bbw, &bbh);
+    
+    // Otimizacao com BB
+    if (!ponto_interno_retangulo(px, py, bbx, bby, bbx + bbw, bby + bbh, 0.0)) {
+        return false; // Rejeição rápida!
+    }
+
+    if(tipo == TIPO_CIRCULO){
+        // Verifica se o ponto nao esta em alguma parte "fantasma" do circulo.
+        CIRCLE c = (CIRCLE)i;
+        double cx = get_XC(c);
+        double cy = get_YC(c);
+        double r = get_rC(c);
+        double dist = sqrt(pow(px - cx, 2) + pow(py - cy, 2));
+        return dist <= r;
+    }
+
+    // Para retangulos, textos e linhas, se estiver no BB, considera-se interno.
+    return true;
+}
+
+void handle_blow(CONTEXTO ctxt, int id_ogiva){
+    if(!ctxt){
+        fprintf(stderr, "(handle_blow) Erro: parametro invalido.\n");
+        return; 
+    }
+
+    printf("Processando o comando blow: id=%d\n", id_ogiva);
+
+    qryContext* contexto = (qryContext*)ctxt;
+
+    fprintf(contexto->arqTxt, "[*] blow %d\n", id_ogiva);
+
+    // Encontra a ogiva
+    Node no_ogiva = procuraNoSmuT(contexto->tree, findFormByIdCallback, &id_ogiva);
+    if (!no_ogiva) {
+        fprintf(contexto->arqTxt, "Erro: Ogiva com ID %d nao encontrada.\n", id_ogiva);
+        return;
+    }
+
+    Info info_ogiva = getInfoSmuT(contexto->tree, no_ogiva);
+    double x_exp, y_exp;
+    get_anchorF(info_ogiva, getTypeInfoSmuT(contexto->tree, no_ogiva), &x_exp, &y_exp, NULL, NULL);
+
+    fprintf(contexto->arqTxt, "blow: Ogiva ID %d explodiu em (%.2f, %.2f).\n", id_ogiva, x_exp, y_exp);
+
+
+    // Adiciona anotação SVG '#' para a explosão
+    char* anot_explosao = (char*)malloc(128 * sizeof(char));
+    if (anot_explosao) {
+        sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" font-size=\"16\" font-weight=\"bold\">#</text>", x_exp, y_exp);
+        insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_explosao);
+    }
+
+
+    // Encontra todos os alvos atingidos pelo ponto de explosão
+    Lista alvos_atingidos = criaLista();
+    getInfosAtingidoPontoSmuT(contexto->tree, x_exp, y_exp, pontoInternoAFormaCallback, alvos_atingidos);
+
+    // Cria lista final de todos os nos a serem removidos
+    Lista nos_a_remover = criaLista();
+    insereNaLista(nos_a_remover, (Item)no_ogiva);
+
+    while(!listaEstaVazia(alvos_atingidos)){
+        Node alvo_a_remover = (Node)removePrimeiroDaLista(alvos_atingidos);
+
+        if(alvo_a_remover != no_ogiva){
+            insereNaLista(nos_a_remover, (Item)alvo_a_remover);
+        }
+    }
+    destroiLista(alvos_atingidos, NULL);
+
+    // Adicionar anotacoes no svg e txt.
+    fprintf(contexto->arqTxt, "  Formas destruidas pela explosao:\n");
+
+    while(!listaEstaVazia(nos_a_remover)){
+        Node no_para_remocao = (Node)removePrimeiroDaLista(nos_a_remover);
+        Info info_removida = getInfoSmuT(contexto->tree, no_para_remocao);
+        DescritorTipoInfo tipo_removido = getTypeInfoSmuT(contexto->tree, no_para_remocao);
+        
+        // Relata no TXT
+        int id_removido = get_idF(info_removida, tipo_removido);
+        const char* nome_forma_removida = get_NameStrF(tipo_removido);
+        fprintf(contexto->arqTxt, "    - ID: %d, Tipo: %s\n", id_removido, nome_forma_removida);
+
+        // Anota o 'x' no svg
+        double xAnch_removido, yAnch_removido;
+        get_anchorF(info_removida, tipo_removido, &xAnch_removido, &yAnch_removido, NULL, NULL);
+
+        char* anot_x = (char*)malloc(128 * sizeof(char));
+        if (anot_x) {
+            sprintf(anot_x, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" font-size=\"16\" font-weight=\"bold\">x</text>", xAnch_removido, yAnch_removido);
+            insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_x);
+        }
+
+        // Remove o no atingido da arvore
+        removeNoSmuT(contexto->tree, no_para_remocao);
+    }
+
+    destroiLista(nos_a_remover, NULL);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------//

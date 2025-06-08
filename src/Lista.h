@@ -56,6 +56,8 @@ void destroiLista(Lista l, void (*liberaItemNaoNulo)(Item item));
  */
 bool insereNaLista(Lista l, Item item);
 
+Item getPriomeiroNoLista(Lista l);
+
 /**
  * @brief Remove e retorna o primeiro item da lista.
  *

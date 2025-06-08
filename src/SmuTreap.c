@@ -527,7 +527,6 @@ Node recoverNodePostPromotion(SmuTreap t, double x, double y){ // Recovery do no
 
     SmuTreap_internal *t_i = (SmuTreap_internal *)t;
     node_internal *current = t_i->root;
-    node_internal *found_node = NULL;
 
 
     while (current != NULL) {
@@ -535,7 +534,6 @@ Node recoverNodePostPromotion(SmuTreap t, double x, double y){ // Recovery do no
         bool yDentroDeEpsilon = fabs(y - current->y) < t_i->epsilon;
 
         if (xDentroDeEpsilon && yDentroDeEpsilon) {
-            found_node = current;
             return current; // Encontrou o no'
         }
 
@@ -964,16 +962,15 @@ void getInfosAtingidoPontoSmuT_aux(SmuTreap_internal *t, node_internal *root, do
     if (!root || !f) return;
 
     // Informacoes do BB que sera usado na busca. Atualiza a cada chamada recursiva.
-    double bb_rx_min = root->BBsubTree.x;
-    double bb_ry_min = root->BBsubTree.y;
-    double bb_rw = root->BBsubTree.w;
-    double bb_rh = root->BBsubTree.h;
-    double bb_rx_max = bb_rx_min + bb_rw;
-    double bb_ry_max = bb_ry_min + bb_rh;
+    double bbSub_x, bbSub_y, bbSub_w, bbSub_h;
+    getBoundingBoxSmuT(t, root, &bbSub_x, &bbSub_y, &bbSub_w, &bbSub_h);
 
-    //Se o ponto (px, py) não está dentro do BBsubTree (que contém âncoras),
-    // e' certo de que ele nao esta' dentro de alguma Info da subárvore.
-    if(!ponto_interno_retangulo(x, y, bb_rx_min, bb_ry_min, bb_rx_max, bb_ry_max, t->epsilon)){ // Se P nao e' interno 'a BB do no' atual, volta um passo.
+    double bbSub_x_max = bbSub_x + bbSub_w;
+    double bbSub_y_max = bbSub_y + bbSub_h;
+
+
+    // Se o ponto (px, py) não está dentro do BBsubTree (que contém âncoras), podamos o galho.
+    if(!ponto_interno_retangulo(x, y, bbSub_x, bbSub_y, bbSub_x_max, bbSub_y_max, t->epsilon)){
         return;
     }
 
@@ -982,7 +979,7 @@ void getInfosAtingidoPontoSmuT_aux(SmuTreap_internal *t, node_internal *root, do
     }
 
     if(root->right) getInfosAtingidoPontoSmuT_aux(t, root->right, x, y, f, L);
-    if(root->right) getInfosAtingidoPontoSmuT_aux(t, root->left, x, y, f, L);
+    if(root->left) getInfosAtingidoPontoSmuT_aux(t, root->left, x, y, f, L);
     return;
 }
 
@@ -995,6 +992,7 @@ bool getInfosAtingidoPontoSmuT(SmuTreap t, double x, double y, FpontoInternoAInf
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
     if(!(t_i->root)){
         fprintf(stderr, "(getInfosAtingidoPontoSmuT) Erro: arvore vazia.");
+        return false;
     }
 
     Lista tempL = criaLista();
