@@ -12,6 +12,7 @@ typedef struct{
     // Para todos.
     FILE* arqTxt;
     SmuTreap tree;
+    int epsilon;
     Lista lista_anotacoes_svg;
     Lista *array_selecoes;
     int *idMax;
@@ -19,6 +20,11 @@ typedef struct{
 
     // Para cln.
     double dx, dy;
+
+    // Para cmflg
+    char* cor_borda;
+    char* cor_preenchimento;
+    double largura_borda;
 
 
 } qryContext;
@@ -29,7 +35,7 @@ void killAnotacaoCallback(char *anotacao){
     } else free(anotacao);
 }
 
-CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB){
+CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB, int epsilon){
     qryContext *ctxt = (qryContext*)malloc(sizeof(qryContext));
     if(!ctxt){
         fprintf(stderr, "(iniciaContext) Erro: falha ao alocar memoria para struct.\n");
@@ -38,6 +44,7 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
 
     ctxt->arqTxt = arqTxt;
     ctxt->tree = t;
+    ctxt->epsilon = epsilon;
     ctxt->lista_anotacoes_svg = lista_anotacoes_svg;
     ctxt->array_selecoes = array_selecoes;
     ctxt->idMax = idMax;
@@ -48,6 +55,15 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
     ctxt->dy = 0;
 
     return ctxt;
+}
+
+bool findFormByIdCallback(SmuTreap t, Node n, Info i, double x, double y, void *aux) {
+    int id_procurado = *((int*) aux);
+    int id_atual = get_idF(i, getTypeInfoSmuT(t, n));
+    if (id_atual == id_procurado) {
+        return true; // Encontrou
+    }
+    return false; // Não encontrou, continua a busca
 }
 
 //------------------------------------------------------------HANDLE_SELR----------------------------------------------------------------//
@@ -421,3 +437,82 @@ void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy){
 //---------------------------------------------------------------------------------------------------------------------------------------//
 
 
+//------------------------------------------------------------HANDLE_CMFLG---------------------------------------------------------------//
+
+void modificaCorELarguraCallback(Item item_node, void *aux_context){
+    qryContext *contexto = (qryContext*)aux_context;
+    Node node_alvo = (Node)item_node;
+    Info info_alvo = getInfoSmuT(contexto->tree, node_alvo);
+    DescritorTipoInfo tipo_alvo = getTypeInfoSmuT(contexto->tree, node_alvo);
+
+    set_corF(info_alvo, tipo_alvo, contexto->cor_borda, contexto->cor_preenchimento);
+    set_strkWF(info_alvo, tipo_alvo, contexto->largura_borda);
+
+    fprintf(contexto->arqTxt, "cmflg: Forma ID %d modificada.\n", get_idF(info_alvo, tipo_alvo));
+}
+
+void handle_cmflg(CONTEXTO ctxt, int id_ref, char *cb, char* cp, double w){
+    if(!ctxt){
+        fprintf(stderr, "(handle_cmflg) Erro: parametro invalido.\n");
+        return; 
+    }
+
+    qryContext* contexto = (qryContext*)ctxt;
+
+    fprintf(contexto->arqTxt, "[*] cmflg %d %s %s %d\n", id_ref, cb, cp, w);
+
+    Node node_ref = procuraNoSmuT(contexto->tree, findFormByIdCallback, &id_ref);
+    if (!node_ref) {
+        fprintf(contexto->arqTxt, "Erro: Forma de referencia com ID %d nao encontrada.\n", id_ref);
+        return;
+    }
+
+    Info info_ref = getInfoSmuT(contexto->tree, node_ref);
+    DescritorTipoInfo tipo_ref = getTypeInfoSmuT(contexto->tree, node_ref);
+
+    Lista alvos = criaLista();
+
+    if (info_ref == TIPO_RETANGULO){
+        RECTANGLE r = (RECTANGLE)info_ref;
+        double rx = get_XR(r);
+        double ry = get_YR(r);
+        double rw = get_wR(r);
+        double rh = get_hR(r);
+        double rXMax = rx + rw;
+        double rYMax = ry + rh;
+
+        getInfosDentroRegiaoSmuT(contexto->tree, rx, ry, rXMax, rYMax, formaTotalmenteContidaCallback, alvos);
+    } else if(tipo_ref == TIPO_TEXTO){
+        TEXTO t = (TEXTO)info_ref;
+
+        double tx = get_XT(t);
+        double ty = get_YT(t);
+        double epsilon = contexto->epsilon;
+
+        // Define uma pequena região quadrada em torno da âncora do texto
+        double x1 = tx - epsilon;
+        double y1 = ty - epsilon;
+        double x2 = tx + epsilon;
+        double y2 = ty + epsilon;
+
+        // Procura por TODAS as âncoras de nós dentro dessa pequena região, e as adiciona na lista.
+        getNodesDentroRegiaoSmuT(contexto->tree, x1, y1, x2, y2, alvos);
+    } else{
+        fprintf(contexto->arqTxt, "Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.\n");
+        destroiLista(alvos, NULL);
+        return;
+    }
+
+    if(listaEstaVazia(alvos)){
+        fprintf(contexto->arqTxt, "Nenhuma forma encontrada para modificar.\n");
+    } else{
+        contexto->cor_borda = cb;
+        contexto->cor_preenchimento = cp;
+        contexto->largura_borda = w;
+
+        //percorreLista(alvos, processaAlvosCmflg, contexto);
+    }
+
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------//

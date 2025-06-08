@@ -13,6 +13,6 @@ void handle_selr(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y, do
 void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y);
 void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy);
 
-CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB);
+CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB, int epsilon);
 
 #endif

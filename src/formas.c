@@ -95,6 +95,80 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
     } else return false; // Tipo desconhecido.
 }
 
+// Ideia de fazer um set_cor para todas as formas. recebe duas cores, e define corL como corB_new.
+void set_corF(Info forma, DescritorTipoInfo tipo, const char* new_corb, const char* new_corp){
+    if(!forma || !tipo || !new_corb || !new_corp){
+        fprintf(stderr, "(set_corF) Erro: parametros invalidos.\n");
+        return;
+    }
+
+    switch (tipo)
+    {
+    case TIPO_CIRCULO:
+        CIRCLE c = (CIRCLE)forma;
+        set_cbC(c, new_corb);
+        set_cpC(c, new_corp);
+        break;
+
+    case TIPO_RETANGULO:
+        RECTANGLE r = (RECTANGLE)forma;
+        set_cbR(r, new_corb);
+        set_cpR(r, new_corp);
+        break;
+
+    case TIPO_TEXTO:
+        TEXTO t = (TEXTO)forma;
+        set_cbT(t, new_corb);
+        set_cpT(t, new_corp);
+        break;
+
+    case TIPO_LINHA:
+        LINHA l = (LINHA)forma;
+        set_cL(l, new_corb);
+        break;
+    
+    default:
+        fprintf(stderr, "(set_corF) Erro: tipo de forma desconhecido.\n");
+        return;
+    }
+
+    return;
+}
+
+void set_strkWF(Info forma, DescritorTipoInfo tipo, double strokeWidth){
+    if(!forma || !tipo || strokeWidth < 0){
+        fprintf(stderr, "(set_strkWF) Erro: parametros invalidos.\n");
+        return;
+    }
+
+    switch (tipo)
+    {
+    case TIPO_CIRCULO:
+        CIRCLE c = (CIRCLE)forma;
+        set_strkWC(c, strokeWidth);
+        break;
+
+    case TIPO_RETANGULO:
+        RECTANGLE r = (RECTANGLE)forma;
+        set_strkWR(r, strokeWidth);
+        break;
+
+    case TIPO_TEXTO:
+        TEXTO t = (TEXTO)forma;
+        set_strkWT(t, strokeWidth);
+        break;
+
+    case TIPO_LINHA:
+        LINHA l = (LINHA)forma;
+        set_strkWL(l, strokeWidth);
+        break;
+    
+    default:
+        fprintf(stderr, "(set_corF) Erro: tipo de forma desconhecido.\n");
+        return;
+    }
+}
+
 void killF(Info forma, DescritorTipoInfo tipo){
     if(!forma || !tipo){
         fprintf(stderr, "(killF) Erro: parametros invalidos.\n");
