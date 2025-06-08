@@ -1,0 +1,12 @@
+[*] selr 17 191.33 14.67 225.00 100.00
+Nenhuma forma inteiramente contida na regiao especificada.
+[*] cln 17 150.00 50.00
+Aviso: Selecao 'n' (17) esta vazia. Nada a clonar.
+[*] selr 19 341.33 64.67 225.00 100.00
+Nenhuma forma inteiramente contida na regiao especificada.
+[*] cln 19 150.00 50.00
+Aviso: Selecao 'n' (19) esta vazia. Nada a clonar.
+[*] selr 23 491.33 114.67 225.00 100.00
+Nenhuma forma inteiramente contida na regiao especificada.
+[*] cln 23 150.00 50.00
+Aviso: Selecao 'n' (23) esta vazia. Nada a clonar.

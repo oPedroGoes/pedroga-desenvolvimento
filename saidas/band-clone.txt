@@ -1,0 +1,4 @@
+[*] selr 17 191.33 14.67 225.00 100.00
+Nenhuma forma inteiramente contida na regiao especificada.
+[*] cln 17 225.00 100.00
+Aviso: Selecao 'n' (17) esta vazia. Nada a clonar.
