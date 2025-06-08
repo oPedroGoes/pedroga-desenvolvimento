@@ -104,28 +104,30 @@ void set_corF(Info forma, DescritorTipoInfo tipo, const char* new_corb, const ch
 
     switch (tipo)
     {
-    case TIPO_CIRCULO:
+    case TIPO_CIRCULO:{
         CIRCLE c = (CIRCLE)forma;
-        set_cbC(c, new_corb);
-        set_cpC(c, new_corp);
+        set_cbC(c, (char*)new_corb);
+        set_cpC(c, (char*)new_corp);
         break;
-
-    case TIPO_RETANGULO:
+    }
+    case TIPO_RETANGULO:{
         RECTANGLE r = (RECTANGLE)forma;
-        set_cbR(r, new_corb);
-        set_cpR(r, new_corp);
+        set_cbR(r, (char*)new_corb);
+        set_cpR(r, (char*)new_corp);
         break;
-
-    case TIPO_TEXTO:
+    }
+    case TIPO_TEXTO:{
         TEXTO t = (TEXTO)forma;
-        set_cbT(t, new_corb);
-        set_cpT(t, new_corp);
+        set_cbT(t, (char*)new_corb);
+        set_cpT(t, (char*)new_corp);
         break;
+    }
 
-    case TIPO_LINHA:
+    case TIPO_LINHA:{
         LINHA l = (LINHA)forma;
-        set_cL(l, new_corb);
+        set_cL(l, (char*)new_corb);
         break;
+    }
     
     default:
         fprintf(stderr, "(set_corF) Erro: tipo de forma desconhecido.\n");
@@ -143,28 +145,32 @@ void set_strkWF(Info forma, DescritorTipoInfo tipo, double strokeWidth){
 
     switch (tipo)
     {
-    case TIPO_CIRCULO:
+    case TIPO_CIRCULO:{
         CIRCLE c = (CIRCLE)forma;
         set_strkWC(c, strokeWidth);
         break;
+    }
 
-    case TIPO_RETANGULO:
+    case TIPO_RETANGULO:{
         RECTANGLE r = (RECTANGLE)forma;
         set_strkWR(r, strokeWidth);
         break;
+    }
 
-    case TIPO_TEXTO:
+    case TIPO_TEXTO:{
         TEXTO t = (TEXTO)forma;
         set_strkWT(t, strokeWidth);
         break;
+    }
 
-    case TIPO_LINHA:
+    case TIPO_LINHA:{
         LINHA l = (LINHA)forma;
         set_strkWL(l, strokeWidth);
         break;
+    }
     
     default:
-        fprintf(stderr, "(set_corF) Erro: tipo de forma desconhecido.\n");
+        fprintf(stderr, "(set_strkWF) Erro: tipo de forma desconhecido.\n");
         return;
     }
 }

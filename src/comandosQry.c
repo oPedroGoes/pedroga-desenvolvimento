@@ -58,12 +58,57 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
 }
 
 bool findFormByIdCallback(SmuTreap t, Node n, Info i, double x, double y, void *aux) {
+    if(!t || !n || !i || !aux){
+        fprintf(stderr, "(findFormByIdCallback) Erro: parametros invalidos.\n");
+        return false;
+    }
     int id_procurado = *((int*) aux);
     int id_atual = get_idF(i, getTypeInfoSmuT(t, n));
     if (id_atual == id_procurado) {
         return true; // Encontrou
     }
     return false; // Não encontrou, continua a busca
+}
+
+bool buscaTipoSpy(Info info_forma, DescritorTipoInfo tipo_forma, Lista L, void *aux_context){
+    if(!info_forma || !tipo_forma || !L || !aux_context){
+       fprintf(stderr, "(buscaTipoSpy) Erro: parametros invalidos."); 
+       return false;
+    }
+
+    qryContext *contexto = (qryContext*)aux_context;
+
+    if (tipo_forma == TIPO_RETANGULO){
+        RECTANGLE r = (RECTANGLE)info_forma;
+        double rx = get_XR(r);
+        double ry = get_YR(r);
+        double rw = get_wR(r);
+        double rh = get_hR(r);
+        double rXMax = rx + rw;
+        double rYMax = ry + rh;
+
+        getInfosDentroRegiaoSmuT(contexto->tree, rx, ry, rXMax, rYMax, formaTotalmenteContidaCallback, L);
+    } else if(tipo_forma == TIPO_TEXTO){
+        TEXTO t = (TEXTO)info_forma;
+
+        double tx = get_XT(t);
+        double ty = get_YT(t);
+        double epsilon = contexto->epsilon;
+
+        // Define uma pequena região quadrada em torno da âncora do texto
+        double x1 = tx - epsilon;
+        double y1 = ty - epsilon;
+        double x2 = tx + epsilon;
+        double y2 = ty + epsilon;
+
+        // Procura por TODAS as âncoras de nós dentro dessa pequena região, e as adiciona na lista.
+        getNodesDentroRegiaoSmuT(contexto->tree, x1, y1, x2, y2, L);
+    } else{
+        fprintf(contexto->arqTxt, "Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.\n");
+        return false;
+    }
+
+    return true;
 }
 
 //------------------------------------------------------------HANDLE_SELR----------------------------------------------------------------//
@@ -459,7 +504,7 @@ void handle_cmflg(CONTEXTO ctxt, int id_ref, char *cb, char* cp, double w){
 
     qryContext* contexto = (qryContext*)ctxt;
 
-    fprintf(contexto->arqTxt, "[*] cmflg %d %s %s %d\n", id_ref, cb, cp, w);
+    fprintf(contexto->arqTxt, "[*] cmflg %d %s %s %.2f\n", id_ref, cb, cp, w);
 
     Node node_ref = procuraNoSmuT(contexto->tree, findFormByIdCallback, &id_ref);
     if (!node_ref) {
@@ -472,47 +517,24 @@ void handle_cmflg(CONTEXTO ctxt, int id_ref, char *cb, char* cp, double w){
 
     Lista alvos = criaLista();
 
-    if (info_ref == TIPO_RETANGULO){
-        RECTANGLE r = (RECTANGLE)info_ref;
-        double rx = get_XR(r);
-        double ry = get_YR(r);
-        double rw = get_wR(r);
-        double rh = get_hR(r);
-        double rXMax = rx + rw;
-        double rYMax = ry + rh;
-
-        getInfosDentroRegiaoSmuT(contexto->tree, rx, ry, rXMax, rYMax, formaTotalmenteContidaCallback, alvos);
-    } else if(tipo_ref == TIPO_TEXTO){
-        TEXTO t = (TEXTO)info_ref;
-
-        double tx = get_XT(t);
-        double ty = get_YT(t);
-        double epsilon = contexto->epsilon;
-
-        // Define uma pequena região quadrada em torno da âncora do texto
-        double x1 = tx - epsilon;
-        double y1 = ty - epsilon;
-        double x2 = tx + epsilon;
-        double y2 = ty + epsilon;
-
-        // Procura por TODAS as âncoras de nós dentro dessa pequena região, e as adiciona na lista.
-        getNodesDentroRegiaoSmuT(contexto->tree, x1, y1, x2, y2, alvos);
-    } else{
-        fprintf(contexto->arqTxt, "Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.\n");
+    if(!buscaTipoSpy(info_ref, tipo_ref, alvos, contexto)){
+        fprintf(contexto->arqTxt, "(handle_cmflg) Erro: buscaTipoSpy falhou!\n");
         destroiLista(alvos, NULL);
         return;
     }
 
     if(listaEstaVazia(alvos)){
         fprintf(contexto->arqTxt, "Nenhuma forma encontrada para modificar.\n");
+        destroiLista(alvos, NULL);
     } else{
         contexto->cor_borda = cb;
         contexto->cor_preenchimento = cp;
         contexto->largura_borda = w;
 
-        //percorreLista(alvos, processaAlvosCmflg, contexto);
+        percorreLista(alvos, modificaCorELarguraCallback, contexto);
     }
 
+    destroiLista(alvos, NULL);
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------//

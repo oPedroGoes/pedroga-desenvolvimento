@@ -81,7 +81,7 @@ char* get_cpR(RECTANGLE r){
     return r1->corp;
 }
 
-double get_strkWT(RECTANGLE r) {
+double get_strkWR(RECTANGLE r) {
     if(!r){
         fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
         return -1;
@@ -90,7 +90,7 @@ double get_strkWT(RECTANGLE r) {
     return r1->strokeWidth;
 }
 
-void set_strkWT(RECTANGLE r, double sw) {
+void set_strkWR(RECTANGLE r, double sw) {
     if(!r || sw < 0){
         fprintf(stderr, "(set_strkWC) Erro: parametros invalidos.");
         return;

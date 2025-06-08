@@ -72,7 +72,7 @@ double get_strkWL(LINHA l){
     return l1->strokeWidth;
 }
 
-void ser_strkWL(LINHA l, double sw){
+void set_strkWL(LINHA l, double sw){
     if(!l || sw < 0){
         fprintf(stderr, "(ser_strkWL) Erro: parametro invalido");
         return ;
