@@ -153,7 +153,8 @@
     printf("promoRate = (nao definido ou falha)\n");
   }
 
-  SmuTreap t = processa_geo(fullNomeGeo, dirSaida, nomeGeo, prioMax, hc, promoRate, EPSILON_CONFIG);
+  int idMax = 0;
+  SmuTreap t = processa_geo(fullNomeGeo, dirSaida, nomeGeo, &idMax, prioMax, hc, promoRate, EPSILON_CONFIG);
 
   Lista array_selecoes[100];
   for (int i = 0; i < 100; i++){
@@ -168,11 +169,10 @@ frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória
   if(dirEntrada) free(dirEntrada);
   if(nomeGeo) free(nomeGeo);
-  // if(fullNomeGeo) free(fullNomeGeo); // Se você alocar memória para eles
+  if(fullNomeGeo) free(fullNomeGeo);
   if(dirSaida) free(dirSaida);
   if(nomeQry) free(nomeQry);
-  // if(fullNomeQry) free(fullNomeQry);
-  // if(fullNameArq) free(fullNameArq);
+  if(fullNomeQry) free(fullNomeQry);
 
   if(prioMax) free(prioMax);
   if(hc) free(hc);

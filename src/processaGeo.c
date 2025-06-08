@@ -8,7 +8,6 @@
 #include "retangulo.h"
 #include "SmuTreap.h"
 #include "boundingBox.h"
-//#include "arvorebin.h"
 #include "formas.h"
 
 #define DEFAULT_PRIOMAX 10000
@@ -136,7 +135,7 @@ void escreverFormaSvg(SmuTreap t, Node n, Info i, double x_ancora_no, double y_a
     }
 }
 
-SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
+SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, int *idMax) {
 
     char str[500];
     char tipo[4]; //Para "c ", "r ", "l ", "t ", "ts" + null
@@ -169,8 +168,8 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
             char cp[50];
 
             if (sscanf(str + 2, "%d %lf %lf %lf %s %s", &i, &x, &y, &r, cb, cp)){
-                //idUltimaForma = i, por algum motivo! Pode ser util depois
                 CIRCLE c = create_circle(i, x, y, r, cb, cp);
+                if (i > *idMax) { *idMax = i; } // Atualiza o ID
                 insertSmuT(t, x, y, (CIRCLE)c, TIPO_CIRCULO, funcCalcBb);
                 
                 //printf("\n\n Circulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %s %s\n", tipo, i, x, y, r, cb, cp);
@@ -186,8 +185,8 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
             char cp[50];
 
             if (sscanf(str + 2, "%d %lf %lf %lf %lf %s %s", &i, &x, &y, &w, &h, cb, cp)){
-                //idUltimaForma = i, por algum motivo! Pode ser util depois
                 RECTANGLE r = create_rectangle(i, x, y, w, h, cb, cp);
+                if (i > *idMax) { *idMax = i; } // Atualiza o ID
                 insertSmuT(t, x, y, (RECTANGLE)r, TIPO_RETANGULO, funcCalcBb);
     
                 //printf("\n\n Retangulo criado!\nlinha lida: %s %d %.4lf %.4lf %.4lf %.4lf %s %s\n", tipo, i, x, y, w, h, cb, cp);
@@ -201,8 +200,8 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
             char c_cor[50];
 
             if (sscanf(str + 2, "%d %lf %lf %lf %lf %s", &i, &x1, &y1, &x2, &y2, c_cor)){
-                //idUltimaForma = i, por algum motivo! Pode ser util depois
                 LINHA l = cria_linha(i, x1, y1, x2, y2, c_cor);
+                if (i > *idMax) { *idMax = i; } // Atualiza o ID
     
                 double anc_x, anc_y;
                 int maior = ma(x1, x2, y1, y2);
@@ -230,6 +229,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
             char* txt = (char*)malloc(300 * sizeof(char));
             if (sscanf(str + 2, "%d %lf %lf %s %s %c \"%[^\"]\"", &i, &x, &y, cb, cp, &a, txt)){
                 TEXTO tx = cria_texto(i, x, y, cb, cp, a, txt, fam, wei, size);
+                if (i > *idMax) { *idMax = i; } // Atualiza o ID
                 insertSmuT(t, x, y, (TEXTO)tx, TIPO_TEXTO, funcCalcBb);
     
                 //printf("\n\n Texto criado!\nlinha lida: %s %d %.2lf %.2lf %s %s %c %s\n", tipo, i, x, y, cb, cp, a, txt);
@@ -245,7 +245,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb) {
 }
 // Não esquecer de processar os default, e nem de consultar o que os documentos fala sobre isso.
 SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nomegeo, 
-                    /*int *idUltimaForma,*/ int *prioMax, int *hc, double *promoRate, double epsilonConfig){
+                    int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig){
 
     int def_prioMax;
     int def_hc;
@@ -309,7 +309,8 @@ if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
     }
 
     // Popula a arvore t.
-    leitura_geo(arqGeo, t, fCalcBB_individual);
+    leitura_geo(arqGeo, t, fCalcBB_individual, idMax);
+    *idMax++;
     printf("\nSucesso na populacao da arvore!\n");
 
     // Gera o SVG inicial percorrendo a SmuTreap

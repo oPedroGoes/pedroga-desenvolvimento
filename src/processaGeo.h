@@ -20,5 +20,5 @@
      * 
      * @return void
      */
-    SmuTreap processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *prioMax, int *hc, double *promoRate, double epsilonConfig);
+    SmuTreap processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig);
 #endif

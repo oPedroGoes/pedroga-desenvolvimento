@@ -14,7 +14,11 @@ typedef struct{
     SmuTreap tree;
     Lista lista_anotacoes_svg;
     Lista *array_selecoes;
+    int *idMax;
+    FCalculaBoundingBox fCalcBB;
 
+    // Para cln.
+    double dx, dy;
 
 
 } qryContext;
@@ -25,7 +29,7 @@ void killAnotacaoCallback(char *anotacao){
     } else free(anotacao);
 }
 
-CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes){
+CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, Lista *array_selecoes, int *idMax, FCalculaBoundingBox fCalcBB){
     qryContext *ctxt = (qryContext*)malloc(sizeof(qryContext));
     if(!ctxt){
         fprintf(stderr, "(iniciaContext) Erro: falha ao alocar memoria para struct.\n");
@@ -36,6 +40,11 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
     ctxt->tree = t;
     ctxt->lista_anotacoes_svg = lista_anotacoes_svg;
     ctxt->array_selecoes = array_selecoes;
+    ctxt->idMax = idMax;
+    ctxt->fCalcBB = fCalcBB;
+
+    ctxt->dx = 0;
+    ctxt->dy = 0;
 
     return ctxt;
 }
@@ -299,5 +308,112 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
 //---------------------------------------------------------------------------------------------------------------------------------------//
 
 
+//------------------------------------------------------------HANDLE_CLN-----------------------------------------------------------------//
+
+void clonaEInsereCallback(Item item_origiNode, void *aux_context){
+    if (!item_origiNode || !aux_context){
+        fprintf(stderr, "(clonaEInsereCallback) Erro: parametros invalidos.\n");
+        return;
+    }
+
+    qryContext *context = (qryContext*)aux_context;
+    Node no_original = (Node)item_origiNode;
+    Info info_original = getInfoSmuT(context->tree, no_original);
+    DescritorTipoInfo tipo = getTypeInfoSmuT(context->tree, no_original);
+
+    int id_original = get_idF(info_original, tipo);
+    int id_clone = *(context->idMax);
+    Info info_clonada = NULL;
+    double xAnch_clone, yAnch_clone;
+
+    // Cria a info da forma clonada com base no tipo
+    switch(tipo) {
+        case TIPO_CIRCULO: {
+            CIRCLE c_original = (CIRCLE)info_original;
+            xAnch_clone = get_XC(c_original) + context->dx;
+            yAnch_clone = get_YC(c_original) + context->dy;
+            info_clonada = create_circle(id_clone, xAnch_clone, yAnch_clone, get_rC(c_original), get_cpC(c_original), get_cbC(c_original));
+            *(context->idMax)++;
+            break;
+        }
+        case TIPO_RETANGULO: {
+            RECTANGLE r_original = (RECTANGLE)info_original;
+            xAnch_clone = get_XR(r_original) + context->dx;
+            yAnch_clone = get_YR(r_original) + context->dy;
+            info_clonada = create_rectangle(id_clone, xAnch_clone, yAnch_clone, get_wR(r_original), get_hR(r_original), get_cpR(r_original), get_cbR(r_original));
+            *(context->idMax)++;
+            break;
+        }
+        case TIPO_TEXTO: {
+            TEXTO t_original = (TEXTO)info_original;
+            xAnch_clone = get_XT(t_original) + context->dx;
+            yAnch_clone = get_YT(t_original) + context->dy;
+            info_clonada = cria_texto(id_clone, xAnch_clone, yAnch_clone, get_cpT(t_original), get_cbT(t_original), get_charancoraT(t_original), get_txtT(t_original), get_ffT(t_original), get_fwT(t_original), get_fsT(t_original));
+            *(context->idMax)++;
+            break;
+        }
+        case TIPO_LINHA: {
+            LINHA l_original = (LINHA)info_original;
+            double x1l = get_X1L(l_original) + context->dx;
+            double y1l = get_Y1L(l_original) + context->dy;
+            double x2l = get_X2L(l_original) + context->dx;
+            double y2l = get_Y2L(l_original) + context->dy;
+            // Linha não troca cores, apenas translada
+            info_clonada = cria_linha(id_clone, x1l, y1l, x2l, y2l, get_cL(l_original));
+
+            // A âncora da linha é seu ponto inicial (menor X, ou menor Y para desempate)
+            if (x1l < x2l || (x1l == x2l && y1l <= y2l)){
+                xAnch_clone = x1l;
+                yAnch_clone = y1l;
+            } else {
+                xAnch_clone = x2l;
+                yAnch_clone = y2l;
+            }
+            *(context->idMax)++;
+            break;
+        }
+    }
+
+    if (info_clonada){
+        Node noClone = insertSmuT(context->tree, xAnch_clone, yAnch_clone, info_clonada, tipo, context->fCalcBB);
+        if(noClone){
+            fprintf(context->arqTxt, "cln: Forma ID %d clonada -> Novo clone ID %d.\n", id_original, id_clone);
+        } else{
+            fprintf(context->arqTxt, "cln: Falha ao inserir clone da forma ID %d na arvore.\n", id_original);
+            killF(info_clonada, tipo);
+        }
+    }
+}
+
+void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy){
+    if(!ctxt){
+        fprintf(stderr, "(handle_cln) Erro: parametro invalido.\n");
+        return;
+    }
+
+    printf("Processando comando cln: n=%d, dx=%.2lf, dy=%.2lf", n_id_selecao, dx, dy);
+
+    qryContext *contexto = (qryContext*)ctxt;
+    fprintf(contexto->arqTxt, "[*] cln %d %.2f %.2f\n", n_id_selecao, dx, dy);
+
+    // Valida o índice da seleção e verifica se a lista existe
+    if (n_id_selecao < 0 || n_id_selecao >= 100 || contexto->array_selecoes[n_id_selecao] == NULL) {
+        fprintf(contexto->arqTxt, "Erro: Selecao 'n' (%d) e invalida ou nao existe.\n", n_id_selecao);
+        return;
+    }
+
+    Lista cloneList = contexto->array_selecoes[n_id_selecao];
+    if (listaEstaVazia(cloneList)) {
+        fprintf(contexto->arqTxt, "Aviso: Selecao 'n' (%d) esta vazia. Nada a clonar.\n", n_id_selecao);
+        return;
+    }
+
+    contexto->dx = dx;
+    contexto->dy = dy;
+
+    percorreLista(cloneList, clonaEInsereCallback, contexto);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------//
 
 

@@ -695,9 +695,9 @@ void handle_blow(SmuTreap tree, FILE* pathTxtOut, int id_ogiva_a_explodir, Lista
 //---------------------------------------------------------------------------------------------------------------------//
 */
 
-void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, FCalculaBoundingBox fCalcBb){
+void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, int *idMax, FCalculaBoundingBox fCalcBb){
 
-    CONTEXTO con = iniciaContext(pathTxt, t, lista_anotacoes_svg, array_selecoes);
+    CONTEXTO con = iniciaContext(pathTxt, t, lista_anotacoes_svg, array_selecoes, idMax, fCalcBb);
 
     char *str = (char*)malloc(sizeof(char)*1024);
     
@@ -785,8 +785,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
     }
 }
 
-SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, 
-                        Lista lista_anotacoes_svg /*int idUltimaForma?*/){
+SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, Lista lista_anotacoes_svg, int *idMax){
     //printf("SmuTreap = %p\npathQry = %s\npathSaida = %s\nnomeQry = %s\narray_anotacoes = %p\nlista_anotacoes_svg = %p\n", t, pathQry, pathSaida, nomeQry, array_anotacoes, lista_anotacoes_svg);
     if(!pathQry || !pathSaida || !nomeQry || !array_anotacoes || !lista_anotacoes_svg){
         fprintf(stderr, "\n(processa_qry) Erro: parametros invalidos.\n");
@@ -852,7 +851,7 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
         exit(1);
     }
 
-    leitura_qry(t, arqQry, saidaTxt, array_anotacoes, lista_anotacoes_svg, fCalcBB_individual);
+    leitura_qry(t, arqQry, saidaTxt, array_anotacoes, lista_anotacoes_svg, idMax, fCalcBB_individual);
     
     //PRINTAR TXT E LISTA DE ANOTACOES SVG!!!!!!!!!
 

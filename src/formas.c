@@ -95,6 +95,37 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
     } else return false; // Tipo desconhecido.
 }
 
+void killF(Info forma, DescritorTipoInfo tipo){
+    if(!forma || !tipo){
+        fprintf(stderr, "(killF) Erro: parametros invalidos.\n");
+        return;
+    }
+
+    switch (tipo)
+    {
+    case TIPO_CIRCULO:
+        kill_circ((CIRCLE)tipo);
+        break;
+
+    case TIPO_RETANGULO:
+        kill_rectangle((RECTANGLE)tipo);
+        break;
+
+    case TIPO_TEXTO:
+        kill_texto((TEXTO)tipo);
+        break;
+
+    case TIPO_LINHA:
+        kill_linha((LINHA)tipo);
+        break;
+    
+    default:
+        fprintf(stderr, "(killF) Erro: tipo de informacao desconhecido.\n");
+        break;
+    }
+    return;
+}
+
 
 
 

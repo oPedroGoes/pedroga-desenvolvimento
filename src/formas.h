@@ -35,4 +35,6 @@ int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, doub
 
 bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2);
 
+void killF(Info forma, DescritorTipoInfo tipo);
+
 #endif
