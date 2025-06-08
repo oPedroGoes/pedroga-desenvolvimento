@@ -48,7 +48,7 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
     ctxt->lista_anotacoes_svg = lista_anotacoes_svg;
     ctxt->array_selecoes = array_selecoes;
     ctxt->idMax = idMax;
-    printf("DEBUG (iniciaContext) id_clone = %d\n", *idMax);
+    //printf("DEBUG (iniciaContext) id_clone = %d\n", *idMax);
     ctxt->fCalcBB = fCalcBB;
 
     ctxt->dx = 0;

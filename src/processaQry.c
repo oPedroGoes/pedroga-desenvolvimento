@@ -700,15 +700,24 @@ void handle_blow(SmuTreap tree, FILE* pathTxtOut, int id_ogiva_a_explodir, Lista
 */
 
 void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes, Lista lista_anotacoes_svg, int *idMax, FCalculaBoundingBox fCalcBb, int epsilon){
-    printf("DEBUG (leitura_qry) id_clone = %d\n", *idMax);
+    printf("\nDEBUG entrando en leitura_qry...\n");
+    //printf("DEBUG (leitura_qry) id_clone = %d\n", *idMax);
     CONTEXTO con = iniciaContext(pathTxt, t, lista_anotacoes_svg, array_selecoes, idMax, fCalcBb, epsilon);
 
     char *str = (char*)malloc(sizeof(char)*1024);
+    if(!str){
+        fprintf(stderr, "(leitura_qry) Erro: falha ao alocar memoria para str.");
+        return;
+    }
     
     char *comm = (char*)malloc(sizeof(char)*7);
+    if(!str){
+        fprintf(stderr, "(leitura_qry) Erro: falha ao alocar memoria para comm.");
+        return;
+    }
 
     while (fgets(str, 1024, arqQry)) {
-        //printf("tamanho str = %ld\n", strlen(str));
+        printf("tamanho str = %ld\n", strlen(str));
         // Remover nova linha do final, se houver
         str[strcspn(str, "\n")] = 0;
         str[strcspn(str, "\r")] = 0; // Para compatibilidade Windows/Linux
