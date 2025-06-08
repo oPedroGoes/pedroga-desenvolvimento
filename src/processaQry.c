@@ -717,7 +717,6 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
     }
 
     while (fgets(str, 1024, arqQry)) {
-        printf("tamanho str = %ld\n", strlen(str));
         // Remover nova linha do final, se houver
         str[strcspn(str, "\n")] = 0;
         str[strcspn(str, "\r")] = 0; // Para compatibilidade Windows/Linux
@@ -799,7 +798,8 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
 }
 
 SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, Lista lista_anotacoes_svg, int *idMax, int epsilon){
-        printf("DEBUG (processa_qry) id_clone = %d\n", *idMax);
+    printf("\nDEBUG entrando em processa_qry...\n");
+    //printf("DEBUG (processa_qry) id_clone = %d\n", *idMax);
     //printf("SmuTreap = %p\npathQry = %s\npathSaida = %s\nnomeQry = %s\narray_anotacoes = %p\nlista_anotacoes_svg = %p\n", t, pathQry, pathSaida, nomeQry, array_anotacoes, lista_anotacoes_svg);
     if(!pathQry || !pathSaida || !nomeQry || !array_anotacoes || !lista_anotacoes_svg){
         fprintf(stderr, "\n(processa_qry) Erro: parametros invalidos.\n");
@@ -834,7 +834,7 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
     fprintf(stderr, "\nAlerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
     exit(1);
 }
-    printf("\nDiretório do arquivo svg2: %s\n", nome_saidasvg2);
+    printf("Diretório do arquivo svg2: %s\n", nome_saidasvg2);
 
     FILE* saidaSvg2 = fopen(nome_saidasvg2, "w");
     if (saidaSvg2 == NULL) {
@@ -866,14 +866,14 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
     }
 
     leitura_qry(t, arqQry, saidaTxt, array_anotacoes, lista_anotacoes_svg, idMax, fCalcBB_individual, epsilon);
-    
-    //PRINTAR TXT E LISTA DE ANOTACOES SVG!!!!!!!!!
 
     // Escreve a arvore modificada no svg 2.
     visitaProfundidadeSmuT(t, escreverFormaSvg1, (void *)saidaSvg2);
-
-    // Escreve as anotacoes no svg 2.
-    percorreLista(lista_anotacoes_svg, visitaListaSvg, (void*)saidaSvg2);
+    
+    if(!listaEstaVazia(lista_anotacoes_svg)){ // Se há anotacoes, as escreve no svg 2.
+        printf("Escrevendo anotacoes no svg 2...\n");
+        percorreLista(lista_anotacoes_svg, visitaListaSvg, (void*)saidaSvg2);
+    } printf("Não há anotacoes a serem escritas no svg 2.\n");
 
     fprintf(saidaSvg2, "</svg>\n");
     fclose(arqQry);

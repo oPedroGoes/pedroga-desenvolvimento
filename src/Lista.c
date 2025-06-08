@@ -120,19 +120,18 @@ int getTamanhoLista(Lista l) {
 }
 
 void percorreLista(Lista l, void (*visita)(Item item, void *aux), void *aux) {
+    printf("\nDEBUG entrando em percorreLista...\n");
     if (l == NULL || visita == NULL){
         perror("\n(percorreLista) Erro: parametros invalidos\n");
         return;
     }
 
     Lista_internal *li = (Lista_internal*)l;
-    printf("\nDEBUG    (percorreLista) Lista_internal li = %p\n", li);
 
     if (listaEstaVazia(l)) printf("Lista esta vazia\n");
 
     NoLista *atual = li->primeiro;
     while (atual != NULL) {
-        printf("DEBUG\n");
         visita(atual->item, aux);
         atual = atual->prox;
     }

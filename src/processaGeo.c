@@ -246,6 +246,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
 // Não esquecer de processar os default, e nem de consultar o que os documentos fala sobre isso.
 SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nomegeo, 
                     int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig){
+    printf("\nDEBUG entrando em processa_geo...\n");
 
     int def_prioMax;
     int def_hc;
@@ -311,12 +312,12 @@ if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
     // Popula a arvore t.
     leitura_geo(arqGeo, t, fCalcBB_individual, idMax);
     (*idMax)++;
-    printf("DEBUG (processa_geo) id_clone = %d\n", *idMax);
-    printf("\nSucesso na populacao da arvore!\n");
+    if(t) printf("\nSucesso na populacao da arvore!\n");
+    printf("Saindo de leitura_geo...\n");
 
     // Gera o SVG inicial percorrendo a SmuTreap
     visitaProfundidadeSmuT(t, escreverFormaSvg, (void *)saidaSvg1); // Ou visitaLarguraSmuT
-    printf("Sucesso na escrita do svg1!\n");
+    printf("\nSaindo da escrita do svg1...\n");
 
 
     fprintf(saidaSvg1, "</svg>\n");

@@ -148,7 +148,7 @@
     printf("hc = (nao definido ou falha)\n");
   }
   if (promoRate != NULL) {
-    printf("promoRate = %f\n", *promoRate);
+    printf("promoRate = %f\n\n\n\n\n\n", *promoRate);
   } else {
     printf("promoRate = (nao definido ou falha)\n");
   }

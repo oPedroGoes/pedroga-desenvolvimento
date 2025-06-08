@@ -502,6 +502,8 @@ void handle_cmflg(CONTEXTO ctxt, int id_ref, char *cb, char* cp, double w){
         return; 
     }
 
+        printf("\nProcessando comando cmflg: id=%d, cb=%s, cp=%s, w=%.2f\n", id_ref, cb, cp, w);
+
     qryContext* contexto = (qryContext*)ctxt;
 
     fprintf(contexto->arqTxt, "[*] cmflg %d %s %s %.2f\n", id_ref, cb, cp, w);
