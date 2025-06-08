@@ -104,19 +104,19 @@ void killF(Info forma, DescritorTipoInfo tipo){
     switch (tipo)
     {
     case TIPO_CIRCULO:
-        kill_circ((CIRCLE)tipo);
+        kill_circ((CIRCLE)forma);
         break;
 
     case TIPO_RETANGULO:
-        kill_rectangle((RECTANGLE)tipo);
+        kill_rectangle((RECTANGLE)forma);
         break;
 
     case TIPO_TEXTO:
-        kill_texto((TEXTO)tipo);
+        kill_texto((TEXTO)forma);
         break;
 
     case TIPO_LINHA:
-        kill_linha((LINHA)tipo);
+        kill_linha((LINHA)forma);
         break;
     
     default:

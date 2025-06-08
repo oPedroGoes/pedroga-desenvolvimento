@@ -750,7 +750,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             int n;
             double dx, dy;
             if (sscanf(str, "cln %d %lf %lf", &n, &dx, &dy) == 3) {
-                //handle_cln(t, pathTxt, n, dx, dy);
+                handle_cln(con, n, dx, dy);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para cln\n", str);
             }

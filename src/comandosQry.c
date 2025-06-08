@@ -333,7 +333,7 @@ void clonaEInsereCallback(Item item_origiNode, void *aux_context){
             xAnch_clone = get_XC(c_original) + context->dx;
             yAnch_clone = get_YC(c_original) + context->dy;
             info_clonada = create_circle(id_clone, xAnch_clone, yAnch_clone, get_rC(c_original), get_cpC(c_original), get_cbC(c_original));
-            *(context->idMax)++;
+            (*(context->idMax))++;
             break;
         }
         case TIPO_RETANGULO: {
@@ -341,7 +341,7 @@ void clonaEInsereCallback(Item item_origiNode, void *aux_context){
             xAnch_clone = get_XR(r_original) + context->dx;
             yAnch_clone = get_YR(r_original) + context->dy;
             info_clonada = create_rectangle(id_clone, xAnch_clone, yAnch_clone, get_wR(r_original), get_hR(r_original), get_cpR(r_original), get_cbR(r_original));
-            *(context->idMax)++;
+            (*(context->idMax))++;
             break;
         }
         case TIPO_TEXTO: {
@@ -349,7 +349,7 @@ void clonaEInsereCallback(Item item_origiNode, void *aux_context){
             xAnch_clone = get_XT(t_original) + context->dx;
             yAnch_clone = get_YT(t_original) + context->dy;
             info_clonada = cria_texto(id_clone, xAnch_clone, yAnch_clone, get_cpT(t_original), get_cbT(t_original), get_charancoraT(t_original), get_txtT(t_original), get_ffT(t_original), get_fwT(t_original), get_fsT(t_original));
-            *(context->idMax)++;
+            (*(context->idMax))++;
             break;
         }
         case TIPO_LINHA: {
@@ -369,7 +369,7 @@ void clonaEInsereCallback(Item item_origiNode, void *aux_context){
                 xAnch_clone = x2l;
                 yAnch_clone = y2l;
             }
-            *(context->idMax)++;
+            (*(context->idMax))++;
             break;
         }
     }
