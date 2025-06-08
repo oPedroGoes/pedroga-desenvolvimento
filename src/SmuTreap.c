@@ -519,6 +519,81 @@ Node getNodeSmuT_original(SmuTreap t, double x, double y){
     return result;
 }
 
+Node recoverNodePostPromotion(SmuTreap t, double x, double y){ // Recovery do no perdido.
+    if (!t) {
+        fprintf(stderr, "(getNodeSmuT) Erro: ponteiro para arvore invalido.\n");
+        return NULL;
+    }
+
+    SmuTreap_internal *t_i = (SmuTreap_internal *)t;
+    node_internal *current = t_i->root;
+    node_internal *found_node = NULL;
+
+
+    while (current != NULL) {
+        bool xDentroDeEpsilon = fabs(x - current->x) < t_i->epsilon;
+        bool yDentroDeEpsilon = fabs(y - current->y) < t_i->epsilon;
+
+        if (xDentroDeEpsilon && yDentroDeEpsilon) {
+            found_node = current;
+            return current; // Encontrou o no'
+        }
+
+        bool podeIrDireita = (x > (current->x + t_i->epsilon)) || (xDentroDeEpsilon && (y > (current->y + t_i->epsilon)));
+        current = podeIrDireita ? current->right : current->left;
+    }
+    // Não encontrou o no'
+    return NULL;
+}
+
+void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
+
+    if (!t || !n || promotionRate <= 0){
+        fprintf(stderr, "(promoteNodeSmuT) Erro: parametros invalidos.");
+        return;
+    } 
+    if (promotionRate <= 0.0) {
+         fprintf(stderr, "(promoteNodeSmuT) Erro: promotionRate deve ser > 0.0.\n");
+        return;
+    }
+
+    SmuTreap_internal *treap = (SmuTreap_internal *)t;
+    node_internal *ni = (node_internal *)n;
+
+
+    int nova_prioridade = (int)(ni->priority * promotionRate);
+
+    if (promotionRate > 1.0 && nova_prioridade == ni->priority){
+        nova_prioridade++; // Se no cast para int o valor permaneceu o mesmo, arredonda para cima.
+    } else if (promotionRate < 1.0 && nova_prioridade == ni->priority && nova_prioridade > 0) {
+        nova_prioridade--; //Se no cast para int o valor permaneceu o mesmo, arredonda para baixo.
+    }
+
+    // Tetos
+    if (nova_prioridade > treap->prioMax) nova_prioridade = treap->prioMax;
+    if (nova_prioridade < 0) nova_prioridade = 0;
+
+    // Salvar principais dados.
+    double x_copia = ni->x;
+    double y_copia = ni->y;
+    Info info_copia = ni->info;
+    DescritorTipoInfo descritor_copia = ni->descritor;
+    int hit_copia = ni->hitCountCounter;
+
+    removeNoSmuT_SemLiberarInfo(t, n); // 'n' (e 'ni_original') agora é um ponteiro para memória liberada!
+
+    node_internal *zombie_node = (Node)newNode(x_copia, y_copia, nova_prioridade, info_copia, descritor_copia, treap->fCalcBB);
+    if (!zombie_node){
+        fprintf(stderr, "(promoteNodeSmuT) Erro: falha ao criar novo no'");
+        killInfo(info_copia, descritor_copia);
+        return;
+    }
+
+    zombie_node->hitCountCounter = hit_copia;
+
+    treap->root = insertSmuT_aux(treap->root, zombie_node, treap);
+}
+
 Node getNodeSmuT(SmuTreap t, double x, double y) {
     if (!t) {
         fprintf(stderr, "(getNodeSmuT) Erro: ponteiro para arvore invalido.\n");
@@ -547,12 +622,10 @@ Node getNodeSmuT(SmuTreap t, double x, double y) {
         found_node->hitCountCounter++;
 
         if (found_node->hitCountCounter >= t_i->hitCountConfig) {
+            found_node->hitCountCounter = 0;
             promoteNodeSmuT(t, (Node)found_node, t_i->promoRateConfig);
 
-            // IMPORTANTE: A promoção recria o nó, invalidando o ponteiro 'found_node'.
-            // Chamamos a função novamente para buscar o novo ponteiro válido,
-            // garantindo que o chamador receba um ponteiro seguro.
-            return getNodeSmuT(t, x, y);
+            return recoverNodePostPromotion(t, x, y);
         }
         return (Node)found_node; // Retorna o nó encontrado.
     }
@@ -635,54 +708,6 @@ DescritorTipoInfo getTypeInfoSmuT(SmuTreap t, Node n){
     }
     node_internal *ni = (node_internal*)n;
     return ni->descritor;
-}
-
-void promoteNodeSmuT(SmuTreap t, Node n, double promotionRate){
-
-    if (!t || !n || promotionRate <= 0){
-        fprintf(stderr, "(promoteNodeSmuT) Erro: parametros invalidos.");
-        return;
-    } 
-    if (promotionRate <= 0.0) {
-         fprintf(stderr, "(promoteNodeSmuT) Erro: promotionRate deve ser > 0.0.\n");
-        return;
-    }
-
-    SmuTreap_internal *treap = (SmuTreap_internal *)t;
-    node_internal *ni = (node_internal *)n;
-
-
-    int nova_prioridade = (int)(ni->priority * promotionRate);
-
-    if (promotionRate > 1.0 && nova_prioridade == ni->priority){
-        nova_prioridade++; // Se no cast para int o valor permaneceu o mesmo, arredonda para cima.
-    } else if (promotionRate < 1.0 && nova_prioridade == ni->priority && nova_prioridade > 0) {
-        nova_prioridade--; //Se no cast para int o valor permaneceu o mesmo, arredonda para baixo.
-    }
-
-    // Tetos
-    if (nova_prioridade > treap->prioMax) nova_prioridade = treap->prioMax;
-    if (nova_prioridade < 0) nova_prioridade = 0;
-
-    // Salvar principais dados.
-    double x_copia = ni->x;
-    double y_copia = ni->y;
-    Info info_copia = ni->info;
-    DescritorTipoInfo descritor_copia = ni->descritor;
-    int hit_copia = ni->hitCountCounter;
-
-    removeNoSmuT_SemLiberarInfo(t, n); // 'n' (e 'ni_original') agora é um ponteiro para memória liberada!
-
-    node_internal *zombie_node = (Node)newNode(x_copia, y_copia, nova_prioridade, info_copia, descritor_copia, treap->fCalcBB);
-    if (!zombie_node){
-        fprintf(stderr, "(promoteNodeSmuT) Erro: falha ao criar novo no'");
-        killInfo(info_copia, descritor_copia);
-        return;
-    }
-
-    zombie_node->hitCountCounter = hit_copia;
-
-    treap->root = insertSmuT_aux(treap->root, zombie_node, treap);
 }
 
 //aux
@@ -852,14 +877,37 @@ bool getNodesDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, doubl
         fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
     }
 
-    int tamanhoAntes = getTamanhoLista(L);
+    Lista tempL = criaLista();
+    getNodesDentroRegiaoSmuT_aux(t, t_i->root, t_i->epsilon, tempL, x1, y1, x2, y2);
 
-    getNodesDentroRegiaoSmuT_aux(t, t_i->root, t_i->epsilon, L, x1, y1, x2, y2);
+    if (listaEstaVazia(tempL)) {
+        destroiLista(tempL, NULL);
+        return false;
+    }
 
-    int tamanhoDepois = getTamanhoLista(L);
+    while (!listaEstaVazia(tempL)){
+        node_internal* n = (node_internal*)removePrimeiroDaLista(tempL);
+        if (!n) continue;
 
-    return tamanhoDepois > tamanhoAntes;
+        n->hitCountCounter++;
 
+        if (n->hitCountCounter >= t_i->hitCountConfig) {
+            double old_x = n->x;
+            double old_y = n->y;
+            n->hitCountCounter = 0;
+
+            promoteNodeSmuT(t, (Node)n, t_i->promoRateConfig);
+
+            Node n_new = recoverNodePostPromotion(t, old_x, old_y); // Usa a função auxiliar
+            if (n_new) {
+                insereNaLista(L, n_new);
+            }
+        } else {
+            insereNaLista(L, (Item)n);
+        }
+    }
+    destroiLista(tempL, NULL);
+    return !listaEstaVazia(L);
 }
 
 //aux
@@ -886,8 +934,7 @@ void getInfosDentroRegiaoSmuT_aux(SmuTreap t, node_internal *root, double rx1, d
     return; // Volta um no'.
 }
 
-bool getInfosDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, double y2,
-				 FdentroDeRegiao f, Lista L){
+bool getInfosDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, double y2, FdentroDeRegiao f, Lista L){
     if(!t || !f || !L){
         fprintf(stderr, "(getInfosDentroRegiaoSmuT) Erro: parametros invalidos");
         return false;
@@ -898,13 +945,37 @@ bool getInfosDentroRegiaoSmuT(SmuTreap t, double x1, double y1, double x2, doubl
         fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
     }
 
+    Lista tempL = criaLista();
+    getInfosDentroRegiaoSmuT_aux(t, t_i->root, x1, y1, x2, y2, f, tempL);
 
-    int tamanhoAntes = getTamanhoLista(L);
-    getInfosDentroRegiaoSmuT_aux(t, t_i->root, x1, y1, x2, y2, f, L);
-    int tamanhoDepois = getTamanhoLista(L);
+    if (listaEstaVazia(tempL)) {
+        destroiLista(tempL, NULL);
+        return false;
+    }
 
-    return tamanhoDepois > tamanhoAntes;
+    while(!listaEstaVazia(tempL)){
+        node_internal* n = (node_internal*)removePrimeiroDaLista(tempL);
+        if (!n) continue;
 
+        n->hitCountCounter++;
+
+        if (n->hitCountCounter >= t_i->hitCountConfig) {
+            double old_x = n->x;
+            double old_y = n->y;
+            n->hitCountCounter = 0;
+
+            promoteNodeSmuT(t, (Node)n, t_i->promoRateConfig);
+
+            Node n_new = recoverNodePostPromotion(t, old_x, old_y); // Usa a função auxiliar
+            if (n_new) {
+                insereNaLista(L, n_new);
+            }
+        } else {
+            insereNaLista(L, (Item)n);
+        }
+    }
+    destroiLista(tempL, NULL);
+    return !listaEstaVazia(L);
 }
 
 //aux
@@ -942,14 +1013,41 @@ bool getInfosAtingidoPontoSmuT(SmuTreap t, double x, double y, FpontoInternoAInf
 
     SmuTreap_internal *t_i = (SmuTreap_internal*)t;
     if(!(t_i->root)){
-        fprintf(stderr, "(getNodesDentroRegiaoSmuT) Erro: arvore vazia.");
+        fprintf(stderr, "(getInfosAtingidoPontoSmuT) Erro: arvore vazia.");
     }
 
-    int tamanhoAntes = getTamanhoLista(L);
-    getInfosAtingidoPontoSmuT_aux(t_i, t_i->root, x, y, f, L);
-    int tamanhoDepois = getTamanhoLista(L);
+    Lista tempL = criaLista();
+    getInfosAtingidoPontoSmuT_aux(t_i, t_i->root, x, y, f, tempL);
 
-    return tamanhoDepois > tamanhoAntes;
+    if (listaEstaVazia(tempL)) {
+        destroiLista(tempL, NULL);
+        return false;
+    }
+
+    while (!listaEstaVazia(tempL)) {
+        node_internal* n = (node_internal*)removePrimeiroDaLista(tempL);
+        if (!n) continue;
+
+        n->hitCountCounter++;
+
+        if (n->hitCountCounter >= t_i->hitCountConfig) {
+            double old_x = n->x;
+            double old_y = n->y;
+            n->hitCountCounter = 0;
+
+            promoteNodeSmuT(t, (Node)n, t_i->promoRateConfig);
+
+            Node n_new = getNodeSmuT_aux(t, old_x, old_y); // Usa a função auxiliar
+            if (n_new) {
+                insereNaLista(L, n_new);
+            }
+        } else {
+            insereNaLista(L, (Item)n);
+        }
+    }
+
+    destroiLista(tempL, NULL);
+    return !listaEstaVazia(L);
 }
 
 //aux
