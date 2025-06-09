@@ -1129,8 +1129,6 @@ Node procuraNoSmuT(SmuTreap t, FsearchNo f, void *aux){
 void print_dot_node(SmuTreap_internal *t, node_internal *node, FILE *fp) {
     if (node == NULL) return;
 
-   // Supondo que você tenha funções para obter x, y e id
-   int currId = getIdGeo(node->info); 
    DescritorTipoInfo tipo = node->descritor;
    int x = node->x;  
    int y = node->y;
@@ -1165,13 +1163,13 @@ void print_dot_node(SmuTreap_internal *t, node_internal *node, FILE *fp) {
    // Imprimir a conexão com o filho esquerdo
    if (node->left != NULL) {
       fprintf(fp, "\t\"%p\" -- \"%p\";\n", node, node->left);
-      printDotRecursive(node->left, fp);
+      print_dot_node(t, node->left, fp);
    }
 
    // Imprimir a conexão com o filho direito
    if (node->right != NULL) {
       fprintf(fp, "\t\"%p\" -- \"%p\";\n", node, node->right);
-      printDotRecursive(node->right, fp);
+      print_dot_node(t, node->right, fp);
    }
 }
 
@@ -1185,18 +1183,17 @@ bool printDotSmuTreap(SmuTreap t, char *fn){
         return false;
     }
 
-    fprintf(fp, "digraph SmuTreap {\n");
-    fprintf(fp, "  node [fontname=\"Helvetica\", shape=record];\n"); // Configurações globais de nó
+    // Configuracoes globais do dot.
+   fprintf(fp, "graph G {\n");
+   fprintf(fp, "\trankdir=TB;\n");
+   fprintf(fp, "\tnode [shape=circle];\n");
 
-    if (treap->root == NULL) {
-        fprintf(fp, "  empty [label=\"Arvore Vazia\"];\n");
-    } else {
-        print_dot_node(treap, treap->root, fp);
-    }
+   print_dot_node(treap, treap->root, fp);
 
-    fprintf(fp, "}\n");
-    fclose(fp);
-    return true;
+   // Fecha o grafo
+   fprintf(fp, "}\n");
+   fclose(fp);
+   return true;
 }
 
 //aux
