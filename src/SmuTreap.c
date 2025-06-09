@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
 
 typedef struct{
     double x, y, w, h;
@@ -1125,31 +1126,53 @@ Node procuraNoSmuT(SmuTreap t, FsearchNo f, void *aux){
 /**
  * @brief Função auxiliar para escrever a representação DOT de um nó.
  */
-void print_dot_node(node_internal *node, FILE *fp) {
+void print_dot_node(SmuTreap_internal *t, node_internal *node, FILE *fp) {
     if (node == NULL) return;
 
-    // Nó atual
-    // Usaremos o endereço do nó como identificador único no DOT para evitar colisões com valores de âncora.
-    fprintf(fp, "  node_%p [label=\"(%.2f, %.2f)\\nPrio: %d\\nBBsub[%.1f,%.1f,%.1f,%.1f]\"];\n",
-            (void*)node, node->x, node->y, node->priority,
-            node->BBsubTree.x, node->BBsubTree.y, node->BBsubTree.w, node->BBsubTree.h);
+   // Supondo que você tenha funções para obter x, y e id
+   int currId = getIdGeo(node->info); 
+   DescritorTipoInfo tipo = node->descritor;
+   int x = node->x;  
+   int y = node->y;
+   char color[10]; //red, black, white, blue.
 
-    // Conexões com filhos
-    if (node->left) {
-        fprintf(fp, "  node_%p -> node_%p [label=\"L\"];\n", (void*)node, (void*)node->left);
-        print_dot_node(node->left, fp);
-    } else {
-         fprintf(fp, "  left_null_%p [shape=point, style=invis];\n", (void*)node);
-         fprintf(fp, "  node_%p -> left_null_%p [style=invis];\n", (void*)node, (void*)node);
-    }
+   switch (tipo){
 
-    if (node->right) {
-        fprintf(fp, "  node_%p -> node_%p [label=\"R\"];\n", (void*)node, (void*)node->right);
-        print_dot_node(node->right, fp);
-    } else {
-        fprintf(fp, "  right_null_%p [shape=point, style=invis];\n", (void*)node);
-        fprintf(fp, "  node_%p -> right_null_%p [style=invis];\n", (void*)node, (void*)node);
-    }
+    case TIPO_CIRCULO:
+    strcpy(color, "Red");
+    break;
+
+    case TIPO_RETANGULO:
+    strcpy(color,"black");
+    break;
+
+    case TIPO_TEXTO:
+    strcpy(color, "brown");
+    break;
+
+    case TIPO_LINHA:
+    strcpy(color, "blue");
+    break;
+   
+    default:
+    break;
+   }
+
+   // Imprimir o nó atual com as informações de x, y e id, sem o endereço de memória
+   fprintf(fp, "\t\"%p\" [label=\"nX: %d\\nY: %d\", color=black, fontcolor=white, style=filled, fillcolor=%s];\n",
+         node, x, y, color);
+
+   // Imprimir a conexão com o filho esquerdo
+   if (node->left != NULL) {
+      fprintf(fp, "\t\"%p\" -- \"%p\";\n", node, node->left);
+      printDotRecursive(node->left, fp);
+   }
+
+   // Imprimir a conexão com o filho direito
+   if (node->right != NULL) {
+      fprintf(fp, "\t\"%p\" -- \"%p\";\n", node, node->right);
+      printDotRecursive(node->right, fp);
+   }
 }
 
 bool printDotSmuTreap(SmuTreap t, char *fn){
@@ -1168,7 +1191,7 @@ bool printDotSmuTreap(SmuTreap t, char *fn){
     if (treap->root == NULL) {
         fprintf(fp, "  empty [label=\"Arvore Vazia\"];\n");
     } else {
-        print_dot_node(treap->root, fp);
+        print_dot_node(treap, treap->root, fp);
     }
 
     fprintf(fp, "}\n");
