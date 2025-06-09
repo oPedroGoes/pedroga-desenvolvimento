@@ -81,11 +81,15 @@ void set_strkWL(LINHA l, double sw){
     l1->strokeWidth = sw;
 }
 
-double get_areaL(LINHA l){
+double get_comprimentoL(LINHA l){
     linha *l1=((linha*)l);
-    double x=l1->x2-l1->x1;
-    double y=l1->y2-l1->y1;
-    return 1.5*sqrt(pow(x,2)+pow(y,2));
+    double dx = fabs(l1->x2 - l1->x1);
+    double dy = fabs(l1->y2 - l1->y1);
+    return sqrt(dx*dx + dy*dy);
+}
+
+double get_areaL(LINHA l){
+    return 10*get_comprimentoL(l);
 }
 
 void set_x1L(LINHA l, double x){

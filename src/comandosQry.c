@@ -27,6 +27,13 @@ typedef struct{
     char* cor_preenchimento;
     double largura_borda;
 
+    // Para disp
+    Node ogiva_node;
+    Lista lista_remocao_disp;
+
+        // Subsecao de disp: busca
+        Item item_a_procurar;
+        bool encontrado;
 
 } qryContext;
 
@@ -54,6 +61,15 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
 
     ctxt->dx = 0;
     ctxt->dy = 0;
+
+    ctxt->cor_borda = NULL;
+    ctxt->cor_preenchimento = NULL;
+    ctxt->largura_borda = 0.0;
+
+    ctxt->ogiva_node = NULL;
+    ctxt->lista_remocao_disp = NULL;
+    ctxt->item_a_procurar = NULL;
+    ctxt->encontrado = false;
 
     return ctxt;
 }
@@ -118,6 +134,56 @@ bool buscaTipoSpy(Info info_forma, DescritorTipoInfo tipo_forma, Lista L, void *
 
     return true;
 }
+
+double get_launch_distance(Info forma_info, DescritorTipoInfo tipo) {
+    switch(tipo) {
+        case TIPO_CIRCULO:
+            return get_areaC((CIRCLE)forma_info);
+        case TIPO_RETANGULO:
+            return get_areaR((RECTANGLE)forma_info);
+        case TIPO_LINHA:
+            return get_areaL((LINHA)forma_info);
+        case TIPO_TEXTO:
+           return get_areaT((TEXTO)forma_info);
+        default:
+            return 0.0;
+    }
+}
+
+/**
+ * @brief Função visitante para ser usada com percorreLista.
+ * Compara o item atual da lista com o item procurado no contexto.
+ * Se forem iguais, define a flag 'encontrado' como true.
+ */
+void visitaVerificaExistencia(Item item_da_lista, void *aux_context) {
+    qryContext* contexto = (qryContext*)aux_context;
+
+    // Se já encontrámos o item, podemos parar de verificar.
+    if (contexto->encontrado) return;
+
+    // Compara os ponteiros. Se forem iguais, o nó já está na lista.
+    if (item_da_lista == contexto->item_a_procurar) contexto->encontrado = true;
+}
+
+/**
+ * @brief Verifica se um nó já existe numa lista usando a interface pública.
+ * @param l A lista onde procurar.
+ * @param no O nó a ser procurado.
+ * @return true se o nó já existe na lista, false caso contrário.
+ */
+bool listaJaContemNo(CONTEXTO ctxt, Lista l, Node no) {
+    if (!l || !no) return false;
+
+    qryContext *contexto = (qryContext*)ctxt;
+    contexto->item_a_procurar = (Item)no;
+    contexto->encontrado = false;
+
+    percorreLista(l, visitaVerificaExistencia, contexto);
+
+    return contexto->encontrado;
+}
+
+
 
 //------------------------------------------------------------HANDLE_SELR----------------------------------------------------------------//
 
@@ -845,6 +911,163 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
     }
 
     destroiLista(nos_a_remover, NULL);
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------//
+
+
+//------------------------------------------------------------HANDLE_DISP----------------------------------------------------------------//
+
+void coletaAlvoAtingidoCallback(Item item_node, void* aux_lista_remocao){
+    if(!item_node || !aux_lista_remocao){
+        fprintf(stderr, "(processaAlvoAtingidoCallback) Erro: parametros invalidos.\n");
+        return;
+    }
+
+    Lista lista_remocao = (Lista)aux_lista_remocao;
+    insereNaLista(lista_remocao, item_node);
+}
+
+void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
+    if (!ctxt) {
+        fprintf(stderr, "(handle_disp) Erro: contexto invalido.\n");
+        return;
+    }
+
+    printf("Processando comando disp: id=%d n=%d\n", id_linha, n_selecao);
+
+    qryContext *contexto = (qryContext*)ctxt;
+
+    fprintf(contexto->arqTxt, "[*] disp %d %d\n", id_linha, n_selecao);
+
+    // Encontrar a linha que define a direção
+    Node linha_node = procuraNoSmuT(contexto->tree, findFormByIdCallback, &id_linha);
+    if (!linha_node || getTypeInfoSmuT(contexto->tree, linha_node) != TIPO_LINHA) {
+        fprintf(contexto->arqTxt, "Erro: Linha de direcao com ID %d nao encontrada.\n", id_linha);
+        return;
+    }
+
+
+
+    // Calcular o vetor unitario normal
+    LINHA l = (LINHA)getInfoSmuT(contexto->tree, linha_node);
+
+    //vetor<x, y> = x2-x1.i + y2-y1.j
+    double vet_x = get_X2L(l) - get_X1L(l);
+    double vet_y = get_Y2L(l) - get_Y1L(l);
+
+    //|vetor| = srqt...
+    double mod = sqrt(vet_x*vet_x + vet_y*vet_y);
+    if (mod < contexto->epsilon) {
+        fprintf(contexto->arqTxt, "Erro: Linha de direcao com ID %d tem comprimento zero.\n", id_linha);
+        return;
+    }
+
+    //vetor unitario = <ux, uy>
+    double ux = vet_x/mod;
+    double uy = vet_y/mod;
+
+
+
+    // Obter a lista de ogivas da selecao
+    if (n_selecao < 0 || n_selecao >= 100 || contexto->array_selecoes[n_selecao] == NULL) {
+        fprintf(contexto->arqTxt, "Erro: Selecao 'n' (%d) e invalida ou nao existe.\n", n_selecao);
+        return;
+    }
+    Lista listaOgivas = contexto->array_selecoes[n_selecao];
+    if(listaEstaVazia(listaOgivas)){
+        fprintf(contexto->arqTxt, "Aviso: Selecao 'n' (%d) esta vazia. Nada a disparar.\n", n_selecao);
+        return;
+    }
+
+
+
+    Lista nos_para_remover = criaLista();
+    contexto->lista_remocao_disp = nos_para_remover;
+
+    while(!listaEstaVazia(listaOgivas)){
+        Node ogiva_node = (Node)removePrimeiroDaLista(listaOgivas);
+
+        Info info_ogiva = getInfoSmuT(contexto->tree, ogiva_node);
+        DescritorTipoInfo tipo_ogiva = getTypeInfoSmuT(contexto->tree, ogiva_node);
+        int id_ogiva = get_idF(info_ogiva, tipo_ogiva);
+
+
+        /* Calcula a distancia do disparo */
+        double distancia = get_launch_distance(info_ogiva, tipo_ogiva);
+        double start_x, start_y;
+        get_anchorF(info_ogiva, tipo_ogiva, &start_x, &start_y, NULL, NULL);
+        double end_x = start_x + ux * distancia;
+        double end_y = start_y + uy * distancia;
+
+        fprintf(contexto->arqTxt, "Disparando ID %d (%s): de (%.2f, %.2f) para (%.2f, %.2f), dist=%.2f\n", id_ogiva, get_NameStrF(tipo_ogiva), start_x, start_y, end_x, end_y, distancia);
+
+
+        /* Encontra os alvos atingidos pelo ponto de explosao */
+        Lista alvos_atingidos = criaLista();
+        getInfosAtingidoPontoSmuT(contexto->tree, end_x, end_y, pontoInternoAFormaCallback, alvos_atingidos);
+
+
+        /* Processa os alvos atingidos */
+        fprintf(contexto->arqTxt, "  > Alvos Atingidos:\n");
+        percorreLista(alvos_atingidos, coletaAlvoAtingidoCallback, nos_para_remover);
+        destroiLista(alvos_atingidos, NULL);  // Como os nos atingidos estao na lista de remocao, tchau lista.
+
+
+        /* Adiciona '#' no local da explosao no svg. */
+        char* anot_explosao = (char*)malloc(128 * sizeof(char));
+        if (anot_explosao) {
+            sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">#</text>", end_x, end_y);
+            insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_explosao);
+        }
+
+        /* Por fim, prepara para destruir a propria ogiva */
+        insereNaLista(contexto->lista_remocao_disp, (Item)ogiva_node);
+    }
+
+    // Checa se ha algum no repetido. Se houver, descarta.
+    Lista revisados_para_remover = criaLista();
+    while(!listaEstaVazia(nos_para_remover)){
+        Node node_candidato = (Node)removePrimeiroDaLista(nos_para_remover);
+
+        if (!listaJaContemNo(contexto, revisados_para_remover, node_candidato)){
+            insereNaLista(revisados_para_remover, node_candidato);
+        }
+
+
+    }
+    destroiLista(nos_para_remover, NULL); // Liberta a lista temporária com duplicados.
+
+
+    fprintf(contexto->arqTxt, "  > Resumo final das formas destruidas:\n");
+
+    while(!listaEstaVazia(revisados_para_remover)) {
+        Node no_a_remover = (Node)removePrimeiroDaLista(revisados_para_remover);
+    
+        // Informacoes para anotacao
+        Info info_removida = getInfoSmuT(contexto->tree, no_a_remover);
+        DescritorTipoInfo tipo_removido = getTypeInfoSmuT(contexto->tree, no_a_remover);
+        double x_anc, y_anc;
+        get_anchorF(info_removida, tipo_removido, &x_anc, &y_anc, NULL, NULL);
+
+        // Escreve anotacao.
+        fprintf(contexto->arqTxt, "    - ID: %d (%s)\n", get_idF(info_removida, tipo_removido), get_NameStrF(tipo_removido));
+
+        // Escreve anotacao
+        char* anot_x = (char*)malloc(128 * sizeof(char));
+        if (anot_x) {
+            sprintf(anot_x, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">x</text>", x_anc, y_anc);
+            insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_x);
+        }
+
+        removeNoSmuT(contexto->tree, no_a_remover);
+    }
+    // Liberta a memória da lista de únicos, que agora está vazia.
+    destroiLista(revisados_para_remover, NULL);
+
+    // Reseta a selecao, e libera o id.
+    destroiLista(contexto->array_selecoes[n_selecao], NULL);
+    contexto->array_selecoes[n_selecao] = NULL;
 }
 
 //---------------------------------------------------------------------------------------------------------------------------------------//

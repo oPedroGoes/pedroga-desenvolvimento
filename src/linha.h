@@ -94,6 +94,16 @@
     */
     void set_strkWL(LINHA l, double sw);
 
+    /*
+    * 
+    * @brief Pegar por meio de um TAD o comprimento da linha.
+    *
+    * @param l Estrutura da linha para pegar a informação
+    * 
+    * @return retorna um double
+    */
+    double get_comprimentoL(LINHA l);
+
     /**
      * 
      * @brief Pegar por meio de um TAD a area da linha

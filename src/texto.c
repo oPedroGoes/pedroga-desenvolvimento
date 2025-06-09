@@ -147,11 +147,7 @@ char* get_fwT(TEXTO t){
 
 int tamanho_dotextoT(TEXTO t){
     texto *t1=((texto*)t);
-    int qtt=0;
-    while(t1->texto[qtt]!='\0'){
-        qtt++;
-    }
-    return qtt;
+    return strlen(t1->texto);
 }
 
 int comprimento_da_linhaT(TEXTO t){
@@ -219,13 +215,7 @@ void set_cpT(TEXTO t, char* cp){
 }
 
 double get_areaT(TEXTO t){
-    texto *t1=((texto*)t);
-    printf("aa\n");
-    if(t1==NULL){
-        printf("vazio\n");
-    }
-    printf("bb");
-    return comprimento_da_linhaT(t1);
+    return 12*tamanho_dotextoT(t);
 }
 
 char get_charancoraT(TEXTO t){
