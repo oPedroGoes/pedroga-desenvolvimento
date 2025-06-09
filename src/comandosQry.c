@@ -28,9 +28,12 @@ typedef struct{
     double largura_borda;
 
     // Para disp
-    bool encontrado;
-    Item item_a_procurar;
-    Lista lista_ids;
+    Node ogiva_node;
+    Lista lista_remocao_disp;
+
+        // Subsecao de disp: busca
+        Item item_a_procurar;
+        bool encontrado;
 
 } qryContext;
 
@@ -62,9 +65,10 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
     ctxt->cor_preenchimento = NULL;
     ctxt->largura_borda = 0.0;
 
-    ctxt->encontrado = false;
+    ctxt->ogiva_node = NULL;
+    ctxt->lista_remocao_disp = NULL;
     ctxt->item_a_procurar = NULL;
-    ctxt->lista_ids = NULL;
+    ctxt->encontrado = false;
 
     return ctxt;
 }
@@ -879,23 +883,6 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
 
 //------------------------------------------------------------HANDLE_DISP----------------------------------------------------------------//
 
-void visitaColetaId(Item item_node, void* aux) {
-    if (!item_node || !aux) return;
-
-    qryContext* ctx = (qryContext*)aux;
-
-    // Aloca memória para o ID, pois a lista guardará um ponteiro para ele.
-    int* id = malloc(sizeof(int));
-    if (!id) {
-        fprintf(stderr, "Erro critico: falha ao alocar memoria para ID.\n");
-        return;
-    }
-
-    *id = get_idF(getInfoSmuT(ctx->tree, (Node)item_node), getTypeInfoSmuT(ctx->tree, (Node)item_node));
-    
-    insereNaLista(ctx->lista_ids, id);
-}
-
 void coletaAlvoAtingidoCallback(Item item_node, void* aux_lista_remocao){
     if(!item_node || !aux_lista_remocao){
         fprintf(stderr, "(processaAlvoAtingidoCallback) Erro: parametros invalidos.\n");
@@ -959,93 +946,7 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
     }
 
 
-    // Coletar os IDs das ogivas de forma segura
-    Lista lista_ids_ogivas = criaLista();
-    contexto->lista_ids = lista_ids_ogivas;
-    percorreLista(listaOgivas, visitaColetaId, &contexto);
 
-
-    Lista nos_para_remover = criaLista();
-
-    // Processar cada ogiva pelo seu ID
-    while (!listaEstaVazia(lista_ids_ogivas)) {
-        int* p_id_ogiva = (int*)removePrimeiroDaLista(lista_ids_ogivas);
-        int id_ogiva = *p_id_ogiva;
-        free(p_id_ogiva);
-
-        Node ogiva_node = procuraNoSmuT(contexto->tree, findFormByIdCallback, &id_ogiva);
-        if (!ogiva_node) continue; 
-
-        // Procura a distancia do disparo.
-        Info info_ogiva = getInfoSmuT(contexto->tree, ogiva_node);
-        double distancia = get_launch_distance(info_ogiva, getTypeInfoSmuT(contexto->tree, ogiva_node));
-        double start_x, start_y;
-        get_anchorF(info_ogiva, getTypeInfoSmuT(contexto->tree, ogiva_node), &start_x, &start_y, NULL, NULL);
-        double end_x = start_x + ux * distancia;
-        double end_y = start_y + uy * distancia;
-
-        
-        fprintf(contexto->arqTxt, "Disparando ID %d: de (%.2f, %.2f) para (%.2f, %.2f), dist=%.2f\n",
-                id_ogiva, start_x, start_y, end_x, end_y, distancia);
-
-        Lista alvos_atingidos = criaLista();
-        getInfosAtingidoPontoSmuT(contexto->tree, end_x, end_y, pontoInternoAFormaCallback, alvos_atingidos);
-
-        insereNaLista(nos_para_remover, (Item)ogiva_node);
-        while(!listaEstaVazia(alvos_atingidos)) {
-            insereNaLista(nos_para_remover, removePrimeiroDaLista(alvos_atingidos));
-        }
-        destroiLista(alvos_atingidos, NULL);
-
-        char* anot_explosao = malloc(128);
-        if (anot_explosao) {
-            sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">#</text>", end_x, end_y);
-            insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_explosao);
-        }
-    }
-    destroiLista(lista_ids_ogivas, free);
-
-    // Destruição
-    Lista unicos_para_remover = criaLista();
-    while(!listaEstaVazia(nos_para_remover)) {
-        Node no_candidato = removePrimeiroDaLista(nos_para_remover);
-        if (!listaJaContemNo(contexto, unicos_para_remover, no_candidato)) {
-            insereNaLista(unicos_para_remover, no_candidato);
-        }
-    }
-    destroiLista(nos_para_remover, NULL);
-
-    fprintf(contexto->arqTxt, "  > Resumo das formas destruidas:\n");
-    while(!listaEstaVazia(unicos_para_remover)) {
-        Node no_a_remover = removePrimeiroDaLista(unicos_para_remover);
-        
-        Info info_removida = getInfoSmuT(contexto->tree, no_a_remover);
-        double x_anc, y_anc;
-        get_anchorF(info_removida, getTypeInfoSmuT(contexto->tree, no_a_remover), &x_anc, &y_anc, NULL, NULL);
-
-        fprintf(contexto->arqTxt, "    - ID: %d (%s)\n", get_idF(info_removida, getTypeInfoSmuT(contexto->tree, no_a_remover)), get_NameStrF(getTypeInfoSmuT(contexto->tree, no_a_remover)));
-
-        char* anot_x = malloc(128);
-        if (anot_x) {
-            sprintf(anot_x, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">x</text>", x_anc, y_anc);
-            insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_x);
-        }
-        removeNoSmuT(contexto->tree, no_a_remover);
-    }
-    destroiLista(unicos_para_remover, NULL);
-    
-    // Invalida a seleção original, libertando a sua memória.
-    destroiLista(contexto->array_selecoes[n_selecao], NULL);
-    contexto->array_selecoes[n_selecao] = NULL;
-
-
-
-
-
-
-
-
-    /*
     Lista nos_para_remover = criaLista();
     contexto->lista_remocao_disp = nos_para_remover;
 
@@ -1057,7 +958,7 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
         int id_ogiva = get_idF(info_ogiva, tipo_ogiva);
 
 
-        /* Calcula a distancia do disparo 
+        /* Calcula a distancia do disparo */
         double distancia = get_launch_distance(info_ogiva, tipo_ogiva);
         double start_x, start_y;
         get_anchorF(info_ogiva, tipo_ogiva, &start_x, &start_y, NULL, NULL);
@@ -1067,27 +968,27 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
         fprintf(contexto->arqTxt, "Disparando ID %d (%s): de (%.2f, %.2f) para (%.2f, %.2f), dist=%.2f\n", id_ogiva, get_NameStrF(tipo_ogiva), start_x, start_y, end_x, end_y, distancia);
 
 
-        /* Encontra os alvos atingidos pelo ponto de explosao 
+        /* Encontra os alvos atingidos pelo ponto de explosao */
         Lista alvos_atingidos = criaLista();
         getInfosAtingidoPontoSmuT(contexto->tree, end_x, end_y, pontoInternoAFormaCallback, alvos_atingidos);
 
 
         if(!listaEstaVazia(alvos_atingidos)){
-            /* Processa os alvos atingidos 
+            /* Processa os alvos atingidos */
         fprintf(contexto->arqTxt, "  > Alvos Atingidos:\n");
         percorreLista(alvos_atingidos, coletaAlvoAtingidoCallback, nos_para_remover);
         destroiLista(alvos_atingidos, NULL);  // Como os nos atingidos estao na lista de remocao, tchau lista.
         } else printf("Ogiva disparou, mas nao atingiu nenhuma forma. Uma pena para Princesa Leia.\n");
 
 
-        /* Adiciona '#' no local da explosao no svg. 
+        /* Adiciona '#' no local da explosao no svg. */
         char* anot_explosao = (char*)malloc(256 * sizeof(char));
         if (anot_explosao) {
             sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">#</text>", end_x, end_y);
             insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_explosao);
         }
 
-        /* Por fim, prepara para destruir a propria ogiva 
+        /* Por fim, prepara para destruir a propria ogiva */
         insereNaLista(contexto->lista_remocao_disp, (Item)ogiva_node);
     }
 
@@ -1136,8 +1037,6 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
     // Reseta a selecao, e libera o id.
     destroiLista(contexto->array_selecoes[n_selecao], NULL);
     contexto->array_selecoes[n_selecao] = NULL;
-*/
 }
-
 
 //---------------------------------------------------------------------------------------------------------------------------------------//
