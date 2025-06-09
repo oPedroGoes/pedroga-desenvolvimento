@@ -10,6 +10,34 @@
 #include "boundingBox.h"
 #include "geometria.h"
 
+/**
+ * @brief Cria uma duplicata de uma string em uma nova área de memória.
+ * Esta é uma implementação padrão da função não-padrão strdup.
+ * @param s A string a ser copiada.
+ * @return Um ponteiro para a nova string, ou NULL se a alocação de memória falhar.
+ * O chamador é responsável por liberar a memória retornada com free().
+ */
+char* my_strdup(const char* s) {
+    if (s == NULL) {
+        return NULL;
+    }
+
+    // Mede o tamanho da string e alocar memoria para o '\0'
+    size_t len = strlen(s) + 1;
+    char* nova_string = malloc(len);
+
+    // Verificar alocacao
+    if (nova_string == NULL) {
+        fprintf(stderr, "Erro: Falha ao alocar memoria em my_strdup.\n");
+        return NULL;
+    }
+
+    // Copiar o conteúdo
+    memcpy(nova_string, s, len);
+
+    return nova_string;
+}
+
 
 int get_idF(Info forma, DescritorTipoInfo tipo){
     if(!forma){
@@ -96,7 +124,7 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
 }
 
 // Ideia de fazer um get_cor para todas as formas. Caso linha retorna 1 e passa corL para cb.
-int get_corF(Info forma, DescritorTipoInfo tipo, char* new_corb, char* new_corp){
+int get_corF(Info forma, DescritorTipoInfo tipo, char** new_corb, char** new_corp){
     if(!forma || !tipo || !new_corb || !new_corp){
         fprintf(stderr, "(get_corF) Erro: parametros invalidos.\n");
         return 0;
@@ -106,27 +134,27 @@ int get_corF(Info forma, DescritorTipoInfo tipo, char* new_corb, char* new_corp)
     {
     case TIPO_CIRCULO:{
         CIRCLE c = (CIRCLE)forma;
-        new_corb = strdup(get_cbC(c));
-        new_corp = strdup(get_cpC(c));
+        *new_corb = my_strdup(get_cbC(c));
+        *new_corp = my_strdup(get_cpC(c));
         return 2;
     }
     case TIPO_RETANGULO:{
         RECTANGLE r = (RECTANGLE)forma;
-        new_corb = strdup(get_cbR(r));
-        new_corp = strdup(get_cpR(r));
+        *new_corb = my_strdup(get_cbR(r));
+        *new_corp = my_strdup(get_cpR(r));
         return 2;
     }
     case TIPO_TEXTO:{
         TEXTO t = (TEXTO)forma;
-        new_corb = strdup(get_cbT(t));
-        new_corp = strdup(get_cpT(t));
+        *new_corb = my_strdup(get_cbT(t));
+        *new_corp = my_strdup(get_cpT(t));
         return 2;
     }
 
     case TIPO_LINHA:{
         LINHA l = (LINHA)forma;
-        new_corb = strdup(get_cL(l));
-        new_corp = NULL;
+        *new_corb = my_strdup(get_cL(l));
+        *new_corp = NULL;
         return 1;
     }
     

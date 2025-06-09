@@ -16,6 +16,7 @@ typedef enum{
     TIPO_LINHA = 4
 } TIPO_FORMA;
 
+char* my_strdup(const char* s);
 int get_idF(Info forma_info, DescritorTipoInfo tipo);
 const char* get_NameStrF(DescritorTipoInfo tipo);
 void forma_get_ancora_para_svg(Info forma_info, DescritorTipoInfo tipo, double* x, double* y);
@@ -39,7 +40,7 @@ void set_corF(Info forma, DescritorTipoInfo tipo, const char* new_corb, const ch
 
 void set_strkWF(Info forma, DescritorTipoInfo tipo, double strokeWidth);
 
-int get_corF(Info forma, DescritorTipoInfo tipo, char* new_corb, char* new_corp);
+int get_corF(Info forma, DescritorTipoInfo tipo, char** new_corb, char** new_corp);
 
 void killF(Info forma, DescritorTipoInfo tipo);
 

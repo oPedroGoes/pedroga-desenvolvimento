@@ -754,7 +754,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
             int id;
             double x, y;
             if (sscanf(str, "transp %d %lf %lf", &id, &x, &y) == 3) {
-                //handle_transp(t, pathTxt, id, x, y);
+                handle_transp(con, id, x, y);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para transp\n", str);
             }

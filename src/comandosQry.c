@@ -386,7 +386,7 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
         return;
     }
 
-    printf("Processando funcao transp: id=%d, x=%lf, y=%lf", id, x, y);
+    printf("Processando funcao transp: id=%d, x=%lf, y=%lf\n", id, x, y);
 
     qryContext* contexto = (qryContext*)ctxt;
 
@@ -410,7 +410,7 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
 
     char *cb = NULL;
     char *cp = NULL;
-    if(!get_corF(info_original, tipo, cb, cp)) return;
+    if(!get_corF(info_original, tipo, &cb, &cp)) return;
     
 
     switch (tipo){
@@ -432,10 +432,10 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
 
         case TIPO_TEXTO: {
             TEXTO t = (TEXTO)info_original;
-            char* txt = strdup(get_txtT(t));
-            char* ff = strdup(get_ffT(t));
-            char* fw = strdup(get_fwT(t));
-            char* fs = strdup(get_fsT(t));
+            char* txt = my_strdup(get_txtT(t));
+            char* ff = my_strdup(get_ffT(t));
+            char* fw = my_strdup(get_fwT(t));
+            char* fs = my_strdup(get_fsT(t));
             nova_info = cria_texto(id, x, y, cb, cp, get_charancoraT(t), txt, ff, fw, fs);
             free(cb); free(cp); free(txt); free(ff); free(fw); free(fs);
             break;
