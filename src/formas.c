@@ -95,6 +95,54 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
     } else return false; // Tipo desconhecido.
 }
 
+// Ideia de fazer um get_cor para todas as formas. Caso linha retorna 1 e passa corL para cb.
+int get_corF(Info forma, DescritorTipoInfo tipo, char* new_corb, char* new_corp){
+    if(!forma || !tipo || !new_corb || !new_corp){
+        fprintf(stderr, "(get_corF) Erro: parametros invalidos.\n");
+        return;
+    }
+
+    switch (tipo)
+    {
+    case TIPO_CIRCULO:{
+        CIRCLE c = (CIRCLE)forma;
+        new_corb = strdup(get_cbC(c));
+        new_corp = strdup(get_cpC(c));
+        return 2;
+    }
+    case TIPO_RETANGULO:{
+        RECTANGLE r = (RECTANGLE)forma;
+        new_corb = strdup(get_cbR(r));
+        new_corp = strdup(get_cpR(r));
+        return 2;
+    }
+    case TIPO_TEXTO:{
+        TEXTO t = (TEXTO)forma;
+        new_corb = strdup(get_cbT(t));
+        new_corp = strdup(get_cpT(t));
+        return 2;
+    }
+
+    case TIPO_LINHA:{
+        LINHA l = (LINHA)forma;
+        new_corb = strdup(get_cL(l));
+        new_corp = NULL;
+        return 1;
+    }
+    
+    default:
+        fprintf(stderr, "(get_corF) Erro: tipo de forma desconhecido.\n");
+        return;
+    }
+
+    if(!new_corb || !new_corp){
+        fprintf(stderr, "(get_corF) Erro: falha ao alocar memoria para cores.\n");
+        return NULL;
+    }
+
+    return;
+}
+
 // Ideia de fazer um set_cor para todas as formas. recebe duas cores, e define corL como corB_new.
 void set_corF(Info forma, DescritorTipoInfo tipo, const char* new_corb, const char* new_corp){
     if(!forma || !tipo || !new_corb || !new_corp){

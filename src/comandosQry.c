@@ -378,6 +378,111 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
 //---------------------------------------------------------------------------------------------------------------------------------------//
 
 
+//------------------------------------------------------------HANDLE_SELI----------------------------------------------------------------//
+
+void handle_transp(CONTEXTO ctxt, int id, double x, double y){
+    if(!ctxt || id < 0 || x < 0 || y < 0){
+        fprintf(stderr, "(handle_transp) Erro: parametros invalidos");
+        return;
+    }
+
+    printf("Processando funcao transp: id=%d, x=%d, y=%d", id, x, y);
+
+    qryContext* contexto = (qryContext*)ctxt;
+
+    fprintf(contexto->arqTxt, "[*] transp %d %.2f %.2f\n", id, x, y);
+
+    // Armazena as informações principais do no.
+    Node movingNode = procuraNoSmuT(contexto->tree, findFormByIdCallback, &id);
+    if(!movingNode){
+        fprintf(contexto->arqTxt, "  Erro: Forma com ID %d nao encontrada para transladar.\n", id);
+        return;
+    }
+
+    Info info_original = getInfoSmuT(contexto->tree, movingNode);
+    DescritorTipoInfo tipo = getTypeInfoSmuT(contexto->tree, movingNode);
+    double x_antigo, y_antigo;
+    get_anchorF(info_original, tipo, &x_antigo, &y_antigo, NULL, NULL);
+
+    Info nova_info = NULL;
+    double x_novo = x;
+    double y_novo = y;
+
+    char *cb;
+    char *cp;
+    if(!get_corF(info_original, tipo, cb, cp)) return;
+    
+
+    switch (tipo){
+        case TIPO_CIRCULO: {
+            CIRCLE c = (CIRCLE)info_original;
+            nova_info = (Info)create_circle(id, x_novo, y_novo, get_rC(c), cb, cp);
+            free(cb);
+            free(cp);
+            break;
+        }
+
+        case TIPO_RETANGULO: {
+            RECTANGLE r = (RECTANGLE)info_original;
+            nova_info = create_rectangle(id, x, y, get_wR(r), get_hR(r), cb, cp);
+            free(cb);
+            free(cp);
+            break;
+        }
+
+        case TIPO_TEXTO: {
+            TEXTO t = (TEXTO)info_original;
+            char* txt = strdup(get_txtT(t));
+            char* ff = strdup(get_ffT(t));
+            char* fw = strdup(get_fwT(t));
+            char* fs = strdup(get_fsT(t));
+            nova_info = cria_texto(id, x, y, cb, cp, get_charancoraT(t), txt, ff, fw, fs);
+            free(cb); free(cp); free(txt); free(ff); free(fw); free(fs);
+            break;
+        }
+
+        case TIPO_LINHA: {
+            LINHA l = (LINHA)info_original;
+            // A lógica de translação da linha é especial
+            double x1_antigo = get_X1L(l);
+            double y1_antigo = get_Y1L(l);
+            double dx = x - x1_antigo; // 'x' é a nova posição da âncora (x1)
+            double dy = y - y1_antigo; // 'y' é a nova posição da âncora (y1)
+
+            double x2_novo = get_X2L(l) + dx;
+            double y2_novo = get_Y2L(l) + dy;
+            
+            nova_info = cria_linha(id, x, y, x2_novo, y2_novo, cb);
+            free(cb);
+            
+            // A âncora de inserção na SmuTreap precisa ser recalculada
+            if (x < x2_novo || (fabs(x - x2_novo) < contexto->epsilon && y < y2_novo)) {
+                x_novo = x;
+                y_novo = y;
+            } else {
+                x_novo = x2_novo;
+                y_novo = y2_novo;
+            }
+            break;
+        }
+    }
+
+    if (!nova_info) {
+        fprintf(contexto->arqTxt, "  Erro: Falha ao recriar a forma ID %d para translado.\n", id);
+        printf("DEBUG: nova_info é NULL para forma ID %d apos o switch.\n", id);
+        return;
+    }
+
+    // Remove e reinsere o no' que se deseja transladar.
+    removeNoSmuT(contexto->tree, movingNode);
+    if (nova_info) {
+        insertSmuT(contexto->tree, x_novo, y_novo, nova_info, tipo, contexto->fCalcBB);
+    }
+}
+
+//---------------------------------------------------------------------------------------------------------------------------------------//
+
+
 //------------------------------------------------------------HANDLE_CLN-----------------------------------------------------------------//
 
 void clonaEInsereCallback(Item item_origiNode, void *aux_context){

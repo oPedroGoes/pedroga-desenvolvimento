@@ -39,7 +39,7 @@ void set_corF(Info forma, DescritorTipoInfo tipo, const char* new_corb, const ch
 
 void set_strkWF(Info forma, DescritorTipoInfo tipo, double strokeWidth);
 
-
+int get_corF(Info forma, DescritorTipoInfo tipo, char* new_corb, char* new_corp);
 
 void killF(Info forma, DescritorTipoInfo tipo);
 
