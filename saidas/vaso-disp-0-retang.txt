@@ -1,0 +1,2 @@
+[*] seli 11 0.00 26.00
+seli: forma 10 (retangulo) selecionada.
