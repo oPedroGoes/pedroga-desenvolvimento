@@ -166,6 +166,30 @@
 
   printf("PROGRAMA FINALIZADO. Liberando memórias...\n");
 
+  // =======================================================
+    //                  BLOCO DE LIMPEZA
+    // =======================================================
+
+    // 1. Liberar a memória da árvore principal SmuTreap
+    // Isto irá percorrer todos os nós e libertar cada forma e o próprio nó.
+    if (t) {
+        killSmuTreap(t);
+    }
+
+    // 2. Liberar todas as listas de seleção que foram criadas
+    for (int j = 0; j < 100; j++) {
+        if (array_selecoes[j] != NULL) {
+            // As listas de seleção armazenam apenas ponteiros para os nós da árvore,
+            // que já foram libertados por killSmuTreap. Portanto, passamos NULL
+            // como segundo argumento para não tentar libertar os itens duas vezes.
+            destroiLista(array_selecoes[j], NULL);
+        }
+    }
+
+    // =======================================================
+    //              FIM DO BLOCO DE LIMPEZA
+    // =======================================================
+
 frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória
   if(dirEntrada) free(dirEntrada);

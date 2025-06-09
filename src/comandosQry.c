@@ -37,7 +37,7 @@ typedef struct{
 
 } qryContext;
 
-void killAnotacaoCallback(char *anotacao){
+void killAnotacaoCallback(void *anotacao){
     if(!anotacao){
         fprintf(stderr, "(killAnotacaoCallback) Erro: parametros invalidos.");
     } else free(anotacao);
@@ -188,7 +188,6 @@ bool listaJaContemNo(CONTEXTO ctxt, Lista l, Node no) {
 //------------------------------------------------------------HANDLE_SELR----------------------------------------------------------------//
 
 void processaNoParaSaidaSelr(Item item_node, void *aux_context){
-    printf("\n\n DEBUG Entrando em processaNoParaSaidaSelr...\n");
     if(!item_node || !aux_context){
         fprintf(stderr, "(processaNoParaSaidaSelr) Erro: parametros invalidos.");
         return;
@@ -483,16 +482,16 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
         case TIPO_CIRCULO: {
             CIRCLE c = (CIRCLE)info_original;
             nova_info = (Info)create_circle(id, x_novo, y_novo, get_rC(c), cb, cp);
-            free(cb);
-            free(cp);
+            if(cb) free(cb);
+            if(cp) free(cp);
             break;
         }
 
         case TIPO_RETANGULO: {
             RECTANGLE r = (RECTANGLE)info_original;
             nova_info = create_rectangle(id, x, y, get_wR(r), get_hR(r), cb, cp);
-            free(cb);
-            free(cp);
+            if(cb) free(cb);
+            if(cp) free(cp);
             break;
         }
 
@@ -519,7 +518,7 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
             double y2_novo = get_Y2L(l) + dy;
             
             nova_info = cria_linha(id, x, y, x2_novo, y2_novo, cb);
-            free(cb);
+            if(cb) free(cb);
             
             // A âncora de inserção na SmuTreap precisa ser recalculada
             if (x < x2_novo || (fabs(x - x2_novo) < contexto->epsilon && y < y2_novo)) {
@@ -552,7 +551,7 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
 //------------------------------------------------------------HANDLE_CLN-----------------------------------------------------------------//
 
 void clonaEInsereCallback(Item item_origiNode, void *aux_context){
-    printf("DEBUG Entrando em clonaEInsereCallback\n");
+    //printf("DEBUG Entrando em clonaEInsereCallback\n");
     if (!item_origiNode || !aux_context){
         fprintf(stderr, "(clonaEInsereCallback) Erro: parametros invalidos.\n");
         return;
@@ -575,7 +574,7 @@ void clonaEInsereCallback(Item item_origiNode, void *aux_context){
             CIRCLE c_original = (CIRCLE)info_original;
             xAnch_clone = get_XC(c_original) + context->dx;
             yAnch_clone = get_YC(c_original) + context->dy;
-            printf("Clonando circulo ID %d. Original-> corp:[%s], corb:[%s]\n", get_idC(c_original), get_cpC(c_original), get_cbC(c_original));
+            //printf("Clonando circulo ID %d. Original-> corp:[%s], corb:[%s]\n", get_idC(c_original), get_cpC(c_original), get_cbC(c_original));
             info_clonada = create_circle(id_clone, xAnch_clone, yAnch_clone, get_rC(c_original), get_cpC(c_original), get_cbC(c_original));
             (*(context->idMax))++;
             break;
@@ -857,7 +856,7 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
 
 
     // Adiciona anotação SVG '#' para a explosão
-    char* anot_explosao = (char*)malloc(128 * sizeof(char));
+    char* anot_explosao = (char*)malloc(256 * sizeof(char));
     if (anot_explosao) {
         sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">#</text>", x_exp, y_exp);
         insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_explosao);
@@ -899,7 +898,7 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
         double xAnch_removido, yAnch_removido;
         get_anchorF(info_removida, tipo_removido, &xAnch_removido, &yAnch_removido, NULL, NULL);
 
-        char* anot_x = (char*)malloc(128 * sizeof(char));
+        char* anot_x = (char*)malloc(256 * sizeof(char));
         if (anot_x) {
             sprintf(anot_x, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">x</text>", xAnch_removido, yAnch_removido);
             insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_x);
@@ -1008,14 +1007,16 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
         getInfosAtingidoPontoSmuT(contexto->tree, end_x, end_y, pontoInternoAFormaCallback, alvos_atingidos);
 
 
-        /* Processa os alvos atingidos */
+        if(!listaEstaVazia(alvos_atingidos)){
+            /* Processa os alvos atingidos */
         fprintf(contexto->arqTxt, "  > Alvos Atingidos:\n");
         percorreLista(alvos_atingidos, coletaAlvoAtingidoCallback, nos_para_remover);
         destroiLista(alvos_atingidos, NULL);  // Como os nos atingidos estao na lista de remocao, tchau lista.
+        } else printf("Ogiva disparou, mas nao atingiu nenhuma forma. Uma pena para Princesa Leia.\n");
 
 
         /* Adiciona '#' no local da explosao no svg. */
-        char* anot_explosao = (char*)malloc(128 * sizeof(char));
+        char* anot_explosao = (char*)malloc(256 * sizeof(char));
         if (anot_explosao) {
             sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">#</text>", end_x, end_y);
             insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_explosao);
@@ -1029,9 +1030,12 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
     Lista revisados_para_remover = criaLista();
     while(!listaEstaVazia(nos_para_remover)){
         Node node_candidato = (Node)removePrimeiroDaLista(nos_para_remover);
-
-        if (!listaJaContemNo(contexto, revisados_para_remover, node_candidato)){
-            insereNaLista(revisados_para_remover, node_candidato);
+        
+        printf("DEBUG VAZIA\n");
+        if(!listaEstaVazia(revisados_para_remover)){
+            if (!listaJaContemNo(contexto, revisados_para_remover, node_candidato)){
+                insereNaLista(revisados_para_remover, node_candidato);
+            }
         }
 
 
@@ -1054,7 +1058,7 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
         fprintf(contexto->arqTxt, "    - ID: %d (%s)\n", get_idF(info_removida, tipo_removido), get_NameStrF(tipo_removido));
 
         // Escreve anotacao
-        char* anot_x = (char*)malloc(128 * sizeof(char));
+        char* anot_x = (char*)malloc(256 * sizeof(char));
         if (anot_x) {
             sprintf(anot_x, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">x</text>", x_anc, y_anc);
             insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_x);

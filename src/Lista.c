@@ -140,7 +140,10 @@ void percorreLista(Lista l, void (*visita)(Item item, void *aux), void *aux) {
 
     Lista_internal *li = (Lista_internal*)l;
 
-    if (listaEstaVazia(l)) printf("Lista esta vazia\n");
+    if (listaEstaVazia(l)){
+        printf("(percorreLista) Erro: Lista esta vazia\n");
+        exit (1);
+    }
 
     NoLista *atual = li->primeiro;
     while (atual != NULL) {

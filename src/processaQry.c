@@ -132,7 +132,7 @@ void visitaListaSvg(Item anotacao, void *aux){
     FILE *arqSvg2 = (FILE*)aux;
 
     const char *buff = (const char*)anotacao;
-    fprintf(arqSvg2, "%s/n", buff);
+    fprintf(arqSvg2, "%s\n", buff);
     return;
 }
 
@@ -875,8 +875,11 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
         percorreLista(lista_anotacoes_svg, visitaListaSvg, (void*)saidaSvg2);
     } else printf("Não há anotacoes a serem escritas no svg 2.\n");
 
+    destroiLista(lista_anotacoes_svg, killAnotacaoCallback);
+
     fprintf(saidaSvg2, "</svg>\n");
     fclose(arqQry);
+    fclose(saidaTxt);
     fclose(saidaSvg2);
     return t;
 

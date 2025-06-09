@@ -89,8 +89,14 @@ int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, doub
         case TIPO_LINHA:
             *x1 = get_X1L((LINHA) forma);
             *y1 = get_Y1L((LINHA) forma);
-            *x2 = get_X2L((LINHA) forma);
-            *y2 = get_Y2L((LINHA) forma);
+
+            // ADICIONE ESTA VERIFICAÇÃO
+            if (x2 != NULL) {
+                *x2 = get_X2L((LINHA) forma);
+            }
+            if (y2 != NULL) {
+                *y2 = get_Y2L((LINHA) forma);
+            }
             return 2;
         
         default:
@@ -101,7 +107,6 @@ int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, doub
 
 // Função de callback para getInfosDentroRegiaoSmuT: verifica se uma forma está totalmente contida na região
 bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, double reg_x1, double reg_y1, double reg_x2, double reg_y2){
-    printf("\n\n Entrando em formaTotalmenteContidaCallback...\n");
     DescritorTipoInfo tipo_forma = getTypeInfoSmuT(t, n_node);
 
     if (tipo_forma == TIPO_CIRCULO || tipo_forma == TIPO_RETANGULO || tipo_forma == TIPO_TEXTO || tipo_forma == TIPO_LINHA ){
@@ -114,10 +119,10 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
     double fxMax = fx + fw;
     double fyMax = fy + fh;
 
-        if(retanguloInternoRetangulo(fx, fy, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2)){
-            const char *nomeForma_DEBUG = get_NameStrF(tipo_forma);
-            printf("DEBUG (formaTotalmenteContidaCallback) Forma contida = %s\n", nomeForma_DEBUG);
-        }
+        //if(retanguloInternoRetangulo(fx, fy, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2)){
+            //const char *nomeForma_DEBUG = get_NameStrF(tipo_forma);
+            //printf("DEBUG (formaTotalmenteContidaCallback) Forma contida = %s\n", nomeForma_DEBUG);
+        //}
 
     return (retanguloInternoRetangulo(fx, fy, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2));
     } else return false; // Tipo desconhecido.
