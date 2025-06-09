@@ -721,8 +721,7 @@ node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_
         printf("(removeNoSmuT_aux) Erro: no nao encontrado.\n");
         exit (1); // Se retornasse NULL, a arvore seria destruida.
     }
-    
-    printf(", root->id = %d\n", get_idF(root->info, root->descritor));
+
     double epsilon_i = t->epsilon;
 
     bool podeIrDireita = (n->x > root->x + epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y > root->y + epsilon_i));
