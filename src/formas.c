@@ -37,7 +37,7 @@ const char* get_NameStrF(DescritorTipoInfo tipo){
 }
 
 int get_anchorF(Info forma, DescritorTipoInfo tipo, double *x1, double *y1, double *x2, double *y2){
-    if(!forma || !tipo || !x1 || !y1 || !x2 || !y2){
+    if(!forma || !tipo || !x1 || !y1){
         fprintf(stderr, "(get_anchorF) Erro: parametros invalidos.\n");
         return 0;
     }

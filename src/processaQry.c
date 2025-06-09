@@ -873,7 +873,7 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
     if(!listaEstaVazia(lista_anotacoes_svg)){ // Se há anotacoes, as escreve no svg 2.
         printf("Escrevendo anotacoes no svg 2...\n");
         percorreLista(lista_anotacoes_svg, visitaListaSvg, (void*)saidaSvg2);
-    } printf("Não há anotacoes a serem escritas no svg 2.\n");
+    } else printf("Não há anotacoes a serem escritas no svg 2.\n");
 
     fprintf(saidaSvg2, "</svg>\n");
     fclose(arqQry);

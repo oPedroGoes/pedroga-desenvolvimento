@@ -1,12 +1,12 @@
 [*] selr 99 0.00 15.00 150.00 150.00
-selr: forma 20 (circulo) selecionada.
+selr: forma 18 (circulo) selecionada.
 selr: forma 13 (texto) selecionada.
-selr: forma 12 (linha) selecionada.
-selr: forma 15 (linha) selecionada.
-selr: forma 16 (linha) selecionada.
 selr: forma 17 (linha) selecionada.
-selr: forma 14 (retangulo) selecionada.
+selr: forma 12 (linha) selecionada.
+selr: forma 20 (circulo) selecionada.
+selr: forma 16 (linha) selecionada.
 selr: forma 19 (circulo) selecionada.
+selr: forma 15 (linha) selecionada.
+selr: forma 14 (retangulo) selecionada.
 selr: forma 10 (retangulo) selecionada.
 selr: forma 11 (retangulo) selecionada.
-selr: forma 18 (circulo) selecionada.

@@ -722,10 +722,14 @@ void  killNode(node_internal *n){
 
 //aux
 node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
+    int n_id = get_idF(n->info, n->descritor);
+    printf("DEBUG (removeNoSmuT_aux) n_id = %d", n_id);
     if (!root){
-        printf("(removeNoSmuT_aux) Erro: no nao encontrado.");
+        printf("(removeNoSmuT_aux) Erro: no nao encontrado.\n");
         exit (1); // Se retornasse NULL, a arvore seria destruida.
     }
+    
+    printf(", root->id = %d\n", get_idF(root->info, root->descritor));
     double epsilon_i = t->epsilon;
 
     bool podeIrDireita = (n->x > root->x + epsilon_i) || (fabs(n->x - root->x) < epsilon_i && (n->y > root->y + epsilon_i));
@@ -759,11 +763,13 @@ node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_
         // Rotaciona o nó para baixo até que se torne uma folha ou tenha um filho,
         // mantendo a propriedade de heap.
         else{
-            if(root->right->priority > root->left->priority){
-                rotacionaEsq(&root);
-                root->right = removeNoSmuT_aux(t, root->right, n);
-            } else{
+            if(root->left->priority > root->right->priority){
+                // Filho esquerdo tem maior prioridade, rotaciona para direita.
                 rotacionaDir(&root);
+                root->right = removeNoSmuT_aux(t, root->right, n);
+            } else {
+                // O filho direito tem maior prioridade, ou prioridades iguais, rotaciona esquerda.
+                rotacionaEsq(&root);
                 root->left = removeNoSmuT_aux(t, root->left, n);
             }
         }

@@ -64,8 +64,9 @@ bool findFormByIdCallback(SmuTreap t, Node n, Info i, double x, double y, void *
         return false;
     }
 
-    if(*((int*)aux) < 0 || *((int*)aux) >= 100){
-        fprintf(stderr, "(findFormByIdCallback) Erro: id que se busca e invalido.\n");
+    if(*((int*)aux) < 0){
+        fprintf(stderr, "(findFormByIdCallback) Erro: id (%d) que se busca e invalido.\n", *((int*)aux));
+        exit(1);
         return false;
     }
 
@@ -628,6 +629,7 @@ void handle_spy(CONTEXTO ctxt, int id_ref){
 //------------------------------------------------------------HANDLE_BLOW----------------------------------------------------------------//
 
 bool pontoInternoAFormaCallback(SmuTreap t, Node n, Info i, double px, double py){
+    printf("\nDEBUG entrando em pontoInternoAFormaCallback...\n");
     if(!t || !n || !i || px < 0 || py < 0){
         fprintf(stderr, "(pontoInternoAFormaCallback) Erro: parametros invalidos.\n");
         return false;
@@ -678,8 +680,8 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
 
     Info info_ogiva = getInfoSmuT(contexto->tree, no_ogiva);
     double x_exp, y_exp;
+    
     get_anchorF(info_ogiva, getTypeInfoSmuT(contexto->tree, no_ogiva), &x_exp, &y_exp, NULL, NULL);
-
     fprintf(contexto->arqTxt, "blow: Ogiva ID %d explodiu em (%.2f, %.2f).\n", id_ogiva, x_exp, y_exp);
 
 
@@ -694,6 +696,7 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
     // Encontra todos os alvos atingidos pelo ponto de explosão
     Lista alvos_atingidos = criaLista();
     getInfosAtingidoPontoSmuT(contexto->tree, x_exp, y_exp, pontoInternoAFormaCallback, alvos_atingidos);
+    printf("DEBUG saindo de getInfosAtingidoPontoSmuT\n");
 
     // Cria lista final de todos os nos a serem removidos
     Lista nos_a_remover = criaLista();
@@ -732,6 +735,7 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
         }
 
         // Remove o no atingido da arvore
+        printf("DEBUG (handle_blow) PAROU AQUI?\n");
         removeNoSmuT(contexto->tree, no_para_remocao);
     }
 

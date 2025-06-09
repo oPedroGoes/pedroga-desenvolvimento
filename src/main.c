@@ -164,6 +164,8 @@
   Lista lista_svg_qry = criaLista();
   processa_qry(t, fullNomeQry, dirSaida, nomeQry, &array_selecoes[0], lista_svg_qry, &idMax, EPSILON_CONFIG);
 
+  printf("PROGRAMA FINALIZADO. Liberando memórias...\n");
+
 frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
   // Liberar memória
   if(dirEntrada) free(dirEntrada);
