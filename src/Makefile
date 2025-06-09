@@ -2,7 +2,7 @@
 TARGET = ted
 
 # Nome do aluno para o pacote .zip
-ALUNO = pedrogoes
+ALUNO = Pedro Goes Assis
 
 # Compilador
 CC = gcc
