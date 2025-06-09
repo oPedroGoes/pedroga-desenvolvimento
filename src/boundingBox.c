@@ -56,19 +56,12 @@ void calcBB_t(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h
     char* str_fSize = get_fsT(texto_info);
 
     // Converter tamanho da fonte (string) para double.
-    double Fsize = 0;
-    if (str_fSize != NULL) {
-        Fsize = atof(str_fSize); // atof converte string para double
-    }
-    if (Fsize <= 0) {
-        Fsize = 10.0; // Um tamanho de fonte padrão pequeno se a conversão falhar ou for inválida
-        // printf("Aviso (calcBB_t): Tamanho da fonte inválido ou zero, usando default %f.\n", Fsize);
-    }
+    double Fsize = str_fSize ? atof(str_fSize) : 10.0;
+    if (Fsize <= 0) Fsize = 10.0;
 
-    int num_chars = 0;
-    if (str_texto != NULL) {
-        num_chars = strlen(str_texto);
-    }
+    int num_chars = str_texto ? strlen(str_texto) : 0;
+    if (num_chars == 0) num_chars = 1;
+    
 
     // Estima qual é a largura de cada char, dado que a fonte pode variar.
     double K_LARGURA_CHAR_APROX = 0.6;
@@ -81,24 +74,20 @@ void calcBB_t(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h
         calc_bb_w =  Fsize * K_LARGURA_CHAR_APROX; // Cria o BB de um char.
     }
 
-    // Calcular âncora (canto inferior esquerdo) do BB,
-    // assumindo que ty_ancora é a coordenada Y do pe' da linha de texto.
-    if (tipo_ancora == 'i') { // Âncora no início (canto superior esquerdo do texto)
+    // Ajuste horizontal baseado na âncora (i, m, f)
+    if (tipo_ancora == 'i') {        // Início
         *bbA_x = tx_ancora;
-        *bbA_y = ty_ancora;
-    } else if (tipo_ancora == 'm') { // Âncora no meio (horizontalmente, no topo do texto)
+    } else if (tipo_ancora == 'm') { // Meio
         *bbA_x = tx_ancora - (calc_bb_w / 2.0);
-        *bbA_y = ty_ancora;
-    } else if (tipo_ancora == 'f') { // Âncora no fim (canto superior direito do texto)
+    } else {                         // Fim ('f')
         *bbA_x = tx_ancora - calc_bb_w;
-        *bbA_y = ty_ancora;
-    } else {
-        // Caso padrão ou erro no tipo de âncora: assumir início
-        *bbA_x = tx_ancora;
-        *bbA_y = ty_ancora;
-        printf("Aviso (calcBB_t): Tipo de âncora de texto desconhecido '%c', usando 'início' como padrão.\n", tipo_ancora);
     }
+    
+    // Ajuste vertical. O 'y' da âncora é o centro, então o topo do BB está
+    // meia altura para cima.
+    *bbA_y = ty_ancora - (calc_bb_h / 2.0);
 
+    // Atribui largura e altura calculadas
     *bbA_w = calc_bb_w;
     *bbA_h = calc_bb_h;
 }
@@ -139,22 +128,3 @@ void fCalcBB_individual(DescritorTipoInfo tp, Info i, double *bbA_x, double *bbA
         return;
     }
 }
-
-/*void uniaoBB(BB bb_dest, BB bb1, BB bb2){
-    // VERIFICACAO VALIDADE DE AMBOS OS BB.
-    if (!bb1 || (bb1->w < 0 || bb1->h < 0)) { // bb1 inválido ou não inicializado
-        if (bb2 && bb2->w >= 0 && bb2->h >= 0) {
-            *bb_res = *bb2;
-        } else {
-            bb_res->x = 0; bb_res->y = 0; bb_res->w = -1; bb_res->h = -1; // inválido
-        }
-        return;
-    }
-    if (!bb2 || (bb2->w < 0 || bb2->h < 0)) { // bb2 inválido ou não inicializado
-         *bb_res = *bb1; // bb1 é válido (verificado acima)
-        return;
-    }
-}*/
-
-//TALVEZ HAVERA UMA
-//void *fCalcBB_agrupada(){}
