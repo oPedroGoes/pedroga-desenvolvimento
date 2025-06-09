@@ -4,11 +4,16 @@
 #include "SmuTreap.h"
 typedef void* BOUNDING_BOX; 
 
-
+/*
+* 
+*  @brief Calcula a BB de uma forma.
+*/
 void calcBB_c(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h);
 void calcBB_r(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h);
 void calcBB_t(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h);
 void calcBB_l(Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h);
+
+
 void fCalcBB_individual(DescritorTipoInfo d, Info i, double *bbA_x, double *bbA_y, double *bbA_w, double *bbA_h);
 
 
