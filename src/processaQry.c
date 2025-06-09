@@ -746,7 +746,7 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
         } else if (strcmp(comm, "disp") == 0) {
             int id, n_sel;
             if (sscanf(str, "disp %d %d", &id, &n_sel) == 2) {
-                //handle_disp(t, pathTxt, id, n_sel);
+                handle_disp(con, id, n_sel);
             } else {
                 fprintf(pathTxt, "[*] %s\nErro: parametros invalidos para disp\n", str);
             }
