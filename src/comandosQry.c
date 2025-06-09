@@ -688,7 +688,7 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
     // Adiciona anotação SVG '#' para a explosão
     char* anot_explosao = (char*)malloc(128 * sizeof(char));
     if (anot_explosao) {
-        sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" font-size=\"16\" font-weight=\"bold\">#</text>", x_exp, y_exp);
+        sprintf(anot_explosao, "<text x=\"%.2f\" y=\"%.2f\" fill=\"orange\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">#</text>", x_exp, y_exp);
         insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_explosao);
     }
 
@@ -730,7 +730,7 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
 
         char* anot_x = (char*)malloc(128 * sizeof(char));
         if (anot_x) {
-            sprintf(anot_x, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" font-size=\"16\" font-weight=\"bold\">x</text>", xAnch_removido, yAnch_removido);
+            sprintf(anot_x, "<text x=\"%.2f\" y=\"%.2f\" fill=\"red\" text-anchor=\"middle\" dominant-baseline=\"middle\" font-size=\"8\" font-weight=\"bold\">x</text>", xAnch_removido, yAnch_removido);
             insereNaLista(contexto->lista_anotacoes_svg, (Item)anot_x);
         }
 
