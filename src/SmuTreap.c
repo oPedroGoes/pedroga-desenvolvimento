@@ -739,46 +739,44 @@ node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_
         root->right = removeNoSmuT_aux(t, root->right, n);
     } else if(podeIrEsquerda){
         root->left = removeNoSmuT_aux(t, root->left, n);
-    } else{ // Encontra o no' que se quer remover
-        // Aqui, ao que parece, a recomendacao é que se use uma flag bool que retorna true se o no'foi achado.
+    } else{ 
+        // Encontra o no' que se quer remover
+        // As coordenadas são as mesmas. Agora precisamos ter certeza de que é o NÓ correto.
+        if (root != n) {
 
-        // Caso 1: no' folha.
-        if (!root->right && !root->left){
-            killNode(root);
-            return NULL;
-        }
+            // As coordenadas são iguais, mas os ponteiros são diferentes.
+            int id_n = get_idF(n->info, n->descritor);
+            int id_root = get_idF(root->info, root->descritor);
 
-        // Caso 2: no' com apenas um filho.
-        else if(root->right == NULL){
-            node_internal *aux = root->left;
-            killNode(root);
-            return aux;
-        } else if(root->left == NULL){
-            node_internal *aux = root->right;
-            killNode(root);
-            return aux;
-        }
-
-        // Caso 3: no' com dois filhos
-        // Rotaciona o nó para baixo até que se torne uma folha ou tenha um filho,
-        // mantendo a propriedade de heap.
-        else{
-            if(root->left->priority > root->right->priority){
-                // Filho esquerdo tem maior prioridade, rotaciona para direita.
-                rotacionaDir(&root);
-                root->right = removeNoSmuT_aux(t, root->right, n);
-            } else {
-                // O filho direito tem maior prioridade, ou prioridades iguais, rotaciona esquerda.
-                rotacionaEsq(&root);
+            if (id_n < id_root) {
                 root->left = removeNoSmuT_aux(t, root->left, n);
+            } else {
+                root->right = removeNoSmuT_aux(t, root->right, n);
+            }
+        } else {
+            // As coordenadas e ponteiros iguais. Proceder com a remoção.
+            if (!root->left || !root->right) { // Caso folha ou 1 filho
+
+                node_internal *temp = root->left ? root->left : root->right;
+                killNode(root); // killNode libera a Info e o nó
+                return temp;
+
+            } else { // Caso 2 filhos
+                
+                if (root->left->priority > root->right->priority) {
+                    rotacionaDir(&root);
+                    root->right = removeNoSmuT_aux(t, root->right, n);
+                } else {
+                    rotacionaEsq(&root);
+                    root->left = removeNoSmuT_aux(t, root->left, n);
+                }
             }
         }
     }
-
-    if(root){
+    
+    if (root) {
         atualizaBB_subtree(root);
     }
-
     return root;
 }
 void removeNoSmuT(SmuTreap t, Node n){
