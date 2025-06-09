@@ -1,5 +1,5 @@
 [*] spy 170
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 871
 spy: Relatorio de formas encontradas:
@@ -8,19 +8,19 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 911, Tipo: retangulo
 [*] spy 157
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 179
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 680
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 230
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 596
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 830
 spy: Relatorio de formas encontradas:
@@ -30,10 +30,10 @@ spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 149, Tipo: texto
   Forma encontrada -> ID: 967, Tipo: retangulo
 [*] spy 549
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 194
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 511
 spy: Relatorio de formas encontradas:
@@ -49,10 +49,10 @@ spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 413, Tipo: texto
   Forma encontrada -> ID: 1170, Tipo: retangulo
 [*] spy 237
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 627
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1140
 spy: Relatorio de formas encontradas:
@@ -61,13 +61,13 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 426, Tipo: texto
 [*] spy 747
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 803
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 803, Tipo: retangulo
 [*] spy 190
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 520
 spy: Relatorio de formas encontradas:
@@ -80,13 +80,13 @@ spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1172, Tipo: retangulo
 [*] spy 939
 spy: Relatorio de formas encontradas:
-  Forma encontrada -> ID: 710, Tipo: linha
   Forma encontrada -> ID: 939, Tipo: retangulo
+  Forma encontrada -> ID: 710, Tipo: linha
 [*] spy 590
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 598
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 827
 spy: Relatorio de formas encontradas:
@@ -101,37 +101,37 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1093, Tipo: retangulo
 [*] spy 370
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 949
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 949, Tipo: retangulo
 [*] spy 765
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1009
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1009, Tipo: retangulo
 [*] spy 204
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 617
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 635
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 13
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 13, Tipo: texto
 [*] spy 652
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 740
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 222
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 123
 spy: Relatorio de formas encontradas:
@@ -143,13 +143,13 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 544, Tipo: texto
 [*] spy 713
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 509
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 509, Tipo: texto
 [*] spy 650
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 57
 spy: Relatorio de formas encontradas:
@@ -158,7 +158,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1110, Tipo: retangulo
 [*] spy 606
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 20
 spy: Relatorio de formas encontradas:
@@ -170,16 +170,16 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1012, Tipo: retangulo
 [*] spy 557
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 263
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 725
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 623
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 880
 spy: Relatorio de formas encontradas:
@@ -188,19 +188,19 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 19, Tipo: texto
 [*] spy 619
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 169
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 200
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1042
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1042, Tipo: retangulo
 [*] spy 626
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 410
 spy: Relatorio de formas encontradas:
@@ -213,22 +213,22 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1090, Tipo: retangulo
 [*] spy 566
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 116
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 116, Tipo: texto
 [*] spy 643
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 618
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 168
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 687
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1158
 spy: Relatorio de formas encontradas:
@@ -243,7 +243,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 839, Tipo: retangulo
 [*] spy 321
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 866
 spy: Relatorio de formas encontradas:
@@ -252,19 +252,19 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 58, Tipo: texto
 [*] spy 625
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1116
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1116, Tipo: retangulo
 [*] spy 398
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 134
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 134, Tipo: texto
 [*] spy 768
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1021
 spy: Relatorio de formas encontradas:
@@ -276,28 +276,28 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1125, Tipo: retangulo
 [*] spy 167
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 534
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 534, Tipo: texto
 [*] spy 663
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 898
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 898, Tipo: retangulo
 [*] spy 323
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 588
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1077
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1077, Tipo: retangulo
 [*] spy 690
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 889
 spy: Relatorio de formas encontradas:
@@ -306,19 +306,19 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 79, Tipo: texto
 [*] spy 394
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 256
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 591
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 267
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 192
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1150
 spy: Relatorio de formas encontradas:
@@ -327,25 +327,25 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1072, Tipo: retangulo
 [*] spy 282
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 748
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 186
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 654
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1071
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1071, Tipo: retangulo
 [*] spy 174
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 605
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 89
 spy: Relatorio de formas encontradas:
@@ -357,7 +357,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 942, Tipo: retangulo
 [*] spy 299
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 811
 spy: Relatorio de formas encontradas:
@@ -366,20 +366,20 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 454, Tipo: texto
 [*] spy 371
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 131
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 131, Tipo: texto
 [*] spy 305
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 855
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 314, Tipo: circulo
   Forma encontrada -> ID: 855, Tipo: retangulo
 [*] spy 799
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 474
 spy: Relatorio de formas encontradas:
@@ -398,7 +398,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 63, Tipo: texto
 [*] spy 694
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1008
 spy: Relatorio de formas encontradas:
@@ -407,13 +407,13 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 26, Tipo: texto
 [*] spy 763
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 514
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 514, Tipo: texto
 [*] spy 702
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1120
 spy: Relatorio de formas encontradas:
@@ -428,19 +428,19 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 119, Tipo: texto
 [*] spy 345
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1011
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1011, Tipo: retangulo
 [*] spy 787
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1087
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1087, Tipo: retangulo
 [*] spy 646
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 850
 spy: Relatorio de formas encontradas:
@@ -450,67 +450,67 @@ spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1174, Tipo: retangulo
   Forma encontrada -> ID: 417, Tipo: texto
 [*] spy 211
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 726
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 594
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 358
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 278
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 248
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1157
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1157, Tipo: retangulo
 [*] spy 582
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1052
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1052, Tipo: retangulo
 [*] spy 163
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 796
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 283
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 576
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 982
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 982, Tipo: retangulo
 [*] spy 271
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 528
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 528, Tipo: texto
 [*] spy 266
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 585
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 971
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 971, Tipo: retangulo
 [*] spy 569
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 770
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 117
 spy: Relatorio de formas encontradas:
@@ -525,7 +525,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 876, Tipo: retangulo
 [*] spy 273
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 497
 spy: Relatorio de formas encontradas:
@@ -534,13 +534,13 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 548, Tipo: texto
 [*] spy 346
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 155
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 555
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1170
 spy: Relatorio de formas encontradas:
@@ -555,22 +555,22 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 11, Tipo: texto
 [*] spy 264
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 981
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 981, Tipo: retangulo
 [*] spy 729
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 775
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 733
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 731
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 969
 spy: Relatorio de formas encontradas:
@@ -585,7 +585,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1176, Tipo: retangulo
 [*] spy 210
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 856
 spy: Relatorio de formas encontradas:
@@ -594,25 +594,25 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 84, Tipo: texto
 [*] spy 708
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 344
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 45
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 45, Tipo: texto
 [*] spy 756
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 612
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1109
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1109, Tipo: retangulo
 [*] spy 676
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 818
 spy: Relatorio de formas encontradas:
@@ -621,17 +621,17 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 816, Tipo: retangulo
 [*] spy 396
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 558
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 146
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 146, Tipo: texto
   Forma encontrada -> ID: 964, Tipo: retangulo
 [*] spy 703
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 33
 spy: Relatorio de formas encontradas:
@@ -640,10 +640,10 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1173, Tipo: retangulo
 [*] spy 302
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 746
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1059
 spy: Relatorio de formas encontradas:
@@ -663,52 +663,52 @@ spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 957, Tipo: retangulo
   Forma encontrada -> ID: 779, Tipo: linha
 [*] spy 310
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 515
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 515, Tipo: texto
 [*] spy 293
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1118
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1118, Tipo: retangulo
 [*] spy 595
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 139
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 139, Tipo: texto
 [*] spy 368
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 262
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 311
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 968
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 968, Tipo: retangulo
 [*] spy 642
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 158
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 791
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 608
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 845
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 845, Tipo: retangulo
 [*] spy 276
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 76
 spy: Relatorio de formas encontradas:
@@ -726,7 +726,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 935, Tipo: retangulo
 [*] spy 196
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 974
 spy: Relatorio de formas encontradas:
@@ -744,10 +744,10 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 455, Tipo: texto
 [*] spy 241
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 215
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1069
 spy: Relatorio de formas encontradas:
@@ -765,13 +765,13 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1082, Tipo: retangulo
 [*] spy 373
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 930
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 930, Tipo: retangulo
 [*] spy 800
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1040
 spy: Relatorio de formas encontradas:
@@ -792,19 +792,19 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 865, Tipo: retangulo
 [*] spy 333
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 281
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 888
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 888, Tipo: retangulo
 [*] spy 637
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 291
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 821
 spy: Relatorio de formas encontradas:
@@ -821,13 +821,13 @@ spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 964, Tipo: retangulo
 [*] spy 412
 spy: Relatorio de formas encontradas:
-  Forma encontrada -> ID: 1169, Tipo: retangulo
   Forma encontrada -> ID: 412, Tipo: texto
+  Forma encontrada -> ID: 1169, Tipo: retangulo
 [*] spy 1159
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 1159, Tipo: retangulo
 [*] spy 247
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 835
 spy: Relatorio de formas encontradas:
@@ -836,16 +836,16 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 503, Tipo: texto
 [*] spy 611
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 657
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 431
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 431, Tipo: texto
 [*] spy 743
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 823
 spy: Relatorio de formas encontradas:
@@ -857,7 +857,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 904, Tipo: retangulo
 [*] spy 402
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 987
 spy: Relatorio de formas encontradas:
@@ -866,7 +866,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 486, Tipo: texto
 [*] spy 308
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 59
 spy: Relatorio de formas encontradas:
@@ -881,7 +881,7 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 82, Tipo: texto
 [*] spy 212
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 1179
 spy: Relatorio de formas encontradas:
@@ -893,15 +893,15 @@ spy: Relatorio de formas encontradas:
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 519, Tipo: texto
 [*] spy 173
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 921
 spy: Relatorio de formas encontradas:
   Forma encontrada -> ID: 921, Tipo: retangulo
   Forma encontrada -> ID: 641, Tipo: linha
 [*] spy 329
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
 [*] spy 286
-Erro: O comando cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
 (handle_spy) Erro: buscaTipoSpy falhou!
