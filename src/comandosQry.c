@@ -386,7 +386,7 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
         return;
     }
 
-    printf("Processando funcao transp: id=%d, x=%d, y=%d", id, x, y);
+    printf("Processando funcao transp: id=%d, x=%lf, y=%lf", id, x, y);
 
     qryContext* contexto = (qryContext*)ctxt;
 
@@ -408,8 +408,8 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
     double x_novo = x;
     double y_novo = y;
 
-    char *cb;
-    char *cp;
+    char *cb = NULL;
+    char *cp = NULL;
     if(!get_corF(info_original, tipo, cb, cp)) return;
     
 

@@ -99,7 +99,7 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
 int get_corF(Info forma, DescritorTipoInfo tipo, char* new_corb, char* new_corp){
     if(!forma || !tipo || !new_corb || !new_corp){
         fprintf(stderr, "(get_corF) Erro: parametros invalidos.\n");
-        return;
+        return 0;
     }
 
     switch (tipo)
@@ -132,15 +132,15 @@ int get_corF(Info forma, DescritorTipoInfo tipo, char* new_corb, char* new_corp)
     
     default:
         fprintf(stderr, "(get_corF) Erro: tipo de forma desconhecido.\n");
-        return;
+        return 0;
     }
 
     if(!new_corb || !new_corp){
         fprintf(stderr, "(get_corF) Erro: falha ao alocar memoria para cores.\n");
-        return NULL;
+        return 0;
     }
 
-    return;
+    return 0;
 }
 
 // Ideia de fazer um set_cor para todas as formas. recebe duas cores, e define corL como corB_new.
