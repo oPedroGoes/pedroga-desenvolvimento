@@ -1,2 +1,4 @@
 [*] selr 66 -1.50 24.50 25.00 30.00
 Nenhuma forma inteiramente contida na regiao especificada.
+[*] disp 12 66
+Aviso: Selecao 'n' (66) esta vazia. Nada a disparar.

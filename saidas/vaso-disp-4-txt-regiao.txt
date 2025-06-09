@@ -1,2 +1,4 @@
 [*] selr 99 77.17 37.67 4.77 4.77
 Nenhuma forma inteiramente contida na regiao especificada.
+[*] disp 12 99
+Aviso: Selecao 'n' (99) esta vazia. Nada a disparar.
