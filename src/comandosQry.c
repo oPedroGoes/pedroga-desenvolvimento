@@ -56,7 +56,6 @@ CONTEXTO iniciaContext(FILE *arqTxt, SmuTreap t, Lista lista_anotacoes_svg, List
     ctxt->lista_anotacoes_svg = lista_anotacoes_svg;
     ctxt->array_selecoes = array_selecoes;
     ctxt->idMax = idMax;
-    //printf("DEBUG (iniciaContext) id_clone = %d\n", *idMax);
     ctxt->fCalcBB = fCalcBB;
 
     ctxt->dx = 0;
@@ -234,7 +233,7 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
     }
 
     qryContext *contexto = (qryContext*)ctxt;
-    printf("DEBUG (handle_selr) id_clone = %d\n", *(contexto->idMax));
+
 
     // Escreve o comando original no arquivo TXT
     fprintf(contexto->arqTxt, "[*] selr %d %.2f %.2f %.2f %.2f\n", selId, sel_x, sel_y, sel_w, sel_h);
@@ -304,28 +303,20 @@ void handle_selr(CONTEXTO ctxt, int selId, double sel_x, double sel_y, double se
 //------------------------------------------------------------HANDLE_SELI----------------------------------------------------------------//
 
 void processaNoParaSaidaSeli(Item item_node, void *aux_context){
-    printf("\n\n DEBUG Entrando em processaNoParaSaidaSeli...\n");
     if(!item_node || !aux_context){
         fprintf(stderr, "\n(processaNoParaSaidaSeli) Erro: parametros invalidos.\n");
         return;
     }
-    printf("DEBUG (processaNoParaSaidaSeli) item = %p\n", item_node);
 
     qryContext* context = (qryContext*)aux_context;
     Node nd = (Node)item_node; // O Item da lista é o Node da SmuTreap
     Info forma = getInfoSmuT(context->tree, nd);
     DescritorTipoInfo tipo = getTypeInfoSmuT(context->tree, nd);
-    printf("DEBUG (processaNoParaSaidaSeli) tipo = %d\n", tipo);
-
-    double x1_DEBUG, y1_DEBUG, x2_DEBUG, y2_DEBUG;
-    int contaAncora = get_anchorF(forma, tipo, &x1_DEBUG, &y1_DEBUG, &x2_DEBUG, &y2_DEBUG);
-    printf("DEBUG (processaNoParaSaidaSeli) contaAncora = %d x1 = %lf, y1 = %lf, x2 = %lf, y2 = %lf\n", contaAncora, x1_DEBUG, y1_DEBUG, x2_DEBUG, y2_DEBUG);
 
     double xa, ya; // Âncora da FORMA para o círculo SVG
     double xl, yl; // Equivalentes para x2 e y2 para linhas.
 
     int id_forma = get_idF(forma, tipo);
-    printf("\nDEBUG (processaNoParaSaidaSeli) id_forma = %d", id_forma);
     const char *nome_forma = get_NameStrF(tipo);
 
     int ancoraCount = get_anchorF(forma, tipo, &xa, &ya, &xl, &yl);
@@ -374,25 +365,6 @@ void handle_seli(CONTEXTO ctxt, int n_id_selecao, double sel_x, double sel_y){
     return;
     }
 
-/*-------------------------------------------------------------DEBUG SVG----------------------------------------------------------------------------//
-
-    char *nome_svg_debug = "/home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/00-vaso-simples/TESTE_SELI_DEBUG.svg";
-    FILE *debug_svg = fopen(nome_svg_debug, "w");
-    if(!debug_svg){
-        fprintf(stderr, "(handle_seli) Erro: falha ao criar arquivo para debug do svd");
-        return;
-    }
-
-    fprintf(debug_svg, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
-    fprintf(debug_svg, "<svg width=\"2000\" height=\"2000\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
-
-    visitaProfundidadeSmuT(t, escreverFormaSvg1, debug_svg);
-
-    fprintf(debug_svg, "</svg>\n");
-    fclose(debug_svg);
-
-//--------------------------------------------------------------------------------------------------------------------------------------------------*/
-    printf("DEBUG ANTES (handle_seli) sel_x = %lf, sel_y = %lf\n", sel_x, sel_y);
     Node no_encontrado = getNodeSmuT(contexto->tree, sel_x, sel_y); // Como getNode tem impacto sobre a prioridade, optei por faze-lo apenas se tudo estiver valido.
     if(!no_encontrado){
         fprintf(contexto->arqTxt, "(seli) Nenhuma forma encontrada na coordenada (%.2f, %.2f) com a tolerancia epsilon.\n", sel_x, sel_y);
@@ -534,7 +506,6 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
 
     if (!nova_info) {
         fprintf(contexto->arqTxt, "  Erro: Falha ao recriar a forma ID %d para translado.\n", id);
-        printf("DEBUG: nova_info é NULL para forma ID %d apos o switch.\n", id);
         return;
     }
 
@@ -551,7 +522,6 @@ void handle_transp(CONTEXTO ctxt, int id, double x, double y){
 //------------------------------------------------------------HANDLE_CLN-----------------------------------------------------------------//
 
 void clonaEInsereCallback(Item item_origiNode, void *aux_context){
-    //printf("DEBUG Entrando em clonaEInsereCallback\n");
     if (!item_origiNode || !aux_context){
         fprintf(stderr, "(clonaEInsereCallback) Erro: parametros invalidos.\n");
         return;
@@ -653,7 +623,6 @@ void handle_cln(CONTEXTO ctxt, int n_id_selecao, double dx, double dy){
 
     contexto->dx = dx;
     contexto->dy = dy;
-                        printf("DEBUGDEBUDEBUGDEBUG\n");
     percorreLista(cloneList, clonaEInsereCallback, contexto);
 }
 
@@ -799,7 +768,6 @@ void handle_spy(CONTEXTO ctxt, int id_ref){
 //------------------------------------------------------------HANDLE_BLOW----------------------------------------------------------------//
 
 bool pontoInternoAFormaCallback(SmuTreap t, Node n, Info i, double px, double py){
-    printf("\nDEBUG entrando em pontoInternoAFormaCallback...\n");
     if(!t || !n || !i || px < 0 || py < 0){
         fprintf(stderr, "(pontoInternoAFormaCallback) Erro: parametros invalidos.\n");
         return false;
@@ -866,7 +834,6 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
     // Encontra todos os alvos atingidos pelo ponto de explosão
     Lista alvos_atingidos = criaLista();
     getInfosAtingidoPontoSmuT(contexto->tree, x_exp, y_exp, pontoInternoAFormaCallback, alvos_atingidos);
-    printf("DEBUG saindo de getInfosAtingidoPontoSmuT\n");
 
     // Cria lista final de todos os nos a serem removidos
     Lista nos_a_remover = criaLista();
@@ -905,7 +872,6 @@ void handle_blow(CONTEXTO ctxt, int id_ogiva){
         }
 
         // Remove o no atingido da arvore
-        printf("DEBUG (handle_blow) PAROU AQUI?\n");
         removeNoSmuT(contexto->tree, no_para_remocao);
     }
 
@@ -1031,7 +997,6 @@ void handle_disp(CONTEXTO ctxt, int id_linha, int n_selecao){
     while(!listaEstaVazia(nos_para_remover)){
         Node node_candidato = (Node)removePrimeiroDaLista(nos_para_remover);
         
-        printf("DEBUG VAZIA\n");
         if(!listaEstaVazia(revisados_para_remover)){
             if (!listaJaContemNo(contexto, revisados_para_remover, node_candidato)){
                 insereNaLista(revisados_para_remover, node_candidato);

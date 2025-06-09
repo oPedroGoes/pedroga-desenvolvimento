@@ -1,207 +1,169 @@
- #include <stdio.h>
- #include <stdlib.h> // Para malloc, free, strtol, strtof, strtod, exit, EXIT_SUCCESS, EXIT_FAILURE
- #include <assert.h>
- #include <string.h> // Para strcmp, strlen, strcpy, strcspn
- #include <errno.h>  // Para errno, ERANGE
- #include <limits.h> // Para INT_MAX, INT_MIN, LONG_MAX, LONG_MIN
- #include <math.h>   // Para HUGE_VALF
- #include <time.h> // Para srand()
- 
- #include "processaGeo.h"
- #include "processaQry.h"
- #include "leituraTerminal.h"
- #include "Lista.h"
- #include "SmuTreap.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
 
-#define EPSILON_CONFIG 0.001 //AJUSTAVEL.
+#include "SmuTreap.h"
+#include "leituraTerminal.h"
+#include "processaGeo.h"
+#include "processaQry.h"
+#include "Lista.h"
 
- /* Falta decidir o que fazer com cada um dos full names.
+/**
+ * Remove a extensão de um nome de arquivo (ex: ".geo").
+ * @param dest Buffer para armazenar o nome base.
+ * @param src String original com o nome do arquivo.
  */
+static void removeExtensao(char *dest, const char *src) {
+    if (!dest || !src) return;
+    
+    strcpy(dest, src);
+    char *ponto = strrchr(dest, '.');
+    if (ponto) {
+        *ponto = '\0';
+    }
+}
 
-/* FREE EM:
-* * todo diretório derivado de pathDir
-* todo diretório derivado de pathArq
-* prioMax, hc, promoRate (se alocados)
-*/
+/**
+ * Constrói o nome completo para o arquivo .dot.
+ * @param pathOut Diretório de saída.
+ * @param nomeGeo Nome do arquivo .geo original.
+ * @param arqDot Ponteiro para a string que armazenará o caminho completo.
+ */
+static void trataArqDot(const char *pathOut, const char *nomeGeo, char **arqDot) {
+    if (!pathOut || !nomeGeo || !arqDot) return;
 
- int main(int argc, char *argv[]){
-  char *dirEntrada = NULL, *dirSaida = NULL, *nomeGeo = NULL, *fullNomeGeo = NULL,
-       *nomeQry = NULL, *fullNomeQry = NULL; char *fullNomeTxt = NULL;
+    char nomeBase[512];
+    removeExtensao(nomeBase, nomeGeo);
 
-  srand(time(NULL));
-  int *prioMax = NULL, *hc = NULL;
-  double *promoRate = NULL;
+    // Formato: <dirSaida>/<nomeBaseGeo>.dot
+    int len = strlen(pathOut) + 1 + strlen(nomeBase) + 4 + 1;
+    *arqDot = (char*) malloc(len);
+    if (*arqDot) {
+        sprintf(*arqDot, "%s/%s.dot", pathOut, nomeBase);
+    }
+}
 
-  int i = 1;
-  while (i < argc){
-    if (strcmp(argv[i], "-e") == 0){
-        printf("lendo parametro -e...\n");
-        i++;
-        if (i >= argc){
-          printf("\nERRO: falta parametro para -e.\n"); 
-          goto frees_and_exit;
+
+int main(int argc, char *argv[]) {
+    // --- 1. Declaração de Variáveis ---
+    char *dirEntrada = NULL, *dirSaida = NULL;
+    char *nomeGeo = NULL, *nomeQry = NULL;
+    char *fullNomeGeo = NULL, *fullNomeQry = NULL, *fullNomeDot = NULL;
+    
+    int *prioMax = NULL, *hc = NULL;
+    double *promoRate = NULL;
+    double epsilon = 0.001; // Valor padrão para epsilon
+    
+    SmuTreap t = NULL;
+    Lista array_selecoes[100];
+    int idMax = 0;
+
+    // Inicializa o array de seleções
+    for (int i = 0; i < 100; i++) {
+        array_selecoes[i] = NULL;
+    }
+
+    srand(time(NULL));
+
+    // --- 2. Processamento dos Parâmetros da Linha de Comando ---
+    printf("Lendo parametros da linha de comando...\n");
+    int i = 1;
+    while (i < argc) {
+        if (strcmp(argv[i], "-e") == 0) {
+            i++;
+            if (i < argc) trataPath(&dirEntrada, argv[i]);
+        } else if (strcmp(argv[i], "-f") == 0) {
+            i++;
+            if (i < argc) trataNomeArquivo(&nomeGeo, argv[i]);
+        } else if (strcmp(argv[i], "-q") == 0) {
+            i++;
+            if (i < argc) trataNomeArquivo(&nomeQry, argv[i]);
+        } else if (strcmp(argv[i], "-o") == 0) {
+            i++;
+            if (i < argc) trataPath(&dirSaida, argv[i]);
+        } else if (strcmp(argv[i], "-p") == 0) {
+            i++;
+            if (i < argc) trataParamNumericoInt(&prioMax, argv[i]);
+        } else if (strcmp(argv[i], "-hc") == 0) {
+            i++;
+            if (i < argc) trataParamNumericoInt(&hc, argv[i]);
+        } else if (strcmp(argv[i], "-pr") == 0) {
+            i++;
+            if (i < argc) trataParamNumericoDouble(&promoRate, argv[i]);
         }
-        trataPath(&dirEntrada, argv[i]);
-        if(dirEntrada == NULL){ 
-          fprintf(stderr, "\nFalha ao processar -e.\n"); 
-          goto frees_and_exit;
+        i++;
+    }
+
+    // --- 3. Validação de Parâmetros e Construção de Paths ---
+    if (!dirSaida || !nomeGeo) {
+        fprintf(stderr, "ERRO: Os parametros -o (diretorio de saida) e -f (arquivo .geo) são obrigatorios.\n");
+        goto cleanup; // Pula para a limpeza e encerra
+    }
+    
+    // Constrói os caminhos completos para os arquivos de entrada
+    completaNomeArquivo(dirEntrada, nomeGeo, &fullNomeGeo);
+    if (nomeQry) {
+        completaNomeArquivo(dirEntrada, nomeQry, &fullNomeQry);
+    }
+    
+    printf("\n--- Caminhos Processados ---\n");
+    printf("Entrada: %s\n", fullNomeGeo);
+    printf("Saida: %s\n", dirSaida);
+    if(fullNomeQry) printf("Consultas: %s\n", fullNomeQry);
+    printf("---------------------------\n\n");
+
+    // --- 4. Lógica Principal da Aplicação ---
+    
+    // Processa o arquivo .geo e cria a árvore
+    t = processa_geo(fullNomeGeo, dirSaida, nomeGeo, &idMax, prioMax, hc, promoRate, epsilon);
+    if (!t) {
+        fprintf(stderr, "ERRO: Falha ao processar o arquivo .geo. Encerrando.\n");
+        goto cleanup;
+    }
+
+    // >> GERA O ARQUIVO .DOT IMEDIATAMENTE APÓS PROCESSAR O .GEO <<
+    trataArqDot(dirSaida, nomeGeo, &fullNomeDot);
+    if (fullNomeDot) {
+        printf("Gerando arquivo .dot: %s\n", fullNomeDot);
+        if (!printDotSmuTreap(t, fullNomeDot)) {
+            fprintf(stderr, "AVISO: Nao foi possivel criar o arquivo .dot.\n");
         }
     }
-    else if (strcmp(argv[i], "-f") == 0){
-        printf("lendo parametro -f...\n");
-        i++;
-        if (i >= argc){
-          printf("\nERRO: falta parametro para -f.\n");
-          goto frees_and_exit;
-        }
-        trataNomeArquivo(&nomeGeo, argv[i]);
-        if(nomeGeo == NULL) {
-          fprintf(stderr, "\nFalha ao processar -f.\n");
-          goto frees_and_exit;
-        }
-    } else if (strcmp(argv[i], "-q") == 0){
-        printf("lendo parametro -q...\n");
-        i++;
-        if (i >= argc){
-          printf("\nERRO: falta parametro para -q.\n");
-          goto frees_and_exit;
-        }
-        trataNomeArquivo(&nomeQry, argv[i]);
-        if(nomeQry == NULL) {
-          fprintf(stderr, "\nFalha ao processar -q.\n");
-          goto frees_and_exit;
-        }
-    } else if (strcmp(argv[i], "-o") == 0){
-        printf("lendo parametro -o...\n");
-        i++;
-        if (i >= argc){
-          printf("\nERRO: falta parametro para -o.\n");
-          goto frees_and_exit;
-        }
-        trataPath(&dirSaida, argv[i]);
-        if(dirSaida == NULL) {
-          fprintf(stderr, "\nFalha ao processar -o.\n");
-          goto frees_and_exit;
-        }
-    } else if (strcmp(argv[i], "-p") == 0){ // prioMax (int)
-        printf("lendo parametro -p (prioMax)...\n");
-        i++;
-        if (i >= argc){
-          printf("\nERRO: falta parametro para -p.\n");
-          goto frees_and_exit;
-        }
-        trataParamNumericoInt(&prioMax, argv[i]);
-        if(prioMax == NULL) {
-          fprintf(stderr, "\nFalha ao processar -p (prioMax).\n");
-          /* Pode decidir sair ou continuar com prioMax=NULL */
-        }
-      } else if (strcmp(argv[i], "-hc") == 0){ // hc (int)
-        printf("lendo parametro -hc...\n");
-        i++;
-        if (i >= argc){
-          printf("\nERRO: falta parametro para -hc.\n");
-          goto frees_and_exit;
-        }
-        trataParamNumericoInt(&hc, argv[i]);
-        if(hc == NULL) {
-          fprintf(stderr, "\nFalha ao processar -hc.\n");
-        }
-      } else if (strcmp(argv[i], "-pr") == 0){ // promoRate (float)
-        printf("lendo parametro -pr (promoRate)...\n");
-        i++;
-        if (i >= argc){
-          printf("\nERRO: falta parametro para -pr.\n");
-          goto frees_and_exit;
-        }
-        trataParamNumericoDouble(&promoRate, argv[i]);
-        if(promoRate == NULL) {
-          fprintf(stderr, "\nFalha ao processar -pr (promoRate).\n");
-        }
-      } else {
-        printf("\nParametro desconhecido: %s\n", argv[i]);
-        // goto frees_and_exit; 
-      }
-    i++;
-  }
-  //while.
 
-  completaNomeArquivo(dirEntrada, nomeGeo, &fullNomeGeo);
-  completaNomeArquivo(dirEntrada, nomeQry, &fullNomeQry);
-  trataArqTxt(dirSaida, nomeGeo, nomeQry, &fullNomeTxt);
+    // Processa o arquivo .qry, se foi fornecido
+    Lista lista_anotacoes_svg = criaLista();
+    if (fullNomeQry) {
+        processa_qry(t, fullNomeQry, dirSaida, nomeQry, array_selecoes, lista_anotacoes_svg, &idMax, epsilon);
+    }
 
-  printf("\n--- Valores Processados ---\n");
-  printf("dirEntrada = %s\n", dirEntrada ? dirEntrada : "(null ou falha)");
-  printf("dirSaida   = %s\n", dirSaida   ? dirSaida   : "(null ou falha)");
-  printf("nomeGeo    = %s\n", nomeGeo    ? nomeGeo    : "(null ou falha)");
-  printf("nomeQry    = %s\n", nomeQry    ? nomeQry    : "(null ou falha)");
-  printf("fullNomeQry    = %s\n", fullNomeQry    ? fullNomeQry    : "(null ou falha)");
-  printf("fullNomeGeo    = %s\n", fullNomeGeo   ? fullNomeGeo    : "(null ou falha)");
-  printf("fullNomeTxt    = %s\n", fullNomeTxt   ? fullNomeTxt    : "(null ou falha)");
-  if (prioMax != NULL) {
-    printf("prioMax = %d\n", *prioMax);
-  } else {
-    printf("prioMax = (nao definido ou falha)\n");
-  }
-  if (hc != NULL) {
-    printf("hc = %d\n", *hc);
-  } else {
-    printf("hc = (nao definido ou falha)\n");
-  }
-  if (promoRate != NULL) {
-    printf("promoRate = %f\n\n\n\n\n\n", *promoRate);
-  } else {
-    printf("promoRate = (nao definido ou falha)\n");
-  }
+    // --- 5. Limpeza Final (Cleanup) ---
+cleanup:
+    printf("PROGRAMA FINALIZADO. Liberando toda a memoria...\n");
 
-  int idMax = 0;
-  SmuTreap t = processa_geo(fullNomeGeo, dirSaida, nomeGeo, &idMax, prioMax, hc, promoRate, EPSILON_CONFIG);
-
-  Lista array_selecoes[100];
-  for (int i = 0; i < 100; i++){
-    array_selecoes[i] = NULL;
-  }
-
-  Lista lista_svg_qry = criaLista();
-  processa_qry(t, fullNomeQry, dirSaida, nomeQry, &array_selecoes[0], lista_svg_qry, &idMax, EPSILON_CONFIG);
-
-  printf("PROGRAMA FINALIZADO. Liberando memórias...\n");
-
-  // =======================================================
-    //                  BLOCO DE LIMPEZA
-    // =======================================================
-
-    // 1. Liberar a memória da árvore principal SmuTreap
-    // Isto irá percorrer todos os nós e libertar cada forma e o próprio nó.
+    // Libera a árvore SmuTreap e todo o seu conteúdo
     if (t) {
         killSmuTreap(t);
     }
 
-    // 2. Liberar todas as listas de seleção que foram criadas
+    // Libera todas as listas de seleção que foram criadas
     for (int j = 0; j < 100; j++) {
         if (array_selecoes[j] != NULL) {
-            // As listas de seleção armazenam apenas ponteiros para os nós da árvore,
-            // que já foram libertados por killSmuTreap. Portanto, passamos NULL
-            // como segundo argumento para não tentar libertar os itens duas vezes.
             destroiLista(array_selecoes[j], NULL);
         }
     }
 
-    // =======================================================
-    //              FIM DO BLOCO DE LIMPEZA
-    // =======================================================
+    // Libera as strings de caminhos e parâmetros
+    if (dirEntrada) free(dirEntrada);
+    if (dirSaida) free(dirSaida);
+    if (nomeGeo) free(nomeGeo);
+    if (nomeQry) free(nomeQry);
+    if (fullNomeGeo) free(fullNomeGeo);
+    if (fullNomeQry) free(fullNomeQry);
+    if (fullNomeDot) free(fullNomeDot);
+    if (prioMax) free(prioMax);
+    if (hc) free(hc);
+    if (promoRate) free(promoRate);
 
-frees_and_exit: // Rótulo para liberar memória antes de sair em caso de erro
-  // Liberar memória
-  if(dirEntrada) free(dirEntrada);
-  if(nomeGeo) free(nomeGeo);
-  if(fullNomeGeo) free(fullNomeGeo);
-  if(dirSaida) free(dirSaida);
-  if(nomeQry) free(nomeQry);
-  if(fullNomeQry) free(fullNomeQry);
-
-  if(prioMax) free(prioMax);
-  if(hc) free(hc);
-  if(promoRate) free(promoRate);
-
-  return 0;
- }
+    return 0;
+}

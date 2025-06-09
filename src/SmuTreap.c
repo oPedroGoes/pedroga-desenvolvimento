@@ -474,8 +474,6 @@ node_internal *getNodeSmuT_aux_original(SmuTreap_internal *t, node_internal* roo
             if(root->hitCountCounter >= t->hitCountConfig){
                 promoteNodeSmuT(t, (Node)root, t->promoRateConfig);
             }
-            printf("(getNodeSmuT_aux) No LINHA encontrado!\n");
-            printf("\nDEBUG DEPOIS (getNodeSmuT) coord_x = %lf, coord_y = %lf\n", root->x, root->y);
             *resultRef = root;
             return root;
         }
@@ -489,7 +487,6 @@ node_internal *getNodeSmuT_aux_original(SmuTreap_internal *t, node_internal* roo
             }
             printf("(getNodeSmuT_aux) No qualquer encontrado!\n");
             *resultRef = root;
-            printf("\nDEBUG DEPOIS (getNodeSmuT) coord_x = %lf, coord_y = %lf\n", (*resultRef)->x, (*resultRef)->y);
             return root;
         }
     }
@@ -514,8 +511,6 @@ Node getNodeSmuT_original(SmuTreap t, double x, double y){
     node_internal *result = NULL;
 
     t_i->root = getNodeSmuT_aux_original(t_i, t_i->root, &result, x, y);
-    //ENCONTRADO O ERRO: COORDENADA DO NO ENCONTRADO MUDA EM getNodeSmuT_aux;
-    //printf("\nDEBUG (getNodeSmuT) coord_x = %lf, coord_y = %lf\n", result->x, result->y);
     return result;
 }
 
@@ -722,8 +717,6 @@ void  killNode(node_internal *n){
 
 //aux
 node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_internal *n){
-    int n_id = get_idF(n->info, n->descritor);
-    printf("DEBUG (removeNoSmuT_aux) n_id = %d", n_id);
     if (!root){
         printf("(removeNoSmuT_aux) Erro: no nao encontrado.\n");
         exit (1); // Se retornasse NULL, a arvore seria destruida.
@@ -762,7 +755,7 @@ node_internal* removeNoSmuT_aux(SmuTreap_internal *t, node_internal *root, node_
                 return temp;
 
             } else { // Caso 2 filhos
-                
+
                 if (root->left->priority > root->right->priority) {
                     rotacionaDir(&root);
                     root->right = removeNoSmuT_aux(t, root->right, n);

@@ -246,7 +246,6 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
 // Não esquecer de processar os default, e nem de consultar o que os documentos fala sobre isso.
 SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nomegeo, 
                     int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig){
-    printf("\nDEBUG entrando em processa_geo...\n");
 
     int def_prioMax;
     int def_hc;

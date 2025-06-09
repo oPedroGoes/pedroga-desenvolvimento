@@ -47,7 +47,6 @@ void destroiLista(Lista l, void (*liberaItemNaoNulo)(Item item)) {
 }
 
 bool insereNaLista(Lista l, Item item) {
-    //printf("DEBUG    (insereNaLista) Lista l = %p\nDEBUG    (insereNaLista) Item item = %p\n", l, item);
     if (!l || !item){
         perror("\n(insereNaLista) Erro: parametros invalidos\n");
         return false; // Lista inválida
@@ -132,7 +131,6 @@ int getTamanhoLista(Lista l) {
 }
 
 void percorreLista(Lista l, void (*visita)(Item item, void *aux), void *aux) {
-    printf("\nDEBUG entrando em percorreLista...\n");
     if (l == NULL || visita == NULL){
         perror("\n(percorreLista) Erro: parametros invalidos\n");
         return;

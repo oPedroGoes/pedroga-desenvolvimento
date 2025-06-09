@@ -119,10 +119,6 @@ bool formaTotalmenteContidaCallback(SmuTreap t, Node n_node, Info forma_info, do
     double fxMax = fx + fw;
     double fyMax = fy + fh;
 
-        //if(retanguloInternoRetangulo(fx, fy, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2)){
-            //const char *nomeForma_DEBUG = get_NameStrF(tipo_forma);
-            //printf("DEBUG (formaTotalmenteContidaCallback) Forma contida = %s\n", nomeForma_DEBUG);
-        //}
 
     return (retanguloInternoRetangulo(fx, fy, fxMax, fyMax, reg_x1, reg_y1, reg_x2, reg_y2));
     } else return false; // Tipo desconhecido.
