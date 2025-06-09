@@ -150,8 +150,8 @@ blow: Ogiva ID 174 explodiu em (406.33, 19.67).
 blow: Ogiva ID 394 explodiu em (306.33, 119.67).
   Formas destruidas pela explosao:
     - ID: 394, Tipo: circulo
-    - ID: 986, Tipo: retangulo
     - ID: 987, Tipo: retangulo
+    - ID: 986, Tipo: retangulo
 [*] blow 342
 blow: Ogiva ID 342 explodiu em (246.33, 99.67).
   Formas destruidas pela explosao:
@@ -371,8 +371,8 @@ blow: Ogiva ID 320 explodiu em (256.33, 89.67).
 blow: Ogiva ID 397 explodiu em (336.33, 119.67).
   Formas destruidas pela explosao:
     - ID: 397, Tipo: circulo
-    - ID: 990, Tipo: retangulo
     - ID: 989, Tipo: retangulo
+    - ID: 990, Tipo: retangulo
 [*] blow 257
 blow: Ogiva ID 257 explodiu em (316.33, 59.67).
   Formas destruidas pela explosao:
