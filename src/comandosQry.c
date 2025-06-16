@@ -723,7 +723,7 @@ void handle_spy(CONTEXTO ctxt, int id_ref){
         return; 
     }
 
-    printf("Processando comando spy: id=%d", id_ref);
+    printf("Processando comando spy: id=%d\n", id_ref);
 
     qryContext* contexto = (qryContext*)ctxt;
 

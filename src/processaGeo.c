@@ -14,8 +14,6 @@
 #define DEFAULT_HITCOUNT 3
 #define DEFAULT_PROMORATE 1.10
 
-#define EPSILON_CONFIG 0.0001
-
 int ma(double x1, double x2, double y1, double y2){
     if(x1<x2){
         return 1;
@@ -140,8 +138,7 @@ SmuTreap leitura_geo(FILE *arqGeo, SmuTreap t, FCalculaBoundingBox funcCalcBb, i
     return t;
 }
 // Não esquecer de processar os default, e nem de consultar o que os documentos fala sobre isso.
-SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nomegeo, 
-                    int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig){
+SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nomeBaseGeo, int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig){
 
     int def_prioMax;
     int def_hc;
@@ -164,26 +161,13 @@ SmuTreap processa_geo(const char* pathgeo, const char* dirsaida, const char* nom
         exit(1);
     }
 
-    // PENSAR EM COMO PASSAR NOMEGEO DE MODO QUE NAO SEJA NECESSARIO ESSA PARTE NESSA FUNCAO.
-    // Remover ".geo" de nomegeo.
-    char nomeBaseGeo[512];
-    int lenNomeGeo = strlen(nomegeo);
-
-    if (lenNomeGeo > 4 && strcmp(nomegeo + lenNomeGeo - 4, ".geo") == 0) {
-        strncpy(nomeBaseGeo, nomegeo, lenNomeGeo - 4); // Copia a parte antes de ".geo"
-        nomeBaseGeo[lenNomeGeo - 4] = '\0';
-    } else {
-        fprintf(stderr, "(processa_geo) Erro: erro ao tratar nomegeo.");
-        exit(1);
-    }
-
     char nome_saidasvg1[512];
     int chars_escritos = snprintf(nome_saidasvg1, sizeof(nome_saidasvg1), "%s/%s.svg", dirsaida, nomeBaseGeo);
 
-if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
-    fprintf(stderr, "Alerta (processa_geo): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", dirsaida, nomeBaseGeo, nome_saidasvg1);
-    exit(1);
-}
+    if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
+        fprintf(stderr, "Alerta (processa_geo): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", dirsaida, nomeBaseGeo, nome_saidasvg1);
+        exit(1);
+    }
     printf("Diretório do arquivo svg1: %s\n", nome_saidasvg1);
 
     FILE* saidaSvg1 = fopen(nome_saidasvg1, "w");
@@ -196,7 +180,7 @@ if (chars_escritos >= (int)sizeof(nome_saidasvg1)) {
     fprintf(saidaSvg1, "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n");
     fprintf(saidaSvg1, "<svg width=\"2000\" height=\"2000\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">\n");
 
-    SmuTreap t = newSmuTreap(def_hc, def_prioMax, def_promoRate, EPSILON_CONFIG);
+    SmuTreap t = newSmuTreap(def_hc, def_prioMax, def_promoRate, epsilonConfig);
     if (t == NULL) {
         fprintf(stderr, "(processa_geo) Erro: falha ao criar SmuTreap.\n");
         fclose(arqGeo);

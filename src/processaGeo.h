@@ -11,7 +11,7 @@
      * 
      * @param pathgeo String contendo o path para o arquivo geo para poder abrir ele
      * @param dirsaid String contendo o path para os arquivos de saida
-     * @param nomegeo String contendo o nome do arquivo geo para estar presente no nome dos arquivos de saida
+     * @param nomeBaseGeo String contendo o nome do arquivo geo para estar presente no nome dos arquivos de saida
      * @param instru ponteiro para saber quantas instruções vao ser lidas no arquivo geo
      * @param formcriadas ponteiro para saber quantas serão as formas criadas no arquivo geo
      * @param id ponteiro para pegar o id da ultima forma criada
@@ -20,5 +20,5 @@
      * 
      * @return void
      */
-    SmuTreap processa_geo(char* pathgeo, char* dirsaida, char* nomegeo, int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig);
+    SmuTreap processa_geo(char* pathgeo, char* dirsaida, char* nomeBaseGeo, int *idMax, int *prioMax, int *hc, double *promoRate, double epsilonConfig);
 #endif

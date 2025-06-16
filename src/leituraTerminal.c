@@ -8,12 +8,6 @@
 #include <limits.h> // Para INT_MAX, INT_MIN, LONG_MAX, LONG_MIN
 #include <math.h>   // Para HUGE_VALF
 
-/* FREE EM:
-* * todo diretório derivado de pathDir
-* todo diretório derivado de pathArq
-* prioMax, hc, promoRate (se alocados)
-*/
-
 void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   if(!arg || !pathDir){
     fprintf(stderr, "(trataPath) Erro: parametros invalidos.\n");
@@ -175,48 +169,93 @@ void trataParamNumericoDouble(double **num_ptr_addr, const char* param_str){
     **num_ptr_addr = val;
 }
 
-void completaNomeArquivo(char *pathDir, char *nomeArq, char **fullNomeArq){
-  if(!pathDir || !nomeArq || !fullNomeArq){
+void completaNomeGeo(char *pathDir, char *nomeBaseArq, char **fullNomeArq){
+  if(!nomeBaseArq || !fullNomeArq){
     fprintf(stderr, "(completaNomeArquivo) Erro: parametros invalidos. \n");
     return;
   }
-    int fullNomeLen = strlen(pathDir) + 1 + strlen(nomeArq);
-    
-    *fullNomeArq = (char*)malloc(sizeof(char)*(fullNomeLen+1));
-    if(fullNomeArq == NULL){
-      fprintf(stderr, "(trataPath) Erro: falha ao alocar memoria para '%s'\n", nomeArq);
-    // Deixa *fullNomeArq como NULL para ser checado em main
-    return ;
-    }
-    
-    strcpy(*fullNomeArq, pathDir);
-    strcat(*fullNomeArq, "/");
-    strcat(*fullNomeArq, nomeArq);
+
+  // Caso nao seja especificado o BED, tomamos o diretorio atual.
+  const char *absolut = ".";
+  if(!pathDir){
+    pathDir = (char*)malloc(sizeof(char)*2);  // "." + '\0'.
+    strcpy(pathDir, absolut);
   }
 
-/*
-*   @brief Remove os ultimos 4 digitos do nome do arquivo.
-*
-*/
-char *removeIndicadorArq(char *dest, const char *src){
-  if(!dest || !src){
-    fprintf(stderr, "(removeIndicadorArq) Erro: parametros invalidos.\n");
-    return NULL;
+  int fullNomeLen = strlen(pathDir) + 1 + strlen(nomeBaseArq) + 4;  // pathDir + "/" + nomeBase + ".geo"
+  
+  *fullNomeArq = (char*)malloc(sizeof(char)*(fullNomeLen+1));
+  if(fullNomeArq == NULL){
+    fprintf(stderr, "(trataPath) Erro: falha ao alocar memoria para '%s'\n", nomeBaseArq);
+  // Deixa *fullNomeArq como NULL para ser checado em main
+  return ;
   }
-  int lenSrc = strlen(src);
-
-    if (lenSrc > 4){
-        strncpy(dest, src, lenSrc - 4); // Copia a parte antes de ".geo"
-        dest[lenSrc - 4] = '\0';
-    } else {
-        fprintf(stderr, "(removeIndicadorArq) Erro: erro ao tratar src.");
-        exit(1);
-    }
-
-    return dest;
+  
+  // Concatena as strings corretamente.
+  sprintf(*fullNomeArq, "%s/%s.geo", pathDir, nomeBaseArq);
 }
 
-// Pode ser modularizada para .dot, .svg e o outro la kk
+void completaNomeQry(char *pathDir, char *nomeBaseGeo, char *nomeBaseQry, char **fullNomeArq){
+  if(!pathDir || !nomeBaseGeo || !nomeBaseQry || !fullNomeArq){
+    fprintf(stderr, "(completaNomeArquivo) Erro: parametros invalidos. \n");
+    return;
+  }
+
+  // pathDir + "/" + nomeBaseGeo + "/" + nomeBaseQry + ".qry"
+  int fullNomeLen = strlen(pathDir) + 1 + strlen(nomeBaseGeo) + 1 + strlen(nomeBaseQry) + 4;
+
+  *fullNomeArq = (char*)malloc(sizeof(char)*(fullNomeLen+1));
+  if(fullNomeArq == NULL){
+    fprintf(stderr, "(trataPath) Erro: falha ao alocar memoria para '%s'\n", nomeBaseQry);
+  // Deixa *fullNomeArq como NULL para ser checado em main
+  return ;
+  }
+  
+  // Concatena as strings corretamente.
+  sprintf(*fullNomeArq, "%s/%s/%s.qry", pathDir, nomeBaseGeo, nomeBaseQry);
+}
+
+int removeExtensaoArq(const char* src, char** dest) {
+    if (src == NULL || dest == NULL) {
+        return -1;
+    }
+    // Inicializa o ponteiro de destino como NULL por segurança.
+    *dest = NULL;
+
+    size_t len = strlen(src);
+    int codigo_retorno = -1;
+    size_t len_sem_extensao = 0;
+
+    // Verifica qual extensão está presente, se houver
+    if (len >= 4 && strcmp(src + len - 4, ".geo") == 0) {
+        codigo_retorno = 0; // .geo
+        len_sem_extensao = len - 4;
+    } else if (len >= 4 && strcmp(src + len - 4, ".qry") == 0) {
+        codigo_retorno = 1; // .qry
+        len_sem_extensao = len - 4;
+    }
+
+    // Se uma extensão válida foi encontrada, cria a nova string
+    if (codigo_retorno != -1) {
+        // Aloca memória para a string base + 1 para o caractere nulo ('\0')
+        *dest = malloc(len_sem_extensao + 1);
+        if (*dest == NULL) {
+            // Falha na alocação de memória é um erro crítico
+            fprintf(stderr, "ERRO: Falha ao alocar memoria em remove_extensao_e_copia.\n");
+            return -1;
+        }
+
+        // Copia apenas a parte do nome do arquivo, sem a extensão
+        strncpy(*dest, src, len_sem_extensao);
+        // Garante que a nova string é terminada corretamente
+        (*dest)[len_sem_extensao] = '\0';
+    }
+
+    // Retorna o código do resultado
+    return codigo_retorno;
+}
+
+/*
 void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
   if(!pathOut || !nomeGeo || !nomeQry || !arqTxt){
     fprintf(stderr, "\n(trataArqTxt) Erro: parametros invalidos.\n");
@@ -248,4 +287,5 @@ void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
     strcat(*arqTxt, "-");
     strcat(*arqTxt, nomeBaseQry);
     strcat(*arqTxt, ".txt");
-}
+}*/
+

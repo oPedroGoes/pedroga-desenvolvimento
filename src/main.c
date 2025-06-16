@@ -49,11 +49,10 @@ int main(int argc, char *argv[]) {
     // --- 1. Declaração de Variáveis ---
     char *dirEntrada = NULL, *dirSaida = NULL;
     char *nomeGeo = NULL, *nomeQry = NULL;
-    char *fullNomeGeo = NULL, *fullNomeQry = NULL, *fullNomeDot = NULL;
     
     int *prioMax = NULL, *hc = NULL;
     double *promoRate = NULL;
-    double epsilon = 0.001; // Valor padrão para epsilon
+    double epsilon = 0.0001; // Valor padrão para epsilon
     
     SmuTreap t = NULL;
     Lista array_selecoes[100];
@@ -64,6 +63,7 @@ int main(int argc, char *argv[]) {
         array_selecoes[i] = NULL;
     }
 
+    // Prepara a criação pseudoaleatória para prioridades
     srand(time(NULL));
 
     // --- 2. Processamento dos Parâmetros da Linha de Comando ---
@@ -100,11 +100,19 @@ int main(int argc, char *argv[]) {
         fprintf(stderr, "ERRO: Os parametros -o (diretorio de saida) e -f (arquivo .geo) são obrigatorios.\n");
         goto cleanup; // Pula para a limpeza e encerra
     }
+
+    char *nomeBaseGeo = NULL;
+    removeExtensaoArq(nomeGeo, &nomeBaseGeo);
+
+    char *nomeBaseQry = NULL;
+    removeExtensaoArq(nomeQry, &nomeBaseQry);
     
     // Constrói os caminhos completos para os arquivos de entrada
-    completaNomeArquivo(dirEntrada, nomeGeo, &fullNomeGeo);
+    char *fullNomeGeo = NULL;
+    char *fullNomeQry = NULL;
+    completaNomeGeo(dirEntrada, nomeBaseGeo, &fullNomeGeo);
     if (nomeQry) {
-        completaNomeArquivo(dirEntrada, nomeQry, &fullNomeQry);
+        completaNomeQry(dirEntrada, nomeBaseGeo, nomeBaseQry, &fullNomeQry);
     }
     
     printf("\n--- Caminhos Processados ---\n");
@@ -113,16 +121,19 @@ int main(int argc, char *argv[]) {
     if(fullNomeQry) printf("Consultas: %s\n", fullNomeQry);
     printf("---------------------------\n\n");
 
+
+
     // --- 4. Lógica Principal da Aplicação ---
     
     // Processa o arquivo .geo e cria a árvore
-    t = processa_geo(fullNomeGeo, dirSaida, nomeGeo, &idMax, prioMax, hc, promoRate, epsilon);
+    t = processa_geo(fullNomeGeo, dirSaida, nomeBaseGeo, &idMax, prioMax, hc, promoRate, epsilon);
     if (!t) {
         fprintf(stderr, "ERRO: Falha ao processar o arquivo .geo. Encerrando.\n");
         goto cleanup;
     }
 
     // >> GERA O ARQUIVO .DOT IMEDIATAMENTE APÓS PROCESSAR O .GEO <<
+    char *fullNomeDot = NULL;
     trataArqDot(dirSaida, nomeGeo, &fullNomeDot);
     if (fullNomeDot) {
         printf("Gerando arquivo .dot: %s\n", fullNomeDot);
@@ -157,6 +168,8 @@ cleanup:
     if (dirEntrada) free(dirEntrada);
     if (dirSaida) free(dirSaida);
     if (nomeGeo) free(nomeGeo);
+    if (nomeBaseGeo) free(nomeBaseGeo);
+    if (nomeBaseQry) free(nomeBaseQry);
     if (nomeQry) free(nomeQry);
     if (fullNomeGeo) free(fullNomeGeo);
     if (fullNomeQry) free(fullNomeQry);
