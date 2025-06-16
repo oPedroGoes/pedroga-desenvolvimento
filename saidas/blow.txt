@@ -1,0 +1,8 @@
+[*] blow 16
+blow: Ogiva ID 16 explodiu em (54.50, 19.90).
+  Formas destruidas pela explosao:
+    - ID: 16, Tipo: linha
+[*] blow 20
+blow: Ogiva ID 20 explodiu em (73.00, 19.00).
+  Formas destruidas pela explosao:
+    - ID: 20, Tipo: circulo

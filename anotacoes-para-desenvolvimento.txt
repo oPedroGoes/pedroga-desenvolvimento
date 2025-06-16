@@ -1,68 +1,65 @@
-comando para rodar: ./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q 00-vaso-simples/selrTest.qry -p 1000 -hc 10 -pr 1.20
+comando para rodar: ./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q 00-vaso-simples/selrTest.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar cln-0 na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-clone-clones.qry -p 1000 -hc 10 -pr 1.20 
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q clone-clones.qry -p 1000 -hc 10 -pr 1.20 
 
 comando para rodar cln-1 na bandeira:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-clone.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q clone.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar cln-2 na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-clone-1clones.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q clone-1clones.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar cln-3 na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-clone-2clones.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q clone-2clones.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar cmflg na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-cmflg.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q cmflg.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar spy na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-spy.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q spy.qry -p 1000 -hc 10 -pr 1.20
 
 Comando para rodar blow na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-blow.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q blow.qry -p 1000 -hc 10 -pr 1.20
 
 Comando para rodar transp na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-transp.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q transp.qry -p 1000 -hc 10 -pr 1.20
 
 Comando para rodar disp na bandeira
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-clone-3disp.qry -p 1000 -hc 10 -pr 1.20
-
-
-
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q clone-3disp.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar selrTest no vaso: 
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 01-band-suecia.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q band-selrTest.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 01-band-suecia.geo -o ./saidas/ -q selrTest.qry -p 1000 -hc 10 -pr 1.20
 
 
 comando para rodar seliTest no vaso: 
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-seliTest.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q seliTest.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar cln no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-clone.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q clone.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar cmflg no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-cmflg.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q cmflg.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar spy no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-spy.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q spy.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar blow no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-blow.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q blow.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar transp no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-transp.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q transp.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar disp 0 no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-disp-0-retang.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q disp-0-retang.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar disp 1 no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-disp-1-txt.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q disp-1-txt.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar disp 2 no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-disp-3-retang-regiao.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q disp-3-retang-regiao.qry -p 1000 -hc 10 -pr 1.20
 
 comando para rodar disp 3 no vaso:
-./ted -e /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/entradas -f 00-vaso-simples.geo -o /home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/ -q vaso-disp-4-txt-regiao.qry -p 1000 -hc 10 -pr 1.20
+./src/ted -e ./entradas -f 00-vaso-simples.geo -o ./saidas/ -q disp-4-txt-regiao.qry -p 1000 -hc 10 -pr 1.20
 
 
 
@@ -70,7 +67,7 @@ comando para rodar disp 3 no vaso:
 
 //-------------------------------------------------------------DEBUG SVG----------------------------------------------------------------------------//
 
-    char *nome_svg_debug = "/home/pedro/estrutura_de_dados_ii/projetoAVALIA1/pedroga-desenvolvimento/saidas/00-vaso-simples/TESTE_SELI_DEBUG.svg";
+    char *nome_svg_debug = "./saidas/00-vaso-simples/TESTE_SELI_DEBUG.svg";
     FILE *debug_svg = fopen(nome_svg_debug, "w");
     if(!debug_svg){
         fprintf(stderr, "(handle_seli) Erro: falha ao criar arquivo para debug do svd");
