@@ -1,8 +1,0 @@
-[*] blow 20
-blow: Ogiva ID 20 explodiu em (73.00, 19.00).
-  Formas destruidas pela explosao:
-    - ID: 20, Tipo: circulo
-[*] blow 13
-blow: Ogiva ID 13 explodiu em (79.50, 40.00).
-  Formas destruidas pela explosao:
-    - ID: 13, Tipo: texto

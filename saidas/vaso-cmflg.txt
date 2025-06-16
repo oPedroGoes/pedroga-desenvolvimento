@@ -1,2 +1,0 @@
-[*] cmflg 13 #447821 #c6e9af 2.00
-cmflg: Forma ID 13 modificada.

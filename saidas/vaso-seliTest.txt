@@ -1,2 +1,0 @@
-[*] seli 11 79.50 40.00
-seli: forma 13 (texto) selecionada.

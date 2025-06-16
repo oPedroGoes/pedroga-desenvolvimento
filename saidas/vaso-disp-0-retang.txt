@@ -1,5 +1,0 @@
-[*] seli 11 0.00 26.00
-seli: forma 10 (retangulo) selecionada.
-[*] disp 12 11
-Disparando ID 10 (retangulo): de (0.00, 26.00) para (248.36, -36.09), dist=256.00
-  > Resumo final das formas destruidas:

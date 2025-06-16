@@ -1,4 +1,0 @@
-[*] blow 184
-blow: Ogiva ID 184 explodiu em (276.33, 29.67).
-  Formas destruidas pela explosao:
-    - ID: 184, Tipo: circulo

@@ -1,6 +1,0 @@
-[*] spy 20
-Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
-(handle_spy) Erro: buscaTipoSpy falhou!
-[*] spy 13
-spy: Relatorio de formas encontradas:
-  Forma encontrada -> ID: 13, Tipo: texto

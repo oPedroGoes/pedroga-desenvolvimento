@@ -1,5 +1,0 @@
-[*] seli 33 79.50 40.00
-seli: forma 13 (texto) selecionada.
-[*] disp 12 33
-Disparando ID 13 (texto): de (79.50, 40.00) para (102.78, 34.18), dist=24.00
-  > Resumo final das formas destruidas:
