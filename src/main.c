@@ -9,23 +9,6 @@
 #include "processaQry.h"
 #include "Lista.h"
 
-/**
- * @brief Constrói o nome completo para o arquivo .dot.
- * @param pathDir Diretório de saída.
- * @param nomeBaseGeo Nome base do arquivo .geo.
- * @param arqDot Ponteiro para a string que armazenará o caminho completo.
- */
-static void trataArqDot(const char *pathDir, const char *nomeBaseGeo, const char *nomeBaseQry, char **arqDot) {
-    if (!pathDir || !nomeBaseGeo || !nomeBaseQry || !arqDot) return;
-
-    // pathDir + "/" + nomeBaseGeo + "-" + nomeBaseQry + ".dot"
-    int len = strlen(pathDir) + 1 + strlen(nomeBaseGeo) + 1 + strlen(nomeBaseQry) + 4;
-    *arqDot = (char*) malloc(len + 1);
-    if (*arqDot) {
-        sprintf(*arqDot, "%s/%s-%s.dot", pathDir, nomeBaseGeo, nomeBaseQry);
-    }
-}
-
 
 int main(int argc, char *argv[]) {
     // --- 1. Declaração de Variáveis ---
@@ -102,7 +85,6 @@ int main(int argc, char *argv[]) {
     printf("Saida: %s\n", dirSaida);
     if(fullNomeQry) printf("Consultas: %s\n", fullNomeQry);
     printf("---------------------------\n\n");
-
 
 
     // --- 4. Lógica Principal da Aplicação ---

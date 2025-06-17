@@ -255,7 +255,7 @@ int removeExtensaoArq(const char* src, char** dest) {
     return codigo_retorno;
 }
 
-void trataArqDot(const char *pathDir, const char *nomeBaseGeo, const char *nomeBaseQry, char **arqDot) {
+void trataArqDot(char *pathDir, char *nomeBaseGeo, char *nomeBaseQry, char **arqDot) {
     if (!pathDir || !nomeBaseGeo || !nomeBaseQry || !arqDot) return;
 
     // pathDir + "/" + nomeBaseGeo + "-" + nomeBaseQry + ".dot"

@@ -90,6 +90,6 @@ int removeExtensaoArq(const char *src, char **dest);
  * @param nomeBaseGeo Nome base do arquivo .geo.
  * @param arqDot Ponteiro para a string que armazenará o caminho completo.
  */
-static void trataArqDot(const char *pathDir, const char *nomeBaseGeo, const char *nomeBaseQry, char **arqDot);
+void trataArqDot(char *pathDir, char *nomeBaseGeo, char *nomeBaseQry, char **arqDot);
 
 #endif
