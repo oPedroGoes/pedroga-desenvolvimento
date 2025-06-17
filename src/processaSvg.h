@@ -1,5 +1,5 @@
-#ifndef PROCESSA_SVG
-#define PROCESSA_SVG
+#ifndef PROCESSASVG_H
+#define PROCESSASVG_H
 
 #include "SmuTreap.h"
 #include "Lista.h"

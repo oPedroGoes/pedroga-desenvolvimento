@@ -72,15 +72,6 @@ double get_strkWL(LINHA l){
     return l1->strokeWidth;
 }
 
-void set_strkWL(LINHA l, double sw){
-    if(!l || sw < 0){
-        fprintf(stderr, "(ser_strkWL) Erro: parametro invalido");
-        return ;
-    }
-    linha *l1 = (linha*)l;
-    l1->strokeWidth = sw;
-}
-
 double get_comprimentoL(LINHA l){
     linha *l1=((linha*)l);
     double dx = fabs(l1->x2 - l1->x1);
@@ -126,6 +117,15 @@ void set_cL(LINHA l, char* c){
 void set_idL(LINHA l, int id){
     linha *l1=(linha*)l;
     l1->id=id;
+}
+
+void set_strkWL(LINHA l, double sw){
+    if(!l || sw < 0){
+        fprintf(stderr, "(ser_strkWL) Erro: parametro invalido");
+        return ;
+    }
+    linha *l1 = (linha*)l;
+    l1->strokeWidth = sw;
 }
 
 void kill_linha(LINHA l){

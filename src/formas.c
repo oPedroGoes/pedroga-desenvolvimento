@@ -38,7 +38,6 @@ char* my_strdup(const char* s) {
     return nova_string;
 }
 
-
 int get_idF(Info forma, DescritorTipoInfo tipo){
     if(!forma){
         fprintf(stderr, "(get_idF) Erro: parametro invalido.\n");
@@ -61,6 +60,21 @@ const char* get_NameStrF(DescritorTipoInfo tipo){
         case TIPO_LINHA: return "linha";
         case TIPO_TEXTO: return "texto";
         default: return "Desconhecido";
+    }
+}
+
+double get_areaF(Info forma_info, DescritorTipoInfo tipo) {
+    switch(tipo) {
+        case TIPO_CIRCULO:
+            return get_areaC((CIRCLE)forma_info);
+        case TIPO_RETANGULO:
+            return get_areaR((RECTANGLE)forma_info);
+        case TIPO_LINHA:
+            return get_areaL((LINHA)forma_info);
+        case TIPO_TEXTO:
+           return get_areaT((TEXTO)forma_info);
+        default:
+            return 0.0;
     }
 }
 

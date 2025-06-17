@@ -1,181 +1,144 @@
 #ifndef LINHA_H
 #define LINHA_H
-    
-    typedef void* LINHA;
 
-    /**
-     * 
-     * @brief Função para criar a estrutura de uma linha
-     * 
-     * @param id ID da linha
-     * @param x1 Inicio do x da linha
-     * @param y1 Inicio do y da linha
-     * @param x2 fim do x da linha
-     * @param y2 fim do y da linha
-     * @param c cor da linha 
-     * 
-     * @return Retorna um ponteiro do tipo void para essa estrutura
-     */
-    LINHA cria_linha(int id, double x1, double y1, double x2, double y2, char* c);
+/**
+ * @file linha.h
+ * @brief Interface para o TAD LINHA, que representa segmentos de reta.
+ *
+ * Fornece funções para criar, acessar e modificar propriedades de linhas,
+ * como coordenadas dos pontos inicial e final, cor e largura.
+ */
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o ID da linha
-     * 
-     * @param l Estrutura da linha para pegar a informação
-     * 
-     * @return retorna um inteiro
-     */
-    int get_idL(LINHA l);
+typedef void* LINHA;
 
-    void set_idL(LINHA l, int id);
+/**
+ * @brief Cria uma nova linha.
+ * @param id Identificador da linha.
+ * @param x1 Coordenada x do ponto inicial.
+ * @param y1 Coordenada y do ponto inicial.
+ * @param x2 Coordenada x do ponto final.
+ * @param y2 Coordenada y do ponto final.
+ * @param c Cor da linha.
+ * @return Ponteiro para a linha criada.
+ */
+LINHA cria_linha(int id, double x1, double y1, double x2, double y2, char* c);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o inicio do eixo x da linha
-     * 
-     * @param l Estrutura da linha para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_X1L(LINHA l);
+/**
+ * @brief Obtém o identificador da linha.
+ * @param l Linha.
+ * @return Identificador.
+ */
+int get_idL(LINHA l);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o inicio do eixo y da linha
-     * 
-     * @param l Estrutura da linha para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_Y1L(LINHA l);
+/**
+ * @brief Define o identificador da linha.
+ * @param l Linha.
+ * @param id Novo identificador.
+ */
+void set_idL(LINHA l, int id);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o fim do eixo x da linha
-     * 
-     * @param l Estrutura da linha para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_X2L(LINHA l);
+/**
+ * @brief Obtém a coordenada x do ponto inicial.
+ * @param l Linha.
+ * @return Coordenada x inicial.
+ */
+double get_X1L(LINHA l);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o fim do eixo y da linha
-     * 
-     * @param l Estrutura da linha para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_Y2L(LINHA l);
+/**
+ * @brief Define a coordenada x do ponto inicial.
+ * @param l Linha.
+ * @param x Nova coordenada x inicial.
+ */
+void set_x1L(LINHA l, double x);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a cor da linha
-     * 
-     * @param l Estrutura da linha para pegar a informação
-     * 
-     * @return retorna uma string contendo a cor
-     */
-    char* get_cL(LINHA l);
+/**
+ * @brief Obtém a coordenada y do ponto inicial.
+ * @param l Linha.
+ * @return Coordenada y inicial.
+ */
+double get_Y1L(LINHA l);
 
-    /**
-    * @brief Pega por meio de um TAD a largura da linha.
-    * @param l Estrutura da linha para pegar a informação.
-    * @return Retorna um double com a largura da linha.
-    */
-    double get_strkWL(LINHA l);
+/**
+ * @brief Define a coordenada y do ponto inicial.
+ * @param l Linha.
+ * @param y Nova coordenada y inicial.
+ */
+void set_y1L(LINHA l, double y);
 
-    /**
-    * @brief Muda a largura da linha.
-    * @param l Estrutura da linha que vai ter a largura mudada.
-    * @param sw Nova largura.
-    */
-    void set_strkWL(LINHA l, double sw);
+/**
+ * @brief Obtém a coordenada x do ponto final.
+ * @param l Linha.
+ * @return Coordenada x final.
+ */
+double get_X2L(LINHA l);
 
-    /*
-    * 
-    * @brief Pegar por meio de um TAD o comprimento da linha.
-    *
-    * @param l Estrutura da linha para pegar a informação
-    * 
-    * @return retorna um double
-    */
-    double get_comprimentoL(LINHA l);
+/**
+ * @brief Define a coordenada x do ponto final.
+ * @param l Linha.
+ * @param x Nova coordenada x final.
+ */
+void set_x2L(LINHA l, double x);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a area da linha
-     * 
-     * @param l Estrutura da linha para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_areaL(LINHA l);
+/**
+ * @brief Obtém a coordenada y do ponto final.
+ * @param l Linha.
+ * @return Coordenada y final.
+ */
+double get_Y2L(LINHA l);
 
-    /** 
-     *
-     * @brief Muda o x inicial da linha 
-     * 
-     * @param l Estrutura da linha para mudar a informação
-     * @param x Float x contendo a nova localização
-     * 
-     * @return void
-     */
-    void set_x1L(LINHA l, double x);
+/**
+ * @brief Define a coordenada y do ponto final.
+ * @param l Linha.
+ * @param y Nova coordenada y final.
+ */
+void set_y2L(LINHA l, double y);
 
-    /** 
-     *
-     * @brief Muda o y inicial da linha 
-     * 
-     * @param l Estrutura da linha para mudar a informação
-     * @param y Float y contendo a nova localização
-     * 
-     * @return void
-     */
-    void set_y1L(LINHA l, double y);
+/**
+ * @brief Obtém a cor da linha.
+ * @param l Linha.
+ * @return String com a cor.
+ */
+char* get_cL(LINHA l);
 
-    /** 
-     *
-     * @brief Muda o x final da linha 
-     * 
-     * @param l Estrutura da linha para mudar a informação
-     * @param x Float x contendo a nova localização
-     * 
-     * @return void
-     */
-    void set_x2L(LINHA l, double x);
+/**
+ * @brief Define a cor da linha.
+ * @param l Linha.
+ * @param c Nova cor (string).
+ */
+void set_cL(LINHA l, char* c);
 
-    /** 
-     *
-     * @brief Muda o y final da linha 
-     * 
-     * @param l Estrutura da linha para mudar a informação
-     * @param y Float y contendo a nova localização
-     * 
-     * @return void
-     */
-    void set_y2L(LINHA l, double y);
+/**
+ * @brief Obtém a largura da linha.
+ * @param l Linha.
+ * @return Largura da linha.
+ */
+double get_strkWL(LINHA l);
 
-    /** 
-     *
-     * @brief Muda a cor da linha 
-     * 
-     * @param l Estrutura da linha para mudar a informação
-     * @param c String contendo a nova cor
-     * 
-     * @return void
-     */
-    void set_cL(LINHA l, char* c);
+/**
+ * @brief Define a largura da linha.
+ * @param l Linha.
+ * @param sw Nova largura.
+ */
+void set_strkWL(LINHA l, double sw);
 
-    /** 
-     *
-     * @brief Função para desalocar a memória da estrutura da linha
-     * 
-     * @param l Estrutura da linha para ter a memória desalocada
-     * 
-     * @return void
-     */
-    void kill_linha(LINHA l);
+/**
+ * @brief Obtém o comprimento da linha.
+ * @param l Linha.
+ * @return Comprimento.
+ */
+double get_comprimentoL(LINHA l);
+
+/**
+ * @brief Obtém a "área" associada à linha (valor simbólico).
+ * @param l Linha.
+ * @return Área.
+ */
+double get_areaL(LINHA l);
+
+/**
+ * @brief Libera a memória da linha.
+ * @param l Linha.
+ */
+void kill_linha(LINHA l);
+
 #endif

@@ -1,5 +1,5 @@
-#ifndef comandosQry_h
-#define comandosQry_h
+#ifndef COMANDOSQRY_H
+#define COMANDOSQRY_H
 
 #include <stdio.h>
 #include <stdlib.h>

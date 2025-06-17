@@ -110,8 +110,8 @@ void leitura_qry(SmuTreap t, FILE *arqQry, FILE *pathTxt, Lista *array_selecoes,
     }
 }
 
-SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeQry, Lista *array_anotacoes, Lista lista_anotacoes_svg, int *idMax, double epsilon){
-    if(!pathQry || !pathSaida || !nomeQry || !array_anotacoes || !lista_anotacoes_svg){
+SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, const char *nomeBaseGeo, const char *nomeBaseQry, Lista *array_anotacoes, Lista lista_anotacoes_svg, int *idMax, double epsilon){
+    if(!pathQry || !pathSaida || !nomeBaseQry || !array_anotacoes || !lista_anotacoes_svg){
         fprintf(stderr, "\n(processa_qry) Erro: parametros invalidos.\n");
         return NULL;
     }
@@ -123,25 +123,11 @@ SmuTreap processa_qry(SmuTreap t, const char *pathQry, const char *pathSaida, co
         exit (1);
     }
 
-    // PENSAR EM COMO PASSAR NOMEGEO DE MODO QUE NAO SEJA NECESSARIO ESSA PARTE NESSA FUNCAO.
-    // Remover ".qry" de nomeQry.
-    char nomeBaseQry[512];
-    int lenNomeQry = strlen(nomeQry);
-
-    if (lenNomeQry > 4 && strcmp(nomeQry + lenNomeQry - 4, ".qry") == 0) {
-        strncpy(nomeBaseQry, nomeQry, lenNomeQry - 4); // Copia a parte antes de ".geo"
-        nomeBaseQry[lenNomeQry - 4] = '\0';
-    } else {
-        fprintf(stderr, "\n(processa_qry) Erro: erro ao tratar nomeQry.\n");
-        fclose(arqQry);
-        exit(1);
-    }
-
     char nome_saidasvg2[512];
-    int chars_escritos_svg2 = snprintf(nome_saidasvg2, sizeof(nome_saidasvg2), "%s/%s.svg", pathSaida, nomeBaseQry);
+    int chars_escritos_svg2 = snprintf(nome_saidasvg2, sizeof(nome_saidasvg2), "%s/%s-%s.svg", pathSaida, nomeBaseGeo, nomeBaseQry);
 
 if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
-    fprintf(stderr, "\nAlerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
+    fprintf(stderr, "\nAlerta (processa_qry): Nome do arquivo SVG '%s/%s-%s.svg' foi truncado para '%s'.\n", pathSaida, nomeBaseGeo, nomeBaseQry, nome_saidasvg2);
     exit(1);
 }
     printf("Diretório do arquivo svg2: %s\n", nome_saidasvg2);
@@ -159,13 +145,13 @@ if (chars_escritos_svg2 >= (int)sizeof(nome_saidasvg2)) {
 
 
     char nome_saidaTxt[512];
-    int chars_escritos_Txt = snprintf(nome_saidaTxt, sizeof(nome_saidaTxt), "%s/%s.txt", pathSaida, nomeBaseQry);
+    int chars_escritos_Txt = snprintf(nome_saidaTxt, sizeof(nome_saidaTxt), "%s/%s-%s.txt", pathSaida, nomeBaseGeo, nomeBaseQry);
 
     if(chars_escritos_Txt >= (int)sizeof(nome_saidaTxt)){
-        fprintf(stderr, "\nAlerta (processa_qry): Nome do arquivo SVG '%s/%s.svg' foi truncado para '%s'.\n", pathQry, nomeBaseQry, nome_saidasvg2);
+        fprintf(stderr, "\nAlerta (processa_qry): Nome do arquivo TXT '%s/%s-%s.txt' foi truncado para '%s'.\n", pathSaida, nomeBaseGeo, nomeBaseQry, nome_saidaTxt);
         exit(1);
     }
-    printf("Diretório do arquivo stxt: %s\n", nome_saidaTxt);
+    printf("Diretório do arquivo txt: %s\n", nome_saidaTxt);
 
     FILE* saidaTxt = fopen(nome_saidaTxt, "w");
     if (saidaTxt == NULL) {

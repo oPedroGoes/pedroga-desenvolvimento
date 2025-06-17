@@ -1,270 +1,177 @@
 #ifndef TEXTO_H
 #define TEXTO_H
-    
-    typedef void* TEXTO;
 
-    /**
-     * Uma estrutura de texto (TEXTO) é uma abstração que representa um texto no plano bidimensional.
-     * Cada texto possui um identificador único (ID), coordenadas (x, y) que definem sua localização,
-     * uma cor da borda (cb), uma cor de preenchimento (cp), uma âncora (a) que indica o ponto de referência,
-     * o conteúdo do texto (txt), a família da fonte (ff), o peso da fonte (fw) e o tamanho da fonte (fs).
-     * Além disso, a estrutura permite calcular a área do texto com base em seu comprimento e altura.
-     *
-     * A estrutura prove operações para criação, destruição e manipulação de textos, incluindo a obtenção
-     * e modificação de seus atributos, como coordenadas, cores, conteúdo e propriedades da fonte.
-     *
-     * As operações incluem:
-     * - Criação de um texto com todos os seus atributos.
-     * - Obtenção do ID, coordenadas, cores, âncora, conteúdo, família da fonte, peso da fonte e tamanho da fonte.
-     * - Modificação das coordenadas, cores e conteúdo do texto.
-     * - Liberação da memória alocada para o texto.
-     */
+/**
+ * @file texto.h
+ * @brief Interface do TAD TEXTO para manipulação de textos no plano 2D.
+ *
+ * Este módulo define o tipo abstrato de dados TEXTO e fornece funções para criar,
+ * acessar e modificar textos, incluindo atributos como posição, cores, âncora,
+ * conteúdo textual e propriedades de fonte. Também permite calcular a área do texto
+ * e liberar a memória alocada.
+ */
 
-    /**
-     * 
-     * @brief Função para criar a estrutura de um texto
-     * 
-     * @param id ID do texto
-     * @param x Eixo x da localização do texto
-     * @param y Eixo y da localização do texto
-     * @param cb cor da borda
-     * @param cp cor do preenchimento 
-     * @param a Char para indicar onde fica a âncora do texto
-     * @param txt O texto em si da estrutura
-     * @param ff Familia do texto
-     * @param fw Weight do texto
-     * @param fs Tamanho do texto
-     * 
-     * @return Retorna um ponteiro do tipo void para essa estrutura
-     */
-    TEXTO cria_texto(int id, double x, double y, char* cb, char* cp, char a, char* txt, char* ff, char* fw, char* fs);
+typedef void* TEXTO;
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o ID do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um inteiro
-     */
-    int get_idT(TEXTO t);
+/**
+ * @brief Cria um novo texto.
+ * @param id Identificador do texto.
+ * @param x Coordenada x da ancora do texto.
+ * @param y Coordenada y da ancora do texto.
+ * @param cb Cor da borda (string).
+ * @param cp Cor de preenchimento (string).
+ * @param a Caractere indicando a âncora do texto ('i', 'm' ou 'f').
+ * @param txt Conteúdo textual.
+ * @param ff Família da fonte (string).
+ * @param fw Peso da fonte (string).
+ * @param fs Tamanho da fonte (string).
+ * @return Ponteiro para o texto criado.
+ */
+TEXTO cria_texto(int id, double x, double y, char* cb, char* cp, char a, char* txt, char* ff, char* fw, char* fs);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o eixo x do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_XT(TEXTO t);
+/**
+ * @brief Obtém o identificador do texto.
+ * @param t Estrutura Texto.
+ * @return Identificador.
+ */
+int get_idT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o eixo y do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_YT(TEXTO t);
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a cor da borda do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna uma string
-     */
-    char* get_cbT(TEXTO t);
+/**
+ * @brief Obtém a coordenada x do texto.
+ * @param t Estrutura Texto.
+ * @return Coordenada x.
+ */
+double get_XT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a cor do preenchimento do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna uma string
-     */
-    char* get_cpT(TEXTO t);
-    
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a ancora do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retora uma string para o svg dizendo onde esta a ancora do texto
-     */
-    char* get_ancoraT(TEXTO t);
+/**
+ * @brief Obtém a coordenada y do texto.
+ * @param t Estrutura Texto.
+ * @return Coordenada y.
+ */
+double get_YT(TEXTO t);
 
-    /**
-    * @brief Pega por meio de um TAD a largura da borda do texto.
-    * @param t Estrutura do texto para pegar a informação.
-    * @return Retorna um double com a largura da borda.
-    */
-    double get_strkWT(TEXTO t);
+/**
+ * @brief Obtém a cor da borda do texto.
+ * @param t Estrutura Texto.
+ * @return String com a cor da borda.
+ */
+char* get_cbT(TEXTO t);
 
-    /**
-    * @brief Muda a largura da borda do texto.
-    * @param t Estrutura do texto que vai ter a largura da borda mudada.
-    * @param sw Nova largura da borda.
-     */
-    void set_strkWT(TEXTO t, double sw);
+/**
+ * @brief Obtém a cor de preenchimento do texto.
+ * @param t Estrutura Texto.
+ * @return String com a cor de preenchimento.
+ */
+char* get_cpT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o texto em si da estrutura texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna uma string
-     */
-    char* get_txtT(TEXTO t);
+/**
+ * @brief Obtém a âncora do texto para uso em SVG ("start", "middle" ou "end").
+ * @param t Estrutura Texto.
+ * @return String indicando a âncora.
+ */
+char* get_ancoraT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a familia do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna uma string
-     */
-    char* get_ffT(TEXTO t);
+/**
+ * @brief Obtém o caractere da âncora do texto ('i', 'm' ou 'f').
+ * @param t Estrutura Texto.
+ * @return Caractere da âncora.
+ */
+char get_charancoraT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o tamanho do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna uma string
-     */
-    char* get_fsT(TEXTO t);
+/**
+ * @brief Obtém o conteúdo textual.
+ * @param t Estrutura Texto.
+ * @return String com o conteúdo textual.
+ */
+char* get_txtT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o Weight do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna uma string
-     */
-    char* get_fwT(TEXTO t);
+/**
+ * @brief Obtém a família da fonte.
+ * @param t Estrutura Texto.
+ * @return String com a família da fonte.
+ */
+char* get_ffT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a quantidade de caracteres presentes no texto do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um inteiro
-     */
-    int tamanho_dotextoT(TEXTO t);
+/**
+ * @brief Obtém o tamanho da fonte.
+ * @param t Estrutura Texto.
+ * @return String com o tamanho da fonte.
+ */
+char* get_fsT(TEXTO t);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o comprimento do texto usado para calcular a área
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um inteiro
-     */
-    int comprimento_da_linhaT(TEXTO t);
-    
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o inicio do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_eixoX1T(TEXTO t);
+/**
+ * @brief Obtém o peso da fonte.
+ * @param t Estrutura Texto.
+ * @return String com o peso da fonte.
+ */
+char* get_fwT(TEXTO t);
 
-    void set_idT(TEXTO t, int id);
-    
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o fim do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_eixoX2T(TEXTO t);
+/**
+ * @brief Obtém a largura da borda do texto.
+ * @param t Estrutura Texto.
+ * @return Largura da borda.
+ */
+double get_strkWT(TEXTO t);
 
-    /**
-     * 
-     * @brief Muda o eixo x do texto
-     * 
-     * @param t estrutura do texto que vai ter o eixo x mudado
-     * @param x novo eixo x
-     * 
-     * @return void
-     */
-    void set_xT(TEXTO t, double x);
+/**
+ * @brief Define a largura da borda do texto.
+ * @param t Estrutura Texto.
+ * @param sw Nova largura da borda.
+ */
+void set_strkWT(TEXTO t, double sw);
 
-    /**
-     * 
-     * @brief Muda o eixo y do texto
-     * 
-     * @param t estrutura do texto que vai ter o eixo y mudado
-     * @param y novo eixo y
-     * 
-     * @return void
-     */
-    void set_yT(TEXTO t, double y);
+/**
+ * @brief Obtém a área do texto (valor simbólico, relacionado ao comprimento do texto).
+ * @param t Estrutura Texto.
+ * @return Área.
+ */
+double get_areaT(TEXTO t);
 
-    /**
-     * 
-     * @brief Muda a cor da borda do texto
-     * 
-     * @param t estrutura do texto que vai ter a cor da borda mudada
-     * @param cb nova cor da borda
-     * 
-     * @return void
-     */
-    void set_cbT(TEXTO t, char* cb);
+/**
+ * @brief Obtém o número de caracteres do texto.
+ * @param t Estrutura Texto.
+ * @return Número de caracteres.
+ */
+int tamanho_dotextoT(TEXTO t);
 
-    /**
-     * 
-     * @brief Muda a cor do preenchimento do texto
-     * 
-     * @param t estrutura do texto que vai ter a cor do preenchimento mudado
-     * @param cb nova cor do preenchimento
-     * 
-     * @return void
-     */
-    void set_cpT(TEXTO t, char* cp);
+/**
+ * @brief Define o identificador do texto.
+ * @param t Estrutura Texto.
+ * @param id Novo identificador.
+ */
+void set_idT(TEXTO t, int id);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD a area do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um double
-     */
-    double get_areaT(TEXTO t);
+/**
+ * @brief Define a coordenada x do texto.
+ * @param t Estrutura Texto.
+ * @param x Nova coordenada x.
+ */
+void set_xT(TEXTO t, double x);
 
-    /**
-     * 
-     * @brief Pegar por meio de um TAD o charactere indicando a ancora do texto
-     * 
-     * @param t Estrutura do texto para pegar a informação
-     * 
-     * @return retorna um char
-     */
-    char get_charancoraT(TEXTO t);
+/**
+ * @brief Define a coordenada y do texto.
+ * @param t Estrutura Texto.
+ * @param y Nova coordenada y.
+ */
+void set_yT(TEXTO t, double y);
 
-    /**
-     * 
-     * @brief desaloca a memória do texto
-     * 
-     * @param t Estrutura do texto para ser desalocado
-     * 
-     * @return void
-     */
-    void kill_texto(TEXTO t);
+/**
+ * @brief Define a cor da borda do texto.
+ * @param t Estrutura Texto.
+ * @param cb Nova cor da borda.
+ */
+void set_cbT(TEXTO t, char* cb);
+
+/**
+ * @brief Define a cor de preenchimento do texto.
+ * @param t Estrutura Texto.
+ * @param cp Nova cor de preenchimento.
+ */
+void set_cpT(TEXTO t, char* cp);
+
+/**
+ * @brief Libera a memória ocupada pelo texto.
+ * @param t Estrutura Texto.
+ */
+void kill_texto(TEXTO t);
 #endif

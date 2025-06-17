@@ -150,33 +150,6 @@ int tamanho_dotextoT(TEXTO t){
     return strlen(t1->texto);
 }
 
-int comprimento_da_linhaT(TEXTO t){
-    texto *t1=((texto*)t);
-    return 12*tamanho_dotextoT(t1);
-}
-
-double get_eixoX1T(TEXTO t){
-    texto *t1=((texto*)t);
-    if(t1->a=='i'){
-        return t1->x;
-    } else if(t1->a=='m'){
-        return (t1->x-comprimento_da_linhaT(t1)/2);
-    } else{
-        return t1->x-comprimento_da_linhaT(t1);
-    }
-}
-
-double get_eixoX2T(TEXTO t){
-    texto *t1=((texto*)t);
-    if(t1->a=='i'){
-        return t1->x+comprimento_da_linhaT(t1);
-    } else if(t1->a=='m'){
-        return (t1->x+comprimento_da_linhaT(t1)/2);
-    } else{
-        return t1->x;
-    }
-}
-
 void set_idT(TEXTO t, int id){
     texto *t1=(texto*)t;
     t1->id=id;

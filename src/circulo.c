@@ -39,9 +39,19 @@ int get_idC(CIRCLE c){
     return c1->id;
 }
 
+void set_idC(CIRCLE c, int id){
+    circle *c1=((circle*)c);
+    c1->id=id;
+}
+
 double get_XC(CIRCLE c){
     circle *c1=((circle*)c);
     return c1->x;
+}
+
+void set_xC(CIRCLE c, double x){
+    circle *c1=((circle*)c);
+    c1->x=x;
 }
 
 double get_YC(CIRCLE c){
@@ -49,9 +59,9 @@ double get_YC(CIRCLE c){
     return c1->y;
 }
 
-double get_rC(CIRCLE c){
+void set_yC(CIRCLE c, double y){
     circle *c1=((circle*)c);
-    return c1->r;
+    c1->y=y;
 }
 
 char* get_cbC(CIRCLE c){
@@ -59,9 +69,31 @@ char* get_cbC(CIRCLE c){
     return c1->corb;
 }
 
+void set_cbC(CIRCLE c, char* cb){
+    circle *c1=((circle*)c);
+    free(c1->corb);
+    c1->corb=(char*)malloc(sizeof(char)*(strlen(cb)+1));
+    if(c1->corb==NULL){
+        printf("Erro na alocação de memória!\n");
+        exit(1);
+    }
+    strcpy(c1->corb, cb);
+}
+
 char* get_cpC(CIRCLE c){
     circle *c1=((circle*)c);
     return c1->corp;
+}
+
+void set_cpC(CIRCLE c, char* cp){
+    circle *c1=((circle*)c);
+    free(c1->corp);
+    c1->corp=(char*)malloc(sizeof(char)*(strlen(cp)+1));
+    if(c1->corp==NULL){
+        printf("Erro na alocação de memória!\n");
+        exit(1);
+    }
+    strcpy(c1->corp, cp);
 }
 
 double get_strkWC(CIRCLE c) {
@@ -87,41 +119,9 @@ double get_areaC(CIRCLE c){
     return c1->r*c1->r*3.1415;
 }
 
-void set_xC(CIRCLE c, double x){
+double get_rC(CIRCLE c){
     circle *c1=((circle*)c);
-    c1->x=x;
-}
-
-void set_yC(CIRCLE c, double y){
-    circle *c1=((circle*)c);
-    c1->y=y;
-}
-
-void set_cbC(CIRCLE c, char* cb){
-    circle *c1=((circle*)c);
-    free(c1->corb);
-    c1->corb=(char*)malloc(sizeof(char)*(strlen(cb)+1));
-    if(c1->corb==NULL){
-        printf("Erro na alocação de memória!\n");
-        exit(1);
-    }
-    strcpy(c1->corb, cb);
-}
-
-void set_idC(CIRCLE c, int id){
-    circle *c1=((circle*)c);
-    c1->id=id;
-}
-
-void set_cpC(CIRCLE c, char* cp){
-    circle *c1=((circle*)c);
-    free(c1->corp);
-    c1->corp=(char*)malloc(sizeof(char)*(strlen(cp)+1));
-    if(c1->corp==NULL){
-        printf("Erro na alocação de memória!\n");
-        exit(1);
-    }
-    strcpy(c1->corp, cp);
+    return c1->r;
 }
 
 void kill_circ(CIRCLE c){

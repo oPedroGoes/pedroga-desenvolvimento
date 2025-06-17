@@ -56,6 +56,12 @@ void destroiLista(Lista l, void (*liberaItemNaoNulo)(Item item));
  */
 bool insereNaLista(Lista l, Item item);
 
+/**
+ * @brief busca o primeiro item da lista.
+ * 
+ * @param l Ponteiro para a lista.
+ * @return Ponteiro para o primeiro item da lista. NULL se a lista estiver vazia.
+ */
 Item getPriomeiroNoLista(Lista l);
 
 /**
