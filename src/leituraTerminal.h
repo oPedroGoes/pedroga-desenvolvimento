@@ -84,6 +84,12 @@ void completaNomeQry(char *pathDir, char *nomeBaseGeo, char *nomeBaseQry, char *
  */
 int removeExtensaoArq(const char *src, char **dest);
 
-void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt);
+/**
+ * @brief Constrói o nome completo para o arquivo .dot.
+ * @param pathDir Diretório de saída.
+ * @param nomeBaseGeo Nome base do arquivo .geo.
+ * @param arqDot Ponteiro para a string que armazenará o caminho completo.
+ */
+static void trataArqDot(const char *pathDir, const char *nomeBaseGeo, const char *nomeBaseQry, char **arqDot);
 
 #endif

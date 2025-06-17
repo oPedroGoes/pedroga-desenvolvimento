@@ -30,7 +30,7 @@ void trataPath(char **pathDir, char* arg){ // arg é argv[i]
   strcpy(*pathDir,arg); // Copia o arg (potencialmente modificado)
  }
 
- void trataNomeArquivo(char **pathArq, char* arg){ // arg é argv[i]
+void trataNomeArquivo(char **pathArq, char* arg){ // arg é argv[i]
   if(!arg || !pathArq){
     fprintf(stderr, "(trataNomeArquivo) Erro: parametros invalidos.\n");
     return;
@@ -255,37 +255,13 @@ int removeExtensaoArq(const char* src, char** dest) {
     return codigo_retorno;
 }
 
-/*
-void trataArqTxt(char *pathOut, char *nomeGeo, char *nomeQry, char **arqTxt){
-  if(!pathOut || !nomeGeo || !nomeQry || !arqTxt){
-    fprintf(stderr, "\n(trataArqTxt) Erro: parametros invalidos.\n");
-    return;
-  }
-    char nomeBaseGeo[512], nomeBaseQry[512]; // Buffers para os nomes base
+void trataArqDot(const char *pathDir, const char *nomeBaseGeo, const char *nomeBaseQry, char **arqDot) {
+    if (!pathDir || !nomeBaseGeo || !nomeBaseQry || !arqDot) return;
 
-    // char *nomeBGeoAdequado = nomeBaseGeo[0]; // Esta linha era problemática e não utilizada, removida.
-
-    // Modifica nomeBaseGeo e nomeBaseQry diretamente.
-    // Passa o array (que decai para char*), não o endereço do array.
-    removeIndicadorArq(nomeBaseGeo, nomeGeo);
-    removeIndicadorArq(nomeBaseQry, nomeQry);
-
-    // Calcula o comprimento necessário para a string final
-    // strlen(pathOut) + '/' (1) + strlen(nomeBaseGeo) + '-' (1) + strlen(nomeBaseQry) + ".txt" (4) + '\0' (1)
-    int lenArqTxt = strlen(pathOut) + 1 + strlen(nomeBaseGeo) + 1 + strlen(nomeBaseQry) + 4;
-
-    *arqTxt = (char*)malloc(sizeof(char)*(lenArqTxt + 1)); // +1 para o terminador nulo
-    if (*arqTxt == NULL){ // Verifica se a alocação falhou
-      fprintf(stderr, "(trataArqTxt) ERRO: falha ao alocar memoria para o nome do arquivo de saida .txt\n");
-      return; // Retorna, e *arqTxt permanece NULL ou como estava (idealmente definido como NULL)
+    // pathDir + "/" + nomeBaseGeo + "-" + nomeBaseQry + ".dot"
+    int len = strlen(pathDir) + 1 + strlen(nomeBaseGeo) + 1 + strlen(nomeBaseQry) + 4;
+    *arqDot = (char*) malloc(len + 1);
+    if (*arqDot) {
+        sprintf(*arqDot, "%s/%s-%s.dot", pathDir, nomeBaseGeo, nomeBaseQry);
     }
-
-    // Constrói o nome completo do arquivo de saída
-    strcpy(*arqTxt, pathOut);
-    strcat(*arqTxt, "/");
-    strcat(*arqTxt, nomeBaseGeo);
-    strcat(*arqTxt, "-");
-    strcat(*arqTxt, nomeBaseQry);
-    strcat(*arqTxt, ".txt");
-}*/
-
+}

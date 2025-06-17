@@ -10,37 +10,19 @@
 #include "Lista.h"
 
 /**
- * Remove a extensão de um nome de arquivo (ex: ".geo").
- * @param dest Buffer para armazenar o nome base.
- * @param src String original com o nome do arquivo.
- */
-static void removeExtensao(char *dest, const char *src) {
-    if (!dest || !src) return;
-    
-    strcpy(dest, src);
-    char *ponto = strrchr(dest, '.');
-    if (ponto) {
-        *ponto = '\0';
-    }
-}
-
-/**
- * Constrói o nome completo para o arquivo .dot.
- * @param pathOut Diretório de saída.
- * @param nomeGeo Nome do arquivo .geo original.
+ * @brief Constrói o nome completo para o arquivo .dot.
+ * @param pathDir Diretório de saída.
+ * @param nomeBaseGeo Nome base do arquivo .geo.
  * @param arqDot Ponteiro para a string que armazenará o caminho completo.
  */
-static void trataArqDot(const char *pathOut, const char *nomeGeo, char **arqDot) {
-    if (!pathOut || !nomeGeo || !arqDot) return;
+static void trataArqDot(const char *pathDir, const char *nomeBaseGeo, const char *nomeBaseQry, char **arqDot) {
+    if (!pathDir || !nomeBaseGeo || !nomeBaseQry || !arqDot) return;
 
-    char nomeBase[512];
-    removeExtensao(nomeBase, nomeGeo);
-
-    // Formato: <dirSaida>/<nomeBaseGeo>.dot
-    int len = strlen(pathOut) + 1 + strlen(nomeBase) + 4 + 1;
-    *arqDot = (char*) malloc(len);
+    // pathDir + "/" + nomeBaseGeo + "-" + nomeBaseQry + ".dot"
+    int len = strlen(pathDir) + 1 + strlen(nomeBaseGeo) + 1 + strlen(nomeBaseQry) + 4;
+    *arqDot = (char*) malloc(len + 1);
     if (*arqDot) {
-        sprintf(*arqDot, "%s/%s.dot", pathOut, nomeBase);
+        sprintf(*arqDot, "%s/%s-%s.dot", pathDir, nomeBaseGeo, nomeBaseQry);
     }
 }
 
@@ -132,20 +114,20 @@ int main(int argc, char *argv[]) {
         goto cleanup;
     }
 
+    // Processa o arquivo .qry, se foi fornecido
+    Lista lista_anotacoes_svg = criaLista();
+    if (fullNomeQry) {
+        processa_qry(t, fullNomeQry, dirSaida, nomeBaseGeo, nomeBaseQry, array_selecoes, lista_anotacoes_svg, &idMax, epsilon);
+    }
+
     // >> GERA O ARQUIVO .DOT IMEDIATAMENTE APÓS PROCESSAR O .GEO <<
     char *fullNomeDot = NULL;
-    trataArqDot(dirSaida, nomeGeo, &fullNomeDot);
+    trataArqDot(dirSaida, nomeBaseGeo, nomeBaseQry, &fullNomeDot);
     if (fullNomeDot) {
         printf("Gerando arquivo .dot: %s\n", fullNomeDot);
         if (!printDotSmuTreap(t, fullNomeDot)) {
             fprintf(stderr, "AVISO: Nao foi possivel criar o arquivo .dot.\n");
         }
-    }
-
-    // Processa o arquivo .qry, se foi fornecido
-    Lista lista_anotacoes_svg = criaLista();
-    if (fullNomeQry) {
-        processa_qry(t, fullNomeQry, dirSaida, nomeBaseGeo, nomeBaseQry, array_selecoes, lista_anotacoes_svg, &idMax, epsilon);
     }
 
     // --- 5. Limpeza Final (Cleanup) ---
