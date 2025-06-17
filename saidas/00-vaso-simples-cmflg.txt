@@ -1,0 +1,6 @@
+[*] cmflg 16 #447821 #c6e9af 2.00
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+(handle_cmflg) Erro: buscaTipoSpy falhou!
+[*] cmflg 20 #447821 #c6e9af 2.00
+Erro: O comando spy/cmflg so e aplicavel a formas de referencia do tipo retangulo ou texto.
+(handle_cmflg) Erro: buscaTipoSpy falhou!

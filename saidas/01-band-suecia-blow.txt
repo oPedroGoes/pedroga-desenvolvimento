@@ -1,0 +1,940 @@
+[*] blow 364
+blow: Ogiva ID 364 explodiu em (236.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 364, Tipo: circulo
+[*] blow 311
+blow: Ogiva ID 311 explodiu em (396.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 311, Tipo: circulo
+[*] blow 190
+blow: Ogiva ID 190 explodiu em (336.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 190, Tipo: circulo
+[*] blow 405
+blow: Ogiva ID 405 explodiu em (416.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 405, Tipo: circulo
+    - ID: 998, Tipo: retangulo
+    - ID: 997, Tipo: retangulo
+[*] blow 290
+blow: Ogiva ID 290 explodiu em (416.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 290, Tipo: circulo
+[*] blow 320
+blow: Ogiva ID 320 explodiu em (256.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 320, Tipo: circulo
+[*] blow 185
+blow: Ogiva ID 185 explodiu em (286.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 185, Tipo: circulo
+[*] blow 248
+blow: Ogiva ID 248 explodiu em (226.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 248, Tipo: circulo
+[*] blow 354
+blow: Ogiva ID 354 explodiu em (366.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 354, Tipo: circulo
+[*] blow 389
+blow: Ogiva ID 389 explodiu em (256.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 389, Tipo: circulo
+    - ID: 982, Tipo: retangulo
+[*] blow 220
+blow: Ogiva ID 220 explodiu em (406.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 220, Tipo: circulo
+[*] blow 173
+blow: Ogiva ID 173 explodiu em (396.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 173, Tipo: circulo
+[*] blow 372
+blow: Ogiva ID 372 explodiu em (316.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 372, Tipo: circulo
+[*] blow 374
+blow: Ogiva ID 374 explodiu em (336.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 374, Tipo: circulo
+[*] blow 356
+blow: Ogiva ID 356 explodiu em (386.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 356, Tipo: circulo
+[*] blow 259
+blow: Ogiva ID 259 explodiu em (336.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 259, Tipo: circulo
+[*] blow 219
+blow: Ogiva ID 219 explodiu em (396.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 219, Tipo: circulo
+[*] blow 310
+blow: Ogiva ID 310 explodiu em (386.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 310, Tipo: circulo
+[*] blow 301
+blow: Ogiva ID 301 explodiu em (296.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 301, Tipo: circulo
+[*] blow 263
+blow: Ogiva ID 263 explodiu em (376.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 263, Tipo: circulo
+[*] blow 365
+blow: Ogiva ID 365 explodiu em (246.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 365, Tipo: circulo
+[*] blow 274
+blow: Ogiva ID 274 explodiu em (256.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 274, Tipo: circulo
+[*] blow 402
+blow: Ogiva ID 402 explodiu em (386.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 402, Tipo: circulo
+    - ID: 995, Tipo: retangulo
+    - ID: 994, Tipo: retangulo
+[*] blow 401
+blow: Ogiva ID 401 explodiu em (376.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 401, Tipo: circulo
+    - ID: 993, Tipo: retangulo
+[*] blow 171
+blow: Ogiva ID 171 explodiu em (376.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 171, Tipo: circulo
+[*] blow 231
+blow: Ogiva ID 231 explodiu em (286.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 231, Tipo: circulo
+[*] blow 297
+blow: Ogiva ID 297 explodiu em (256.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 297, Tipo: circulo
+[*] blow 333
+blow: Ogiva ID 333 explodiu em (386.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 333, Tipo: circulo
+[*] blow 334
+blow: Ogiva ID 334 explodiu em (396.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 334, Tipo: circulo
+[*] blow 227
+blow: Ogiva ID 227 explodiu em (246.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 227, Tipo: circulo
+[*] blow 324
+blow: Ogiva ID 324 explodiu em (296.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 324, Tipo: circulo
+[*] blow 302
+blow: Ogiva ID 302 explodiu em (306.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 302, Tipo: circulo
+[*] blow 241
+blow: Ogiva ID 241 explodiu em (386.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 241, Tipo: circulo
+[*] blow 340
+blow: Ogiva ID 340 explodiu em (226.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 340, Tipo: circulo
+[*] blow 370
+blow: Ogiva ID 370 explodiu em (296.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 370, Tipo: circulo
+[*] blow 243
+blow: Ogiva ID 243 explodiu em (406.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 243, Tipo: circulo
+[*] blow 275
+blow: Ogiva ID 275 explodiu em (266.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 275, Tipo: circulo
+[*] blow 214
+blow: Ogiva ID 214 explodiu em (346.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 214, Tipo: circulo
+[*] blow 368
+blow: Ogiva ID 368 explodiu em (276.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 368, Tipo: circulo
+[*] blow 322
+blow: Ogiva ID 322 explodiu em (276.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 322, Tipo: circulo
+[*] blow 165
+blow: Ogiva ID 165 explodiu em (316.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 165, Tipo: circulo
+[*] blow 177
+blow: Ogiva ID 177 explodiu em (206.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 177, Tipo: circulo
+[*] blow 202
+blow: Ogiva ID 202 explodiu em (226.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 202, Tipo: circulo
+[*] blow 245
+blow: Ogiva ID 245 explodiu em (196.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 245, Tipo: circulo
+    - ID: 831, Tipo: retangulo
+[*] blow 379
+blow: Ogiva ID 379 explodiu em (386.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 379, Tipo: circulo
+[*] blow 238
+blow: Ogiva ID 238 explodiu em (356.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 238, Tipo: circulo
+[*] blow 166
+blow: Ogiva ID 166 explodiu em (326.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 166, Tipo: circulo
+[*] blow 272
+blow: Ogiva ID 272 explodiu em (236.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 272, Tipo: circulo
+[*] blow 264
+blow: Ogiva ID 264 explodiu em (386.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 264, Tipo: circulo
+[*] blow 335
+blow: Ogiva ID 335 explodiu em (406.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 335, Tipo: circulo
+[*] blow 376
+blow: Ogiva ID 376 explodiu em (356.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 376, Tipo: circulo
+[*] blow 258
+blow: Ogiva ID 258 explodiu em (326.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 258, Tipo: circulo
+[*] blow 347
+blow: Ogiva ID 347 explodiu em (296.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 347, Tipo: circulo
+[*] blow 265
+blow: Ogiva ID 265 explodiu em (396.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 265, Tipo: circulo
+[*] blow 257
+blow: Ogiva ID 257 explodiu em (316.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 257, Tipo: circulo
+[*] blow 186
+blow: Ogiva ID 186 explodiu em (296.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 186, Tipo: circulo
+[*] blow 366
+blow: Ogiva ID 366 explodiu em (256.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 366, Tipo: circulo
+[*] blow 396
+blow: Ogiva ID 396 explodiu em (326.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 396, Tipo: circulo
+    - ID: 989, Tipo: retangulo
+    - ID: 988, Tipo: retangulo
+[*] blow 234
+blow: Ogiva ID 234 explodiu em (316.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 234, Tipo: circulo
+[*] blow 392
+blow: Ogiva ID 392 explodiu em (286.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 392, Tipo: circulo
+    - ID: 985, Tipo: retangulo
+    - ID: 984, Tipo: retangulo
+[*] blow 391
+blow: Ogiva ID 391 explodiu em (276.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 391, Tipo: circulo
+    - ID: 983, Tipo: retangulo
+[*] blow 251
+blow: Ogiva ID 251 explodiu em (256.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 251, Tipo: circulo
+[*] blow 230
+blow: Ogiva ID 230 explodiu em (276.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 230, Tipo: circulo
+[*] blow 178
+blow: Ogiva ID 178 explodiu em (216.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 178, Tipo: circulo
+[*] blow 350
+blow: Ogiva ID 350 explodiu em (326.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 350, Tipo: circulo
+[*] blow 326
+blow: Ogiva ID 326 explodiu em (316.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 326, Tipo: circulo
+[*] blow 360
+blow: Ogiva ID 360 explodiu em (196.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 360, Tipo: circulo
+    - ID: 861, Tipo: retangulo
+[*] blow 207
+blow: Ogiva ID 207 explodiu em (276.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 207, Tipo: circulo
+[*] blow 304
+blow: Ogiva ID 304 explodiu em (326.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 304, Tipo: circulo
+[*] blow 390
+blow: Ogiva ID 390 explodiu em (266.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 390, Tipo: circulo
+[*] blow 244
+blow: Ogiva ID 244 explodiu em (416.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 244, Tipo: circulo
+[*] blow 228
+blow: Ogiva ID 228 explodiu em (256.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 228, Tipo: circulo
+[*] blow 339
+blow: Ogiva ID 339 explodiu em (216.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 339, Tipo: circulo
+[*] blow 305
+blow: Ogiva ID 305 explodiu em (336.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 305, Tipo: circulo
+[*] blow 299
+blow: Ogiva ID 299 explodiu em (276.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 299, Tipo: circulo
+[*] blow 312
+blow: Ogiva ID 312 explodiu em (406.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 312, Tipo: circulo
+[*] blow 404
+blow: Ogiva ID 404 explodiu em (406.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 404, Tipo: circulo
+    - ID: 996, Tipo: retangulo
+[*] blow 289
+blow: Ogiva ID 289 explodiu em (406.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 289, Tipo: circulo
+[*] blow 170
+blow: Ogiva ID 170 explodiu em (366.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 170, Tipo: circulo
+[*] blow 288
+blow: Ogiva ID 288 explodiu em (396.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 288, Tipo: circulo
+[*] blow 318
+blow: Ogiva ID 318 explodiu em (236.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 318, Tipo: circulo
+[*] blow 192
+blow: Ogiva ID 192 explodiu em (356.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 192, Tipo: circulo
+[*] blow 385
+blow: Ogiva ID 385 explodiu em (216.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 385, Tipo: circulo
+    - ID: 978, Tipo: retangulo
+    - ID: 977, Tipo: retangulo
+[*] blow 292
+blow: Ogiva ID 292 explodiu em (206.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 292, Tipo: circulo
+[*] blow 399
+blow: Ogiva ID 399 explodiu em (356.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 399, Tipo: circulo
+    - ID: 992, Tipo: retangulo
+    - ID: 991, Tipo: retangulo
+[*] blow 387
+blow: Ogiva ID 387 explodiu em (236.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 387, Tipo: circulo
+    - ID: 980, Tipo: retangulo
+    - ID: 979, Tipo: retangulo
+[*] blow 268
+blow: Ogiva ID 268 explodiu em (196.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 268, Tipo: circulo
+    - ID: 837, Tipo: retangulo
+[*] blow 294
+blow: Ogiva ID 294 explodiu em (226.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 294, Tipo: circulo
+[*] blow 213
+blow: Ogiva ID 213 explodiu em (336.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 213, Tipo: circulo
+[*] blow 321
+blow: Ogiva ID 321 explodiu em (266.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 321, Tipo: circulo
+[*] blow 382
+blow: Ogiva ID 382 explodiu em (416.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 382, Tipo: circulo
+[*] blow 181
+blow: Ogiva ID 181 explodiu em (246.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 181, Tipo: circulo
+[*] blow 211
+blow: Ogiva ID 211 explodiu em (316.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 211, Tipo: circulo
+[*] blow 361
+blow: Ogiva ID 361 explodiu em (206.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 361, Tipo: circulo
+[*] blow 369
+blow: Ogiva ID 369 explodiu em (286.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 369, Tipo: circulo
+[*] blow 341
+blow: Ogiva ID 341 explodiu em (236.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 341, Tipo: circulo
+[*] blow 222
+blow: Ogiva ID 222 explodiu em (196.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 222, Tipo: circulo
+    - ID: 825, Tipo: retangulo
+[*] blow 235
+blow: Ogiva ID 235 explodiu em (326.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 235, Tipo: circulo
+[*] blow 197
+blow: Ogiva ID 197 explodiu em (406.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 197, Tipo: circulo
+[*] blow 323
+blow: Ogiva ID 323 explodiu em (286.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 323, Tipo: circulo
+[*] blow 337
+blow: Ogiva ID 337 explodiu em (196.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 337, Tipo: circulo
+    - ID: 855, Tipo: retangulo
+[*] blow 295
+blow: Ogiva ID 295 explodiu em (236.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 295, Tipo: circulo
+[*] blow 217
+blow: Ogiva ID 217 explodiu em (376.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 217, Tipo: circulo
+[*] blow 386
+blow: Ogiva ID 386 explodiu em (226.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 386, Tipo: circulo
+[*] blow 332
+blow: Ogiva ID 332 explodiu em (376.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 332, Tipo: circulo
+[*] blow 346
+blow: Ogiva ID 346 explodiu em (286.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 346, Tipo: circulo
+[*] blow 394
+blow: Ogiva ID 394 explodiu em (306.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 394, Tipo: circulo
+    - ID: 987, Tipo: retangulo
+    - ID: 986, Tipo: retangulo
+[*] blow 284
+blow: Ogiva ID 284 explodiu em (356.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 284, Tipo: circulo
+[*] blow 174
+blow: Ogiva ID 174 explodiu em (406.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 174, Tipo: circulo
+[*] blow 160
+blow: Ogiva ID 160 explodiu em (266.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 160, Tipo: circulo
+[*] blow 352
+blow: Ogiva ID 352 explodiu em (346.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 352, Tipo: circulo
+[*] blow 262
+blow: Ogiva ID 262 explodiu em (366.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 262, Tipo: circulo
+[*] blow 358
+blow: Ogiva ID 358 explodiu em (406.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 358, Tipo: circulo
+[*] blow 351
+blow: Ogiva ID 351 explodiu em (336.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 351, Tipo: circulo
+[*] blow 183
+blow: Ogiva ID 183 explodiu em (266.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 183, Tipo: circulo
+[*] blow 239
+blow: Ogiva ID 239 explodiu em (366.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 239, Tipo: circulo
+[*] blow 249
+blow: Ogiva ID 249 explodiu em (236.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 249, Tipo: circulo
+[*] blow 188
+blow: Ogiva ID 188 explodiu em (316.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 188, Tipo: circulo
+[*] blow 194
+blow: Ogiva ID 194 explodiu em (376.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 194, Tipo: circulo
+[*] blow 344
+blow: Ogiva ID 344 explodiu em (266.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 344, Tipo: circulo
+[*] blow 300
+blow: Ogiva ID 300 explodiu em (286.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 300, Tipo: circulo
+[*] blow 266
+blow: Ogiva ID 266 explodiu em (406.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 266, Tipo: circulo
+[*] blow 314
+blow: Ogiva ID 314 explodiu em (196.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 314, Tipo: circulo
+    - ID: 849, Tipo: retangulo
+[*] blow 156
+blow: Ogiva ID 156 explodiu em (226.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 156, Tipo: circulo
+[*] blow 278
+blow: Ogiva ID 278 explodiu em (296.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 278, Tipo: circulo
+[*] blow 261
+blow: Ogiva ID 261 explodiu em (356.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 261, Tipo: circulo
+[*] blow 209
+blow: Ogiva ID 209 explodiu em (296.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 209, Tipo: circulo
+[*] blow 316
+blow: Ogiva ID 316 explodiu em (216.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 316, Tipo: circulo
+[*] blow 225
+blow: Ogiva ID 225 explodiu em (226.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 225, Tipo: circulo
+[*] blow 199
+blow: Ogiva ID 199 explodiu em (196.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 199, Tipo: circulo
+    - ID: 819, Tipo: retangulo
+[*] blow 187
+blow: Ogiva ID 187 explodiu em (306.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 187, Tipo: circulo
+[*] blow 327
+blow: Ogiva ID 327 explodiu em (326.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 327, Tipo: circulo
+[*] blow 253
+blow: Ogiva ID 253 explodiu em (276.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 253, Tipo: circulo
+[*] blow 325
+blow: Ogiva ID 325 explodiu em (306.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 325, Tipo: circulo
+[*] blow 212
+blow: Ogiva ID 212 explodiu em (326.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 212, Tipo: circulo
+[*] blow 388
+blow: Ogiva ID 388 explodiu em (246.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 388, Tipo: circulo
+    - ID: 981, Tipo: retangulo
+[*] blow 168
+blow: Ogiva ID 168 explodiu em (346.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 168, Tipo: circulo
+[*] blow 237
+blow: Ogiva ID 237 explodiu em (346.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 237, Tipo: circulo
+[*] blow 206
+blow: Ogiva ID 206 explodiu em (266.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 206, Tipo: circulo
+[*] blow 229
+blow: Ogiva ID 229 explodiu em (266.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 229, Tipo: circulo
+[*] blow 282
+blow: Ogiva ID 282 explodiu em (336.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 282, Tipo: circulo
+[*] blow 193
+blow: Ogiva ID 193 explodiu em (366.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 193, Tipo: circulo
+[*] blow 180
+blow: Ogiva ID 180 explodiu em (236.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 180, Tipo: circulo
+[*] blow 236
+blow: Ogiva ID 236 explodiu em (336.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 236, Tipo: circulo
+[*] blow 279
+blow: Ogiva ID 279 explodiu em (306.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 279, Tipo: circulo
+[*] blow 403
+blow: Ogiva ID 403 explodiu em (396.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 403, Tipo: circulo
+[*] blow 205
+blow: Ogiva ID 205 explodiu em (256.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 205, Tipo: circulo
+[*] blow 375
+blow: Ogiva ID 375 explodiu em (346.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 375, Tipo: circulo
+[*] blow 184
+blow: Ogiva ID 184 explodiu em (276.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 184, Tipo: circulo
+[*] blow 158
+blow: Ogiva ID 158 explodiu em (246.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 158, Tipo: circulo
+[*] blow 157
+blow: Ogiva ID 157 explodiu em (236.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 157, Tipo: circulo
+[*] blow 218
+blow: Ogiva ID 218 explodiu em (386.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 218, Tipo: circulo
+[*] blow 153
+blow: Ogiva ID 153 explodiu em (196.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 153, Tipo: circulo
+    - ID: 807, Tipo: retangulo
+[*] blow 355
+blow: Ogiva ID 355 explodiu em (376.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 355, Tipo: circulo
+[*] blow 395
+blow: Ogiva ID 395 explodiu em (316.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 395, Tipo: circulo
+[*] blow 400
+blow: Ogiva ID 400 explodiu em (366.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 400, Tipo: circulo
+[*] blow 378
+blow: Ogiva ID 378 explodiu em (376.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 378, Tipo: circulo
+[*] blow 381
+blow: Ogiva ID 381 explodiu em (406.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 381, Tipo: circulo
+[*] blow 172
+blow: Ogiva ID 172 explodiu em (386.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 172, Tipo: circulo
+[*] blow 287
+blow: Ogiva ID 287 explodiu em (386.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 287, Tipo: circulo
+[*] blow 338
+blow: Ogiva ID 338 explodiu em (206.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 338, Tipo: circulo
+[*] blow 330
+blow: Ogiva ID 330 explodiu em (356.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 330, Tipo: circulo
+[*] blow 161
+blow: Ogiva ID 161 explodiu em (276.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 161, Tipo: circulo
+[*] blow 307
+blow: Ogiva ID 307 explodiu em (356.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 307, Tipo: circulo
+[*] blow 393
+blow: Ogiva ID 393 explodiu em (296.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 393, Tipo: circulo
+[*] blow 246
+blow: Ogiva ID 246 explodiu em (206.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 246, Tipo: circulo
+[*] blow 329
+blow: Ogiva ID 329 explodiu em (346.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 329, Tipo: circulo
+[*] blow 342
+blow: Ogiva ID 342 explodiu em (246.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 342, Tipo: circulo
+[*] blow 154
+blow: Ogiva ID 154 explodiu em (206.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 154, Tipo: circulo
+[*] blow 270
+blow: Ogiva ID 270 explodiu em (216.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 270, Tipo: circulo
+[*] blow 398
+blow: Ogiva ID 398 explodiu em (346.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 398, Tipo: circulo
+    - ID: 990, Tipo: retangulo
+[*] blow 306
+blow: Ogiva ID 306 explodiu em (346.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 306, Tipo: circulo
+[*] blow 303
+blow: Ogiva ID 303 explodiu em (316.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 303, Tipo: circulo
+[*] blow 281
+blow: Ogiva ID 281 explodiu em (326.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 281, Tipo: circulo
+[*] blow 286
+blow: Ogiva ID 286 explodiu em (376.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 286, Tipo: circulo
+[*] blow 293
+blow: Ogiva ID 293 explodiu em (216.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 293, Tipo: circulo
+[*] blow 269
+blow: Ogiva ID 269 explodiu em (206.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 269, Tipo: circulo
+[*] blow 255
+blow: Ogiva ID 255 explodiu em (296.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 255, Tipo: circulo
+[*] blow 273
+blow: Ogiva ID 273 explodiu em (246.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 273, Tipo: circulo
+[*] blow 200
+blow: Ogiva ID 200 explodiu em (206.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 200, Tipo: circulo
+[*] blow 210
+blow: Ogiva ID 210 explodiu em (306.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 210, Tipo: circulo
+[*] blow 380
+blow: Ogiva ID 380 explodiu em (396.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 380, Tipo: circulo
+[*] blow 189
+blow: Ogiva ID 189 explodiu em (326.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 189, Tipo: circulo
+[*] blow 363
+blow: Ogiva ID 363 explodiu em (226.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 363, Tipo: circulo
+[*] blow 169
+blow: Ogiva ID 169 explodiu em (356.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 169, Tipo: circulo
+[*] blow 201
+blow: Ogiva ID 201 explodiu em (216.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 201, Tipo: circulo
+[*] blow 250
+blow: Ogiva ID 250 explodiu em (246.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 250, Tipo: circulo
+[*] blow 179
+blow: Ogiva ID 179 explodiu em (226.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 179, Tipo: circulo
+[*] blow 277
+blow: Ogiva ID 277 explodiu em (286.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 277, Tipo: circulo
+[*] blow 252
+blow: Ogiva ID 252 explodiu em (266.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 252, Tipo: circulo
+[*] blow 167
+blow: Ogiva ID 167 explodiu em (336.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 167, Tipo: circulo
+[*] blow 226
+blow: Ogiva ID 226 explodiu em (236.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 226, Tipo: circulo
+[*] blow 233
+blow: Ogiva ID 233 explodiu em (306.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 233, Tipo: circulo
+[*] blow 349
+blow: Ogiva ID 349 explodiu em (316.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 349, Tipo: circulo
+[*] blow 159
+blow: Ogiva ID 159 explodiu em (256.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 159, Tipo: circulo
+[*] blow 373
+blow: Ogiva ID 373 explodiu em (326.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 373, Tipo: circulo
+[*] blow 232
+blow: Ogiva ID 232 explodiu em (296.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 232, Tipo: circulo
+[*] blow 377
+blow: Ogiva ID 377 explodiu em (366.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 377, Tipo: circulo
+[*] blow 371
+blow: Ogiva ID 371 explodiu em (306.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 371, Tipo: circulo
+[*] blow 198
+blow: Ogiva ID 198 explodiu em (416.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 198, Tipo: circulo
+[*] blow 164
+blow: Ogiva ID 164 explodiu em (306.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 164, Tipo: circulo
+[*] blow 221
+blow: Ogiva ID 221 explodiu em (416.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 221, Tipo: circulo
+[*] blow 336
+blow: Ogiva ID 336 explodiu em (416.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 336, Tipo: circulo
+[*] blow 315
+blow: Ogiva ID 315 explodiu em (206.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 315, Tipo: circulo
+[*] blow 260
+blow: Ogiva ID 260 explodiu em (346.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 260, Tipo: circulo
+[*] blow 204
+blow: Ogiva ID 204 explodiu em (246.33, 39.67).
+  Formas destruidas pela explosao:
+    - ID: 204, Tipo: circulo
+[*] blow 283
+blow: Ogiva ID 283 explodiu em (346.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 283, Tipo: circulo
+[*] blow 163
+blow: Ogiva ID 163 explodiu em (296.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 163, Tipo: circulo
+[*] blow 162
+blow: Ogiva ID 162 explodiu em (286.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 162, Tipo: circulo
+[*] blow 397
+blow: Ogiva ID 397 explodiu em (336.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 397, Tipo: circulo
+[*] blow 384
+blow: Ogiva ID 384 explodiu em (206.33, 119.67).
+  Formas destruidas pela explosao:
+    - ID: 384, Tipo: circulo
+    - ID: 976, Tipo: retangulo
+[*] blow 343
+blow: Ogiva ID 343 explodiu em (256.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 343, Tipo: circulo
+[*] blow 271
+blow: Ogiva ID 271 explodiu em (226.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 271, Tipo: circulo
+[*] blow 296
+blow: Ogiva ID 296 explodiu em (246.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 296, Tipo: circulo
+[*] blow 285
+blow: Ogiva ID 285 explodiu em (366.33, 69.67).
+  Formas destruidas pela explosao:
+    - ID: 285, Tipo: circulo
+[*] blow 267
+blow: Ogiva ID 267 explodiu em (416.33, 59.67).
+  Formas destruidas pela explosao:
+    - ID: 267, Tipo: circulo
+[*] blow 155
+blow: Ogiva ID 155 explodiu em (216.33, 19.67).
+  Formas destruidas pela explosao:
+    - ID: 155, Tipo: circulo
+[*] blow 298
+blow: Ogiva ID 298 explodiu em (266.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 298, Tipo: circulo
+[*] blow 182
+blow: Ogiva ID 182 explodiu em (256.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 182, Tipo: circulo
+[*] blow 362
+blow: Ogiva ID 362 explodiu em (216.33, 109.67).
+  Formas destruidas pela explosao:
+    - ID: 362, Tipo: circulo
+[*] blow 308
+blow: Ogiva ID 308 explodiu em (366.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 308, Tipo: circulo
+[*] blow 331
+blow: Ogiva ID 331 explodiu em (366.33, 89.67).
+  Formas destruidas pela explosao:
+    - ID: 331, Tipo: circulo
+[*] blow 348
+blow: Ogiva ID 348 explodiu em (306.33, 99.67).
+  Formas destruidas pela explosao:
+    - ID: 348, Tipo: circulo
+[*] blow 191
+blow: Ogiva ID 191 explodiu em (346.33, 29.67).
+  Formas destruidas pela explosao:
+    - ID: 191, Tipo: circulo
+[*] blow 240
+blow: Ogiva ID 240 explodiu em (376.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 240, Tipo: circulo
+[*] blow 223
+blow: Ogiva ID 223 explodiu em (206.33, 49.67).
+  Formas destruidas pela explosao:
+    - ID: 223, Tipo: circulo
+[*] blow 291
+blow: Ogiva ID 291 explodiu em (196.33, 79.67).
+  Formas destruidas pela explosao:
+    - ID: 291, Tipo: circulo
+    - ID: 843, Tipo: retangulo

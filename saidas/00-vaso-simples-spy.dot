@@ -1,0 +1,25 @@
+graph G {
+	rankdir=TB;
+	node [shape=circle];
+	"0x617e76862240" [label="nX: 73\nY: 19", color=black, fontcolor=white, style=filled, fillcolor=Red];
+	"0x617e76862240" -- "0x617e76862510";
+	"0x617e76862510" [label="nX: 59\nY: 38", color=black, fontcolor=white, style=filled, fillcolor=blue];
+	"0x617e76862510" -- "0x617e76861f10";
+	"0x617e76861f10" [label="nX: 0\nY: 26", color=black, fontcolor=white, style=filled, fillcolor=black];
+	"0x617e76861f10" -- "0x617e76861df0";
+	"0x617e76861df0" [label="nX: 3\nY: 29", color=black, fontcolor=white, style=filled, fillcolor=black];
+	"0x617e76861df0" -- "0x617e76862130";
+	"0x617e76862130" [label="nX: 54\nY: 15", color=black, fontcolor=white, style=filled, fillcolor=Red];
+	"0x617e76862130" -- "0x617e76861cd0";
+	"0x617e76861cd0" [label="nX: 48\nY: 35", color=black, fontcolor=white, style=filled, fillcolor=black];
+	"0x617e76861cd0" -- "0x617e76862330";
+	"0x617e76862330" [label="nX: 39\nY: 25", color=black, fontcolor=white, style=filled, fillcolor=blue];
+	"0x617e76862330" -- "0x617e76862020";
+	"0x617e76862020" [label="nX: 35\nY: 20", color=black, fontcolor=white, style=filled, fillcolor=Red];
+	"0x617e76862130" -- "0x617e76862420";
+	"0x617e76862420" [label="nX: 54\nY: 19", color=black, fontcolor=white, style=filled, fillcolor=blue];
+	"0x617e76862240" -- "0x617e76862600";
+	"0x617e76862600" [label="nX: 75\nY: 71", color=black, fontcolor=white, style=filled, fillcolor=blue];
+	"0x617e76862600" -- "0x617e76862930";
+	"0x617e76862930" [label="nX: 79\nY: 40", color=black, fontcolor=white, style=filled, fillcolor=brown];
+}
