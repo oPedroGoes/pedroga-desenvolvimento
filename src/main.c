@@ -145,7 +145,7 @@ int main(int argc, char *argv[]) {
     // Processa o arquivo .qry, se foi fornecido
     Lista lista_anotacoes_svg = criaLista();
     if (fullNomeQry) {
-        processa_qry(t, fullNomeQry, dirSaida, nomeQry, array_selecoes, lista_anotacoes_svg, &idMax, epsilon);
+        processa_qry(t, fullNomeQry, dirSaida, nomeBaseGeo, nomeBaseQry, array_selecoes, lista_anotacoes_svg, &idMax, epsilon);
     }
 
     // --- 5. Limpeza Final (Cleanup) ---
